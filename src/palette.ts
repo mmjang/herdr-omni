@@ -2,7 +2,7 @@ import { BoxRenderable, InputRenderable, InputRenderableEvents, TextRenderable, 
 import type { CommandResult, PaletteItem } from "./types";
 import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
-import { filterPaletteItems } from "./search";
+import { filterPaletteItems, searchResults } from "./search";
 export { filterPaletteItems } from "./search";
 
 export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
@@ -22,7 +22,8 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
 
   function redraw() {
     panel?.destroy();
-    const items = visibleItems();
+    const results = searchResults(allItems, query, deps.history);
+    const items = results.map(result => result.item);
     selected = Math.max(0, Math.min(selected, items.length - 1));
     panel = new BoxRenderable(renderer, { id: "palette", flexDirection: "column", width: "100%", height: "100%", backgroundColor: theme.background });
     const body = new BoxRenderable(renderer, { id: "body", flexDirection: "column", flexGrow: 1, paddingLeft: 2, paddingRight: 2 });
@@ -34,7 +35,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const input = new InputRenderable(renderer, {
       id: "search",
       value: prompting() ? promptValue : query,
-      placeholder: prompting() ? promptItem!.prompt!.placeholder : "Search · : actions · > agents",
+      placeholder: prompting() ? promptItem!.prompt!.placeholder : "Search · @ workspaces · > agents · : actions",
       backgroundColor: theme.background,
       focusedBackgroundColor: theme.background,
       textColor: theme.text,
@@ -54,12 +55,12 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else if (items.length === 0) {
       list.add(new TextRenderable(renderer, { id: "empty", content: "No results match your search.", fg: theme.muted }));
     } else {
-      const window = viewport(items, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0)), item => item.category);
+      const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0)), result => result.section);
       let category = "";
       items.slice(window.start, window.end).forEach((item, offset) => {
         const index = window.start + offset;
-        if (item.category !== category) {
-          category = item.category;
+        if (results[index]!.section !== category) {
+          category = results[index]!.section;
           list.add(new TextRenderable(renderer, { id: `category-${index}`, content: category, fg: theme.accent, attributes: 1 }));
         }
         const row = new BoxRenderable(renderer, { id: `item-${index}`, flexDirection: "row", width: "100%", paddingLeft: 1, paddingRight: 2, backgroundColor: index === selected ? theme.panel : theme.background });

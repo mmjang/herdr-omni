@@ -20,7 +20,7 @@ to [Herdr](https://herdr.dev)—right inside your terminal.
   named `dev` no longer look identical.
 - **Switch worktrees from the same search.** Focus an open worktree or open an
   existing checkout from the current repository.
-- **Go straight to what you need.** Start with `>` for agents or `:` for actions.
+- **Go straight to what you need.** Start with `@` for workspaces, `>` for agents, or `:` for actions.
   Leave the prefix off to search across everything.
 - **Turn forgotten shortcuts into muscle memory.** Actions display your actual
   keybindings, including remaps, and prompt for names or confirmation when needed.
@@ -104,12 +104,18 @@ Live results are refreshed each time the palette opens. Tab results include
 their workspace as a breadcrumb, so repeated tab names remain unambiguous.
 Start a search with `>` to show only live agents; text after the prefix filters
 those agent results further.
+Use `@` for workspace-only search: `@` lists workspaces, while `@order`
+fuzzy-searches them. Recent selections retain priority within this scope.
 All Herdr commands appear under **Actions**. Start with `:` to show only actions,
 or type a query such as `:split` to fuzzy-search them.
 
 Search supports fuzzy abbreviations, with bonuses for consecutive letters and
 word boundaries. Matching results selected successfully through the palette
-appear first, most recent first, followed by match quality and agent attention
+appear in a **Recent** section with up to seven matching results, newest first.
+Older selections remain in their regular sections without duplicating those seven.
+Recent contains navigation destinations only: workspaces, tabs, worktrees, and
+agent sessions. Actions stay in **Actions** and do not occupy recent slots.
+Remaining results are ordered by match quality and agent attention
 priority (blocked, done, working, idle, unknown). Selection history survives
 reopening the palette and is stored under `$XDG_STATE_HOME/herdr-palette`
 (default `~/.local/state/herdr-palette`). Merely highlighting a row does not

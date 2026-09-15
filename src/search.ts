@@ -25,12 +25,19 @@ export function fuzzyScore(query: string, value: string): number {
 }
 
 export function filterPaletteItems(items: PaletteItem[], query: string, history: Record<string, number> = {}): PaletteItem[] {
+  return searchResults(items, query, history).map(result => result.item);
+}
+
+/** Recent is a presentation section; the item's category and action remain intact. */
+export function searchResults(items: PaletteItem[], query: string, history: Record<string, number> = {}): { item: PaletteItem; section: string }[] {
   const agentsOnly = query.startsWith(">");
   const actionsOnly = query.startsWith(":");
-  const tokens = (agentsOnly || actionsOnly ? query.slice(1) : query).trim().split(/\s+/).filter(Boolean);
-  return items.flatMap((item, index) => {
+  const workspacesOnly = query.startsWith("@");
+  const tokens = (agentsOnly || actionsOnly || workspacesOnly ? query.slice(1) : query).trim().split(/\s+/).filter(Boolean);
+  const matches = items.flatMap((item, index) => {
     if (agentsOnly && !item.id.startsWith("live:agent:")) return [];
     if (actionsOnly && item.category !== "Actions") return [];
+    if (workspacesOnly && !item.id.startsWith("live:workspace:")) return [];
     let score = 0;
     for (const token of tokens) {
       const match = Math.max(fuzzyScore(token, item.title), ...[item.description, ...item.aliases, ...item.shortcuts].map(field => fuzzyScore(token, field) - 25));
@@ -38,6 +45,14 @@ export function filterPaletteItems(items: PaletteItem[], query: string, history:
       score += match;
     }
     return [{ item, index, score, recent: history[historyKey(item.id)] ?? 0 }];
-  }).sort((a, b) => b.recent - a.recent || b.score - a.score || (a.item.priority ?? 5) - (b.item.priority ?? 5) || a.index - b.index)
-    .map(result => result.item);
+  });
+  const recent = matches.filter(result => result.recent > 0 && result.item.category !== "Actions")
+    .sort((a, b) => b.recent - a.recent || a.index - b.index).slice(0, 7);
+  const recentIds = new Set(recent.map(result => result.item.id));
+  const rest = matches.filter(result => !recentIds.has(result.item.id))
+    .sort((a, b) => b.score - a.score || (a.item.priority ?? 5) - (b.item.priority ?? 5) || a.index - b.index);
+  return [
+    ...recent.map(({ item }) => ({ item, section: "Recent" })),
+    ...rest.map(({ item }) => ({ item, section: item.category })),
+  ];
 }
