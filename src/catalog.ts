@@ -1,7 +1,7 @@
 import type { Invocation, PaletteItem, PromptSpec, ResolveAction } from "./types";
 
 const entry = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, key: string, invocation: Invocation, prompt?: PromptSpec): PaletteItem =>
-  ({ id, title, category, description, icon, aliases: [], shortcuts: key ? [key] : [], invocation, ...(prompt ? { prompt } : {}) });
+  ({ id, title, category: "Actions", description, icon, aliases: [category], shortcuts: key ? [key] : [], invocation, ...(prompt ? { prompt } : {}) });
 
 const action = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, shortcut: string, argv: string[]): PaletteItem =>
   entry(id, title, category, description, icon, shortcut, { kind: "herdr", argv });

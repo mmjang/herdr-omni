@@ -1,6 +1,6 @@
 import { createTestRenderer } from "@opentui/core/testing";
 import { expect, test } from "bun:test";
-import { mountPalette } from "../src/palette";
+import { filterPaletteItems, mountPalette } from "../src/palette";
 import { fallbackTheme } from "../src/theme";
 import type { CommandResult, PaletteItem } from "../src/types";
 
@@ -18,6 +18,23 @@ const items = [
   item("rename_pane", "Rename pane", { kind: "resolve", action: "rename-pane" }, { placeholder: "New name" }),
   item("settings", "Settings", { kind: "shortcut" }),
 ];
+
+test("scopes a leading greater-than search to live agents", () => {
+  const agent = { ...item("live:agent:w1:p1", "Review changes", { kind: "herdr", argv: ["agent", "focus", "w1:p1"] }), category: "Agents" as const };
+  const nextAgent = { ...item("next_agent", "Next agent", { kind: "resolve", action: "focus-agent", step: 1 }), category: "Agents" as const };
+  const tab = { ...item("live:tab:w1:t1", "review → dev", { kind: "herdr", argv: ["tab", "focus", "w1:t1"] }), category: "Tabs" as const };
+
+  expect(filterPaletteItems([agent, nextAgent, tab], ">")).toEqual([agent]);
+  expect(filterPaletteItems([agent, nextAgent, tab], ">review")).toEqual([agent]);
+  expect(filterPaletteItems([agent, nextAgent, tab], ">missing")).toEqual([]);
+});
+
+test("searches the complete agent-session and workspace label", () => {
+  const agent = { ...item("live:agent:w1:p1", "Review checkout flow - ordering-service", { kind: "herdr", argv: ["agent", "focus", "w1:p1"] }), category: "Agents" as const };
+
+  expect(filterPaletteItems([agent], ">review checkout ordering")).toEqual([agent]);
+  expect(filterPaletteItems([agent], ">ordering-service")).toEqual([agent]);
+});
 
 async function palette(result: CommandResult) {
   const harness = await createTestRenderer({ width: 60, height: 14 });
@@ -42,6 +59,34 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 const settleEscape = () => new Promise(resolve => setTimeout(resolve, 30));
 const rowsOf = (frame: string) => frame.split("\n").filter((row, index, all) => index < all.length - 1 || row !== "");
 
+test("shows each live agent status beside its session title", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 18 });
+  const statuses = ["blocked", "done", "working", "idle", "unknown"] as const;
+  const agents = statuses.map(status => ({
+    ...item(`live:agent:${status}`, `Review - project`, { kind: "herdr", argv: [] }),
+    category: "Agents" as const, agentStatus: status, shortcuts: [],
+  }));
+  mountPalette(harness.renderer, agents, { run: async () => ({ ok: true, message: "" }), close: () => {} });
+  await harness.renderOnce();
+  const frame = harness.captureCharFrame();
+  for (const status of statuses) expect(frame).toContain(`[${status}]`);
+  expect(frame).toContain("Review - project");
+});
+
+test("renders repeated categories when recent results cross category boundaries", async () => {
+  const harness = await createTestRenderer({ width: 70, height: 18 });
+  const mixed = [
+    { ...item("first", "First", { kind: "shortcut" }), category: "Tabs" as const },
+    { ...item("second", "Second", { kind: "shortcut" }), category: "Workspace" as const },
+    { ...item("third", "Third", { kind: "shortcut" }), category: "Tabs" as const },
+  ];
+  mountPalette(harness.renderer, mixed, { history: { first: 3, second: 2, third: 1 }, run: async () => ({ ok: false, message: "" }), close: () => {} });
+  await harness.renderOnce();
+  const frame = harness.captureCharFrame();
+  expect(frame.indexOf("First")).toBeLessThan(frame.indexOf("Second"));
+  expect(frame.indexOf("Second")).toBeLessThan(frame.indexOf("Third"));
+});
+
 test("paints the palette background across the whole popup", async () => {
   const { renderer, mockInput, renderOnce, captureSpans } = await palette({ ok: true, message: "" });
 
@@ -61,7 +106,7 @@ test("pins the footer to the bottom of the popup", async () => {
 
   const rows = rowsOf(captureCharFrame());
   expect(rows).toHaveLength(14);
-  expect(rows.at(-1)).toContain("1 commands");
+  expect(rows.at(-1)).toContain("1 results");
 });
 
 test("sets the footer apart as a full-width bar", async () => {
@@ -117,8 +162,8 @@ test("returns to search when escaping a prompt", async () => {
   await settleEscape();
   await renderOnce();
 
-  expect(captureCharFrame()).toContain("Commands");
-  expect(captureCharFrame()).toContain("1 commands");
+  expect(captureCharFrame()).toContain("Herdr");
+  expect(captureCharFrame()).toContain("1 results");
   expect(ran).toEqual([]);
 });
 
@@ -133,7 +178,7 @@ test("reports why a command did not run instead of ignoring enter", async () => 
   const rows = rowsOf(captureCharFrame());
   expect(rows).toHaveLength(14);
   expect(rows.at(-2)).toContain("Press ctrl+a+z — Herdr only runs this one");
-  expect(rows.at(-1)).toContain("1 commands");
+  expect(rows.at(-1)).toContain("1 results");
 });
 
 test("stays usable when running a command throws", async () => {
@@ -159,5 +204,5 @@ test("explains an empty result set", async () => {
   await mockInput.typeText("nowhere");
   await renderOnce();
 
-  expect(captureCharFrame()).toContain("No commands match your search.");
+  expect(captureCharFrame()).toContain("No results match your search.");
 });

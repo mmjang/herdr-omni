@@ -2,8 +2,10 @@ import { BoxRenderable, InputRenderable, InputRenderableEvents, TextRenderable, 
 import type { CommandResult, PaletteItem } from "./types";
 import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
+import { filterPaletteItems } from "./search";
+export { filterPaletteItems } from "./search";
 
-export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
+export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
 const CHROME_ROWS = 4;
@@ -15,11 +17,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let promptValue = "";
   let panel: BoxRenderable | undefined;
 
-  const matches = (item: PaletteItem) => {
-    const haystack = [item.title, item.description, ...item.aliases, ...item.shortcuts].join(" ").toLowerCase();
-    return query.toLowerCase().split(/\s+/).every(token => haystack.includes(token));
-  };
-  const visibleItems = () => allItems.filter(matches);
+  const visibleItems = () => filterPaletteItems(allItems, query, deps.history);
   const prompting = () => promptItem !== undefined;
 
   function redraw() {
@@ -30,13 +28,13 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const body = new BoxRenderable(renderer, { id: "body", flexDirection: "column", flexGrow: 1, paddingLeft: 2, paddingRight: 2 });
     panel.add(body);
     const heading = new BoxRenderable(renderer, { id: "heading", flexDirection: "row" });
-    heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Commands", fg: theme.text, attributes: 1, flexGrow: 1 }));
+    heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr", fg: theme.text, attributes: 1, flexGrow: 1 }));
     heading.add(new TextRenderable(renderer, { id: "escape", content: "esc", fg: theme.muted }));
     body.add(heading);
     const input = new InputRenderable(renderer, {
       id: "search",
       value: prompting() ? promptValue : query,
-      placeholder: prompting() ? promptItem!.prompt!.placeholder : "Search commands",
+      placeholder: prompting() ? promptItem!.prompt!.placeholder : "Search · : actions · > agents",
       backgroundColor: theme.background,
       focusedBackgroundColor: theme.background,
       textColor: theme.text,
@@ -54,7 +52,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     if (prompting()) {
       list.add(new TextRenderable(renderer, { id: "prompt-hint", content: promptItem!.description, fg: theme.muted }));
     } else if (items.length === 0) {
-      list.add(new TextRenderable(renderer, { id: "empty", content: "No commands match your search.", fg: theme.muted }));
+      list.add(new TextRenderable(renderer, { id: "empty", content: "No results match your search.", fg: theme.muted }));
     } else {
       const window = viewport(items, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0)), item => item.category);
       let category = "";
@@ -62,12 +60,17 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         const index = window.start + offset;
         if (item.category !== category) {
           category = item.category;
-          list.add(new TextRenderable(renderer, { id: `category-${category}`, content: category, fg: theme.accent, attributes: 1 }));
+          list.add(new TextRenderable(renderer, { id: `category-${index}`, content: category, fg: theme.accent, attributes: 1 }));
         }
         const row = new BoxRenderable(renderer, { id: `item-${index}`, flexDirection: "row", width: "100%", paddingLeft: 1, paddingRight: 2, backgroundColor: index === selected ? theme.panel : theme.background });
         row.add(new TextRenderable(renderer, { id: `mark-${index}`, content: index === selected ? "┃" : " ", fg: theme.accent }));
         row.add(new TextRenderable(renderer, { id: `label-${index}`, content: `${item.icon}  ${item.title}`, fg: index === selected ? theme.text : theme.muted, flexGrow: 1 }));
-        row.add(new TextRenderable(renderer, { id: `key-${index}`, content: item.shortcuts.join(" / "), fg: index === selected ? theme.accent : theme.shortcut }));
+        row.add(new TextRenderable(renderer, {
+          id: `key-${index}`,
+          content: item.agentStatus ? ` [${item.agentStatus}]` : item.shortcuts.join(" / "),
+          fg: item.agentStatus === "unknown" ? theme.muted : index === selected || item.agentStatus ? theme.accent : theme.shortcut,
+          flexShrink: 0,
+        }));
         list.add(row);
       });
     }
@@ -86,7 +89,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else {
       bar.add(key("footer-enter", "enter")); bar.add(label("footer-select", " select   "));
       bar.add(key("footer-arrows", "↑/↓")); bar.add(label("footer-move", " move", true));
-      bar.add(label("footer-count", `${count} commands`));
+      bar.add(label("footer-count", `${count} results`));
     }
     return bar;
   }
@@ -115,7 +118,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   async function select() {
     if (prompting()) return run(promptItem!, promptValue);
     const item = visibleItems()[selected];
-    if (!item) { status = "No commands match your search."; return redraw(); }
+    if (!item) { status = "No results match your search."; return redraw(); }
     if (item.prompt) {
       promptItem = item;
       promptValue = "";

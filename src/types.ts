@@ -1,4 +1,4 @@
-export type Category = "Workspace" | "Tabs" | "Panes" | "Worktrees" | "Agents" | "Herdr" | "Custom";
+export type Category = "Actions" | "Workspace" | "Tabs" | "Panes" | "Worktrees" | "Agents" | "Herdr" | "Custom";
 
 export type ResolveAction =
   | "close-pane"
@@ -36,6 +36,8 @@ export interface PaletteItem {
   shortcuts: string[];
   invocation: Invocation;
   prompt?: PromptSpec;
+  priority?: number;
+  agentStatus?: "blocked" | "done" | "working" | "idle" | "unknown";
 }
 
 export interface CommandResult { ok: boolean; message: string }
