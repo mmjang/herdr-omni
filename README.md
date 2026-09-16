@@ -12,13 +12,16 @@ actions—one search away.
 - **Recent when browsing. Relevance when searching.** History never overrides a better match.
 - **Go straight there.** `@` workspaces · `>` agents · `:` actions.
 
-Bind to **`cmd+p`** below. Type, then press Enter or click a result.
+Bind to **`cmd+p` on macOS** or **`ctrl+alt+p` on Linux** below.
+Type, then press Enter or click a result.
 
 Built with Bun and OpenTUI. Forked from
 [Herdr Palette](https://github.com/cesarferreira/herdr-palette) by
 [César Ferreira](https://github.com/cesarferreira).
 
 ## Install
+
+**Supported platforms: macOS and Linux only. Windows is not currently supported.**
 
 ### Ask your agent to install
 
@@ -27,15 +30,18 @@ Copy this prompt into your coding agent:
 ```text
 Please install and configure Herdr Omni for me:
 
-1. Check that Herdr and Bun are available. If Bun is missing, install it
+1. Check the OS: Herdr Omni supports macOS and Linux only. If this is
+   Windows or another unsupported OS, stop and explain that limitation.
+   Check that Herdr and Bun are available. If Bun is missing, install it
    using the official instructions at https://bun.sh and make sure it is
    on the PATH available to Herdr.
 2. Run `herdr plugin install mmjang/herdr-omni`.
 3. Add the following binding to ~/.config/herdr/config.toml (the default).
    If HERDR_CONFIG_PATH is set, use that path instead; `herdr --help`
    shows the resolved config path. Preserve existing settings and avoid
-   duplicates. If Cmd+P is already bound
-   to another command, ask me how to resolve the conflict:
+   duplicates. Use key = "cmd+p" on macOS or key = "ctrl+alt+p" on Linux
+   in the binding below. If that shortcut is already bound to another
+   command, ask me how to resolve the conflict:
 
 [[keys.command]]
 key = "cmd+p"
@@ -67,6 +73,9 @@ Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
 Add this direct binding to `~/.config/herdr/config.toml`. If
 `HERDR_CONFIG_PATH` is set, use that path instead. Run `herdr --help` to
 check the resolved config path:
+
+Use `cmd+p` on macOS, or change the `key` below to `ctrl+alt+p` on Linux.
+If the shortcut is already assigned, choose an unused binding.
 
 ```toml
 [[keys.command]]
