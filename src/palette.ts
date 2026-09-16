@@ -292,7 +292,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else {
       bar.add(key("footer-enter", "enter/click")); bar.add(label("footer-select", " select   "));
       bar.add(key("footer-arrows", "↑/↓")); bar.add(label("footer-move", " move", true));
-      if (deps.sessionJob && transcriptQuery()) bar.add(label("footer-transcripts", transcripts ? " esc back · transcripts on  " : " → search transcripts  "));
+      if (deps.sessionJob && transcriptQuery()) bar.add(label("footer-transcripts", transcripts ? " esc back · content search on  " : " Press → to search session content  "));
       bar.add(label("footer-count", loading ? "Loading…" : refreshError ? "Refresh unavailable" : `${count} results`));
     }
     return bar;

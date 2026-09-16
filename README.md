@@ -94,142 +94,23 @@ running configuration with:
 herdr server reload-config
 ```
 
-## Configuration and scope
+## Using Omni
 
-### Updates
+Type to search, then **Enter** or click to jump. Use `@` for workspaces,
+`>` for agents, or `:` for actions. Omni follows your Herdr theme and shortcuts;
+UI-only actions show their keyboard binding.
 
-Omni checks for newer stable versions in the background when you open it, with
-checks cached for an hour. When an update is available, choose **Update** to
-install it through Herdr, or **Later** to hide that version's reminder for a day.
-The dialog defaults to **Later**. If you have already started searching, Omni
-shows a notice instead; press `ctrl+u` or click the notice to review the update.
+To search local Codex/Claude transcripts, press **→** at the end of your query.
+Matches arrive with context; **Esc** returns to normal search. Transcript search
+uses literal words or quoted phrases, requires the corresponding CLI, and makes
+no model requests.
 
-After installation, close and reopen Omni to use the new version. Your settings
-and search history are preserved. Failed checks do not interrupt search, and
-installation errors stay visible with a retry option.
+Saved sessions resume in a new tab. If the original directory is gone, Omni
+suggests a workspace for you to confirm. Conversation history is restored—not
+deleted files or Git changes.
 
-Update checks apply to official GitHub installs of `mmjang/herdr-omni`.
-Local development links and manually pinned installs are left alone. Versions
-installed by Omni's updater remain eligible for future update prompts.
-
-### Behavior
-
-The palette reads Herdr's `config.toml`, including `[keys]` remaps, custom
-`[[keys.command]]` bindings, and `[theme]`, so it displays your effective
-shortcuts and paints itself with your effective theme. Bindings keep the word
-`prefix` instead of expanding it to the concrete leader key
-(e.g. `prefix+z`, not `ctrl+a+z`). It stores recent selections locally
-and never writes to your Herdr config.
-
-Only actions documented by Herdr and backed by its CLI/API run directly from the
-palette, including rename, close, workspace/agent navigation, resize, swap, move
-pane, worktree create/open/remove, and Edit scrollback (through Herdr's session
-socket API). Edit scrollback targets the pane that opened Omni; the palette
-closes after Herdr confirms the editor opened. Commands that need text (rename, open
-worktree, remove confirmation) prompt inside the palette before running. Herdr's
-UI-only commands — cycle/last pane, the shortcut guide, settings, copy mode, and
-detach — are shortcut-only entries. In Herdr 0.9.0, native Copy mode is client-local
-and has no plugin-callable API: close Omni with Esc, then use its displayed binding.
-Sending keys to a pane would send them to the running application, not invoke
-Herdr's Copy mode.
-Custom commands from your configuration are shown as documentation only; their
-execution semantics remain owned by Herdr. A failing Herdr command shows its
-error and leaves the palette open.
-
-The palette opens immediately with actions while live results load in the
-background. Workspace, tab, and agent results appear before worktree discovery
-finishes. Live results refresh automatically every two seconds after each
-refresh completes; the selected item and search cursor are preserved, and failed
-refreshes retain the last available results. Closing the palette stops polling.
-Tab results include
-their workspace as a breadcrumb, so repeated tab names remain unambiguous.
-Unnamed tabs and tabs with purely numeric names are excluded from results.
-Start a search with `>` to find live agents and saved Codex/Claude sessions by
-name, project, or session ID. Live results appear immediately; saved-session
-metadata loads in the background. Saved sessions are labeled with their provider.
-Enter/click focuses a matching live pane, or resumes a saved session in a new tab
-in a matching workspace, using its original project directory. Workspace matching
-uses pane directories and explicit worktree paths, not workspace names. Multiple
-matches use the first workspace in Herdr's order. If none match, Omni asks before
-using the current workspace: type `yes` to confirm or Esc to cancel.
-If the original directory was removed, choose an existing
-workspace directory from a picker. Omni suggests surviving Git worktree matches,
-then matching project folders, then the current workspace. Enter confirms; Esc
-cancels. This restores conversation history, not deleted files or Git changes.
-While the agent starts, a waiting screen shows elapsed time and prevents duplicate
-launches. Startup failures are reported instead of silently closing the palette.
-Matching live/saved session IDs are deduplicated.
-Use `@` for workspace-only search: `@` lists workspaces, while `@order`
-fuzzy-searches them. Bare prefixes retain Recent; adding keywords ranks by relevance.
-All Herdr commands appear under **Actions**. Start with `:` to show only actions,
-or type a query such as `:split` to fuzzy-search them.
-
-Search uses the actual VS Code Quick Open core scorer (vendored under MIT),
-with Omni-specific field weighting, an exact-match bonus, Recent grouping, and
-agent priorities. It does not reproduce VS Code's complete file-ranking policy.
-Search fields are explicit: workspace and tab names, agent session/workspace
-names and agent kinds, worktree names/branches, and curated action synonyms.
-Paths support contiguous, case-insensitive text matching rather than scattered
-fuzzy letters. Agent session IDs support contiguous matching. Display descriptions,
-counts, statuses, other internal IDs, automatic
-index numbers, raw terminal titles, and shortcut modifiers are not search fields.
-Recent appears only for an empty query or a bare `@` / `>` prefix, never for
-keyword searches or Actions. Keyword searches keep results in their original
-sections and rank by match quality, then agent attention priority; recency only
-breaks remaining navigation ties. Action rankings never use history.
-Each category appears once. Groups rank by their best match score, with ties
-resolved by `CATEGORY_ORDER` in `src/constants.ts`; results within each group
-retain their relevance ordering.
-Search supports fuzzy abbreviations, with bonuses for consecutive letters and
-word boundaries. Matching characters in result titles are highlighted using the
-theme's accent color. Matching results selected successfully through the palette
-are eligible for **Recent** only among the 10 most recently used available
-navigation destinations, chosen before filtering by query or prefix. Up to 7
-eligible candidates are shown while browsing, newest first. Older selections remain searchable
-in their regular sections without duplicating the displayed Recent results.
-These limits are configured by `RECENT_CANDIDATE_LIMIT` and `RECENT_DISPLAY_LIMIT`
-in [`src/constants.ts`](src/constants.ts).
-Recent contains navigation destinations only: workspaces, tabs, worktrees, and
-agent sessions. Actions stay in **Actions** and do not occupy recent slots.
-Remaining results are ordered by match quality and agent attention
-priority (blocked, done, working, idle, unknown). Selection history survives
-reopening the palette and is stored under `$XDG_STATE_HOME/herdr-palette`
-(default `~/.local/state/herdr-palette`). Merely highlighting a row does not
-record a visit.
-
-The history directory retains its original name to preserve existing selections.
-
-### Optional transcript search
-
-Press **Right Arrow** at the end of a non-empty search query to explore matching
-transcripts. This works with plain queries as well as `>`, `@`, and `:` searches
-(the prefix is omitted from transcript matching). Press **Esc** to return to
-normal results; press Esc again to close Omni. Right Arrow inside the query still
-moves the text cursor. Transcript search is off each time Omni opens.
-Normal results stay available while matching conversations
-arrive under **Transcript matches**; the selected session stays selected. The
-selected transcript match shows up to six lines of surrounding context below the
-list, with literal matches highlighted. The preview centers on the hit, and includes
-neighboring messages when the matching message is short.
-
-- `>payment timeout`: both keywords must occur in the same message.
-- `>"duplicate payment callback"`: match the literal phrase.
-- Chinese text, error codes, and partial IDs work too; transcript text uses
-  case-insensitive literal matching, not scattered-letter fuzzy matching.
-
-Scans run newest-first in a separate, cancellable process. Editing the query,
-leaving transcript search with Esc, or closing Omni cancels stale work. No SQLite,
-persistent transcript index, or model request is used. Up to 100 transcript
-matches are returned per scan, with an explicit notice when the limit is reached.
-
-Codex history uses the installed CLI's app-server `thread/list` and `thread/read`;
-Claude history uses the official Agent SDK's local session readers. Both CLIs must
-be available on PATH for their saved sessions to be discovered. Tested with Codex
-0.154.0 and Claude Code 2.1.273; older/incompatible providers report errors without
-blocking live search. This covers locally available history (unarchived Codex
-threads), not cloud-only or deleted sessions. Searchable content includes exposed
-user/assistant text and supported command/tool output; images, hidden reasoning,
-and internal metadata are excluded. Provider history/compaction limits still apply.
+Official installs offer updates in-app; press **Ctrl+U** when a notice appears.
+Reopen Omni after updating. Local checkouts and pinned installs are left alone.
 
 ## Local development
 

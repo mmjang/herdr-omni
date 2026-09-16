@@ -78,7 +78,7 @@ test("transcripts are opt-in, progressive, deduplicated, and selection remains o
     await h.mockInput.typeText(">payment"); await wait(); await h.renderOnce();
     expect(calls).toEqual(["list"]);
     expect(h.captureCharFrame()).toContain("Payment work");
-    expect(h.captureCharFrame()).toContain("→ search transcripts");
+    expect(h.captureCharFrame()).toContain("Press → to search session content");
     expect(h.captureCharFrame()).not.toContain("Old investigation");
     h.mockInput.pressArrow("right");
     await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
@@ -145,7 +145,7 @@ for (const query of ["payment", ">payment", "@payment", ":payment", "支付回�
       h.mockInput.pressEscape(); await wait(30); await h.renderOnce();
       expect(closes).toBe(0);
       expect(h.captureCharFrame()).not.toContain("Transcript matches");
-      expect(h.captureCharFrame()).toContain("→ search transcripts");
+      expect(h.captureCharFrame()).toContain("Press → to search session content");
       h.mockInput.pressEscape(); await wait(30);
       expect(closes).toBe(1);
     } finally { h.renderer.destroy(); }
