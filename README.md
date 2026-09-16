@@ -30,6 +30,34 @@ Herdr downloads the plugin and runs its dependency installation. Follow the
 prompts, then configure the shortcut under **Open the palette** below.
 Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
 
+### Ask your agent to install
+
+Copy this prompt into your coding agent:
+
+```text
+Please install and configure Herdr Omni for me:
+
+1. Check that Herdr and Bun are available. If Bun is missing, install it
+   using the official instructions at https://bun.sh and make sure it is
+   on the PATH available to Herdr.
+2. Run `herdr plugin install mmjang/herdr-omni`.
+3. Add the following binding to Herdr's active config.toml, preserving
+   existing settings and avoiding duplicates. If Cmd+P is already bound
+   to another command, ask me how to resolve the conflict:
+
+[[keys.command]]
+key = "cmd+p"
+type = "shell"
+command = "\"$HERDR_BIN_PATH\" plugin pane open --plugin herdr-omni --entrypoint picker"
+description = "Open Herdr Omni"
+
+4. Run `herdr server reload-config`.
+5. Confirm that `herdr plugin list` shows herdr-omni enabled and verify
+   that its popup opens successfully.
+
+Please execute these steps, troubleshoot any errors, and report the result.
+```
+
 ### Local development
 
 To work on the plugin source, clone the repository and link your checkout:
