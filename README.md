@@ -20,11 +20,21 @@ Built with Bun and OpenTUI. Forked from
 
 ## Install
 
-Install [Bun](https://bun.sh), then link the checkout for local development:
+Install [Herdr](https://herdr.dev) and [Bun](https://bun.sh), then clone this
+repository and link it as a local plugin:
 
 ```sh
-bun install && herdr plugin link .
+git clone https://github.com/mmjang/herdr-omni.git
+cd herdr-omni
+bun install
+herdr plugin link .
+herdr plugin list
 ```
+
+If you already have a checkout, run the last three commands from its root.
+Keep the checkout in place: Herdr runs the linked plugin from this directory.
+The local-link installation and popup command below have been verified with
+Herdr 0.9.0 and Bun 1.3.14 on macOS.
 
 ## Open the palette
 
