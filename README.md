@@ -94,6 +94,7 @@ refresh completes; the selected item and search cursor are preserved, and failed
 refreshes retain the last available results. Closing the palette stops polling.
 Tab results include
 their workspace as a breadcrumb, so repeated tab names remain unambiguous.
+Unnamed tabs and tabs with purely numeric names are excluded from results.
 Start a search with `>` to show only live agents; text after the prefix filters
 those agent results further.
 Use `@` for workspace-only search: `@` lists workspaces, while `@order`

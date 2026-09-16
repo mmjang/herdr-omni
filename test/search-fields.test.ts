@@ -43,7 +43,7 @@ test("meaningful titles, kinds, branches and contiguous path fragments remain se
 test("fallback display IDs and detached status do not become search keywords", () => {
   const items = itemsFromSnapshot({ workspaces: [{ workspace_id: "w987" }], tabs: [{ tab_id: "w987:t543", workspace_id: "w987" }] }, "w987");
   expect(filterPaletteItems(items, "w987")).toEqual([]);
-  expect(filterPaletteItems(items, "")).toHaveLength(2);
+  expect(filterPaletteItems(items, "")).toHaveLength(1);
   expect(filterPaletteItems(itemsFromWorktrees([{ label: "checkout", path: "/repo" }], "w987"), "detached")).toEqual([]);
 });
 

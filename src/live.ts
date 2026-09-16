@@ -41,7 +41,11 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
       [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, label, [path, text(worktree?.repo_root)])];
   });
 
-  const tabItems = tabs.map(tab => {
+  // Generated numeric tab labels add no useful destination information.
+  const tabItems = tabs.filter(tab => {
+    const label = text(tab.label).trim();
+    return label.length > 0 && !/^\p{Decimal_Number}+$/u.test(label);
+  }).map(tab => {
     const tabId = text(tab.tab_id);
     const workspaceId = text(tab.workspace_id);
     const label = text(tab.label) || tabId;

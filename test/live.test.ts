@@ -37,6 +37,18 @@ test("maps workspaces and tabs to exact focus commands", () => {
   expect(tab).toMatchObject({ title: "beta → shell", category: "Tabs" });
 });
 
+test("excludes unnamed and numeric tabs while retaining named tabs and workspaces", () => {
+  const labels = ["1", "02", " 123 ", "１２", "", "   ", undefined, "dev", "v2", "123-api"];
+  const items = itemsFromSnapshot({
+    workspaces: [{ workspace_id: "w1", label: "Coffee" }],
+    tabs: labels.map((label, i) => ({ tab_id: `w1:t${i}`, workspace_id: "w1", label })),
+  }, "w1");
+  expect(items.filter(item => item.category === "Tabs").map(item => item.title)).toEqual([
+    "Coffee → dev", "Coffee → v2", "Coffee → 123-api",
+  ]);
+  expect(items.filter(item => item.category === "Workspace").map(item => item.title)).toEqual(["Coffee"]);
+});
+
 test("focuses agents by pane ID, even when agent names are duplicated", () => {
   const items = itemsFromSnapshot(snapshot, "w1");
   const agents = items.filter(item => item.category === "Agents");
