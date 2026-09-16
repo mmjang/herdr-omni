@@ -79,6 +79,11 @@ export async function execute(item: PaletteItem, input = ""): Promise<CommandRes
   }
   const resolved = await resolve(item.invocation, input);
   if ("message" in resolved) return { ok: false, message: resolved.message };
+  // Herdr 0.9.0's agent.focus updates server focus without moving the client's
+  // visible tab. pane.focus projects both, and our agent targets are pane IDs.
+  if (resolved.argv[0] === "agent" && resolved.argv[1] === "focus") {
+    return requestHerdr("pane.focus", { pane_id: resolved.argv[2] });
+  }
   const { code, stderr } = await runHerdr(resolved.argv);
   return code === 0 ? { ok: true, message: "" } : { ok: false, message: explain(stderr, code) };
 }
