@@ -43,10 +43,14 @@ test("live and saved agents share activity ordering with relevance first and unk
   expect(mergeSessions([{ ...live, lastActiveAt: 500 }], [session])[0]!.lastActiveAt).toBe(500);
 });
 
-test("transcripts use literal AND keywords, quoted phrases, Chinese, punctuation, and safe excerpts", () => {
-  expect(transcriptTerms('payment "callback timeout"')).toEqual(["payment", "callback timeout"]);
-  expect(transcriptExcerpt(["Payment CALLBACK timeout in /api/v2"], 'payment "callback timeout"')).toContain("CALLBACK timeout");
-  expect(transcriptExcerpt(["callback eventually hit timeout"], '"callback timeout"')).toBeUndefined();
+test("transcripts use contiguous case-insensitive phrases, Chinese, punctuation, and safe excerpts", () => {
+  expect(transcriptTerms('payment "callback timeout"')).toEqual(['payment "callback timeout"']);
+  expect(transcriptExcerpt(["Payment CALLBACK timeout in /api/v2"], 'payment callback timeout')).toContain("CALLBACK timeout");
+  expect(transcriptExcerpt(["callback eventually hit timeout"], 'callback timeout')).toBeUndefined();
+  expect(transcriptExcerpt(["prefix output: it should work now"], "fix it now")).toBeUndefined();
+  expect(transcriptExcerpt(["Please FIX IT NOW, thanks"], "fix it now")).toContain("FIX IT NOW");
+  expect(transcriptExcerpt(['say "fix it now"'], '"fix it now"')).toBeDefined();
+  expect(transcriptExcerpt(['say fix it now'], '"fix it now"')).toBeUndefined();
   expect(transcriptExcerpt(["payment", "timeout"], "payment timeout")).toBeUndefined();
   expect(transcriptExcerpt(["我们处理支付回调失败"], "支付回调")).toContain("支付回调");
   expect(transcriptExcerpt(["error E_CONN_RESET: foo.bar()"], "foo.bar()")).toBeDefined();
@@ -55,14 +59,38 @@ test("transcripts use literal AND keywords, quoted phrases, Chinese, punctuation
   expect(transcriptExcerpt(["hello\x1b world"], "world")).not.toContain("\x1b");
 });
 
-test("provider extraction includes visible messages and output, excluding reasoning and metadata", () => {
+test("transcript previews highlight only full contiguous phrases", () => {
+  const preview = transcriptPreview("fix something now. Please FIX IT NOW. it now", "fix it now", 100, 6);
+  expect(preview.flat().filter(part => part.match).map(part => part.text).join("")).toBe("FIX IT NOW");
+});
+
+test("transcript excerpts preserve paragraphs, code indentation and readable JSON", () => {
+  const excerpt = transcriptExcerpt(["Heading\r\n\r\n```ts\r\n\tconst needle = 1;\r\n```"], "needle")!;
+  expect(excerpt).toContain("Heading\n\n```ts\n    const needle = 1;\n```");
+  const lines = transcriptPreview(excerpt, "needle", 100, 10).map(line => line.map(part => part.text).join(""));
+  expect(lines).toContain("    const needle = 1;");
+  const json = transcriptExcerpt(['{"first":"hello","second":"needle","third":"world"}'], "needle")!;
+  expect(json).toContain('\n  "second": "needle",\n');
+  expect(transcriptExcerpt(['literal \\n needle'], "needle")).toContain('literal \\n needle');
+});
+
+test("provider extraction keeps conversation text but excludes all tool content", () => {
   expect(codexText({ turns: [{ items: [
     { type: "userMessage", content: [{ type: "text", text: "question" }] },
     { type: "agentMessage", text: "answer" }, { type: "reasoning", text: "private" },
     { type: "commandExecution", command: "test", aggregatedOutput: "error" },
-  ] }] })).toEqual(["question", "answer", "test", "error"]);
-  expect(claudeText([{ message: { content: [{ type: "text", text: "answer" }, { type: "thinking", thinking: "private" },
-    { type: "tool_result", content: [{ type: "text", text: "error" }] }] } }])).toEqual(["answer", "error"]);
+    { type: "mcpToolCall", result: { text: "tool output" } },
+  ] }] })).toEqual(["question", "answer"]);
+  const messages = claudeText([
+    { type: "user", message: { content: "question" } },
+    { type: "assistant", message: { content: [{ type: "text", text: "answer" }, { type: "thinking", thinking: "private" },
+      { type: "tool_use", input: { text: "tool input" } }] } },
+    { type: "user", message: { content: [{ type: "tool_result", content: [{ type: "text", text: "tool output" }] },
+      { type: "tool_result", content: "plain tool output" }] } },
+    { type: "system", message: { content: "system text" } },
+  ]);
+  expect(messages).toEqual(["question", "answer"]);
+  expect(transcriptExcerpt(messages, "tool output")).toBeUndefined();
 });
 
 test("an already-aborted session job starts no worker and emits nothing", async () => {

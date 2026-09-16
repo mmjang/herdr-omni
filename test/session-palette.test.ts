@@ -7,6 +7,35 @@ import type { SavedSession } from "../src/types";
 const session: SavedSession = { provider: "claude", id: "abc-123", title: "Old investigation", cwd: "/repo/shop", updatedAt: 1 };
 const wait = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
+test("transcript loading indicator animates until completion and stops on cancellation", async () => {
+  const h = await createTestRenderer({ width: 110, height: 20 });
+  let publish!: (event: SessionEvent) => void;
+  let finish!: () => void;
+  mountPalette(h.renderer, [], { sessionJob: async (request, signal, emit) => {
+    if (request.type === "list") return;
+    publish = emit;
+    await new Promise<void>(resolve => { finish = resolve; signal.addEventListener("abort", () => resolve(), { once: true }); });
+  }, run: async () => ({ ok: true, message: "" }), close: () => {} });
+  try {
+    await h.mockInput.typeText("needle"); await wait();
+    h.mockInput.pressKey("f", { ctrl: true });
+    await h.renderOnce();
+    const heading = h.captureCharFrame().split("\n")[0]!;
+    expect(heading).toContain("Searching transcripts…");
+    await wait(TRANSCRIPT_DEBOUNCE_MS + 120); await h.renderOnce();
+    expect(h.captureCharFrame().split("\n")[0]).not.toBe(heading);
+    publish({ type: "progress", scanned: 1, total: 3 });
+    await h.renderOnce(); expect(h.captureCharFrame()).toContain("1/3");
+    publish({ type: "done" }); finish(); await wait(); await h.renderOnce();
+    expect(h.captureCharFrame().split("\n")[0]).not.toContain("Searching transcripts");
+    h.mockInput.pressEscape(); await wait(30);
+    h.mockInput.pressKey("f", { ctrl: true }); await h.renderOnce();
+    expect(h.captureCharFrame().split("\n")[0]).toContain("Searching transcripts");
+    h.mockInput.pressEscape(); await wait(130); await h.renderOnce();
+    expect(h.captureCharFrame().split("\n")[0]).not.toContain("Searching transcripts");
+  } finally { h.renderer.destroy(); }
+});
+
 test("opening the palette loads saved metadata newest first without searching transcripts", async () => {
   const h = await createTestRenderer({ width: 110, height: 20 });
   const requests: string[] = [];

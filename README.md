@@ -119,8 +119,9 @@ OpenCode searches local history across projects (top-level sessions, not child-a
 To search local Codex, Claude Code, or OpenCode transcripts, press **Ctrl+F** or click
 **Search session content**. Left and right arrows always move the text cursor.
 Matches arrive with context; **Esc** returns to normal search. Transcript search
-uses literal words or quoted phrases, requires the corresponding CLI, and makes
-no model requests.
+matches your complete phrase (case-insensitive), requires the corresponding CLI, and makes
+no model requests. Only user messages and assistant replies are searched; tool calls
+and tool output are excluded.
 
 Saved sessions resume in a new tab. If the original directory is gone, Omni
 suggests a workspace for you to confirm. Conversation history is restored—not
@@ -145,6 +146,13 @@ If you already have a checkout, run the last three commands from its root.
 Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
+
+### 0.8.1
+
+- Exclude tool calls and output from Codex, Claude Code, and OpenCode content search.
+- Session content search now matches complete phrases, with literal preview highlights instead of fuzzy title highlights for transcript-only matches.
+- Preserve paragraphs and code indentation in previews, and format complete JSON output for readability.
+- Show an animated loading indicator and scan progress during transcript search.
 
 ### 0.8.0
 

@@ -123,7 +123,6 @@ export class OpenCodeHistory {
       return message.parts.flatMap((part: unknown) => {
         if (!record(part)) return [];
         if (part.type === "text" && !part.ignored && !part.synthetic && typeof part.text === "string") return [part.text];
-        if (part.type === "tool" && record(part.state) && part.state.status === "completed" && typeof part.state.output === "string") return [part.state.output];
         return [];
       });
     });

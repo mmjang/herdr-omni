@@ -56,22 +56,20 @@ export class CodexHistory {
   }
 }
 
-/** Extract only documented visible text/tool fields; never stringify raw metadata or reasoning. */
+/** Search conversation text only, excluding tool calls/results, system data and reasoning. */
 export function claudeText(messages: any[]): string[] {
   const content = (value: any): string[] => {
     if (typeof value === "string") return [value];
     if (!Array.isArray(value)) return [];
-    return value.flatMap(block => block?.type === "text" && typeof block.text === "string" ? [block.text]
-      : block?.type === "tool_result" ? content(block.content) : []);
+    return value.flatMap(block => block?.type === "text" && typeof block.text === "string" ? [block.text] : []);
   };
-  return messages.flatMap(message => content(message.message?.content));
+  return messages.flatMap(message => ["user", "assistant"].includes(message.type) ? content(message.message?.content) : []);
 }
 
 export function codexText(thread: any): string[] {
   return (thread?.turns ?? []).flatMap((turn: any) => (turn.items ?? []).flatMap((item: any) => {
     if (item.type === "agentMessage" && typeof item.text === "string") return [item.text];
     if (item.type === "userMessage") return (item.content ?? []).filter((part: any) => part.type === "text" && typeof part.text === "string").map((part: any) => part.text);
-    if (item.type === "commandExecution") return [item.command, item.aggregatedOutput].filter(value => typeof value === "string");
     return [];
   }));
 }

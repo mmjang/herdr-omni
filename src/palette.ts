@@ -43,8 +43,19 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   const sessionController = new AbortController();
   let scanController: AbortController | undefined;
   let scanTimer: ReturnType<typeof setTimeout> | undefined;
+  let scanLoading = false;
+  let loadingIndicator: TextRenderable | undefined;
+  let loadingTick = 0;
+  let loadingTimer: ReturnType<typeof setInterval> | undefined;
+  const loadingText = () => `${["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"][loadingTick % 10]} Searching transcripts…  `;
+  const stopLoading = () => {
+    scanLoading = false;
+    clearInterval(loadingTimer);
+    loadingTimer = undefined;
+    if (loadingIndicator) loadingIndicator.content = "";
+  };
   let transcriptHits: Array<{ session: SavedSession; excerpt: string }> = [];
-  const stopScan = () => { clearTimeout(scanTimer); scanController?.abort(); scanController = undefined; };
+  const stopScan = () => { stopLoading(); clearTimeout(scanTimer); scanController?.abort(); scanController = undefined; };
   const transcriptQuery = () => (">@:".includes(query[0] ?? " ") ? query.slice(1) : query).trim();
   const sessionMetadataVisible = () => query.startsWith(">") || (!query.startsWith("@") && !query.startsWith(":"));
   const sessionSearchVisible = () => sessionMetadataVisible() || transcripts;
@@ -118,7 +129,14 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     transcriptHits = [];
     scanStatus = "";
     scanError = "";
-    if (!transcripts || !transcriptQuery() || !deps.sessionJob || sessionsLoading) return;
+    if (!transcripts || !transcriptQuery() || !deps.sessionJob) return;
+    scanLoading = true;
+    loadingTick = 0;
+    loadingTimer = setInterval(() => {
+      loadingTick++;
+      if (loadingIndicator && !destroyed) loadingIndicator.content = loadingText();
+    }, 100);
+    if (sessionsLoading) return;
     const controller = new AbortController();
     scanController = controller;
     scanStatus = "Searching transcripts…";
@@ -131,10 +149,15 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           if (event.type === "hit") transcriptHits.push(event);
           if (event.type === "progress") scanStatus = `Searching transcripts… ${event.scanned}/${event.total}`;
           if (event.type === "error") scanError = event.message;
-          if (event.type === "done") scanStatus = event.limited ? "Transcript result limit reached" : "Transcript search complete";
+          if (event.type === "done") { stopLoading(); scanStatus = event.limited ? "Transcript result limit reached" : "Transcript search complete"; }
         });
       }).catch(() => {
         if (!destroyed && !controller.signal.aborted) preserveSelection(() => { scanStatus = "Transcript search unavailable"; });
+      }).finally(() => {
+        if (!destroyed && !controller.signal.aborted) {
+          stopLoading();
+          if (!prompting() && !running && !updateDialog) redraw(true);
+        }
       });
     }, TRANSCRIPT_DEBOUNCE_MS);
   }
@@ -159,6 +182,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   function redraw(preserveCursor = false) {
     if (destroyed) return;
     const cursor = preserveCursor ? activeInput?.cursorOffset : undefined;
+    loadingIndicator = undefined;
     panel?.destroyRecursively();
     const results = visibleResults();
     const items = results.map(result => result.item);
@@ -173,6 +197,10 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const heading = new BoxRenderable(renderer, { id: "heading", flexDirection: "row" });
     heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr Omni", fg: theme.text, attributes: 1 }));
     heading.add(new TextRenderable(renderer, { id: "version", content: `  v${version}`, fg: theme.muted, flexGrow: 1 }));
+    if (scanLoading && !running && !prompting() && !updateDialog && !workspacePicker) {
+      loadingIndicator = new TextRenderable(renderer, { id: "transcript-loading", content: loadingText(), fg: theme.accent, height: 1 });
+      heading.add(loadingIndicator);
+    }
     heading.add(new TextRenderable(renderer, { id: "escape", content: updating || running ? "" : prompting() || updateDialog || workspacePicker ? "esc" : "tab switch · esc", fg: theme.muted }));
     body.add(heading);
     if (running) {
@@ -314,7 +342,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           void select();
         };
         row.add(new TextRenderable(renderer, { id: `mark-${index}`, content: index === selected ? "┃" : " ", fg: theme.accent }));
-        const positions = matchingPositions(query, item.title);
+        const positions = results[index]!.section === "Transcript matches" ? new Set<number>() : matchingPositions(query, item.title);
         const normalColor = index === selected ? theme.text : theme.muted;
         const content = new StyledText([
           fg(normalColor)(`${item.icon}  `),

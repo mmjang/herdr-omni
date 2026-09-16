@@ -19,6 +19,19 @@ export type SessionJob = (request: SessionRequest, signal: AbortSignal, publish:
 export const sessionKey = (session: Pick<SavedSession, "provider" | "id">) => `${session.provider}:${session.id}`;
 export const cleanText = (value: string) => value.replace(/[\x00-\x1f\x7f-\x9f]/g, " ").replace(/\s+/g, " ").trim();
 
+/** Transcript bodies keep paragraphs and indentation, unlike single-line labels. */
+export const cleanTranscript = (value: string) => value.replace(/\r\n?/g, "\n")
+  .replace(/[\x00-\x08\x0b-\x1f\x7f-\x9f]/g, " ").replace(/\t/g, "    ").trim();
+
+function formatTranscript(value: string): string {
+  const text = cleanTranscript(value);
+  // Pretty-print only complete JSON objects/arrays, never guess at escaped prose.
+  if (text.startsWith("{") || text.startsWith("[")) {
+    try { return cleanTranscript(JSON.stringify(JSON.parse(text), null, 2)); } catch { /* Ordinary text or partial output. */ }
+  }
+  return text;
+}
+
 export function agentActivity(item: PaletteItem): number {
   return Math.max(...[item.lastActiveAt, item.session?.updatedAt, 0]
     .map(value => typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0));
@@ -45,23 +58,26 @@ export function mergeSessions(live: PaletteItem[], sessions: SavedSession[]): Pa
   return [...enriched, ...sessions.filter(session => !known.has(sessionKey(session))).map(savedSessionItem)];
 }
 
-/** AND of literal tokens/quoted phrases, within one message, not scattered fuzzy letters. */
+/** One case-insensitive literal phrase; quotes and regex characters are ordinary text. */
 export function transcriptTerms(query: string): string[] {
-  return [...query.matchAll(/"([^"]+)"|([^\s"]+)/g)].map(match => cleanText(match[1] ?? match[2]!).toLowerCase()).filter(Boolean);
+  const phrase = cleanText(query).toLowerCase();
+  return phrase ? [phrase] : [];
 }
 
 export function transcriptExcerpt(messages: string[], query: string): string | undefined {
   const terms = transcriptTerms(query);
   if (!terms.length) return;
   for (const [index, message] of messages.entries()) {
-    const text = cleanText(message);
+    const formatted = formatTranscript(message);
+    // Formatting must not hide literal queries containing JSON punctuation.
+    const text = terms.every(term => formatted.toLowerCase().includes(term)) ? formatted : cleanTranscript(message);
     const lower = text.toLowerCase();
     if (!terms.every(term => lower.includes(term))) continue;
     const first = Math.min(...terms.map(term => lower.indexOf(term)));
     const start = Math.max(0, first - TRANSCRIPT_CONTEXT_BEFORE);
     const end = Math.min(text.length, first + Math.max(...terms.map(term => term.length)) + TRANSCRIPT_CONTEXT_AFTER);
-    const before = start === 0 && index > 0 ? cleanText(messages[index - 1]!).slice(-TRANSCRIPT_CONTEXT_BEFORE) : "";
-    const after = end === text.length && index + 1 < messages.length ? cleanText(messages[index + 1]!).slice(0, TRANSCRIPT_CONTEXT_AFTER) : "";
+    const before = start === 0 && index > 0 ? formatTranscript(messages[index - 1]!).slice(-TRANSCRIPT_CONTEXT_BEFORE) : "";
+    const after = end === text.length && index + 1 < messages.length ? formatTranscript(messages[index + 1]!).slice(0, TRANSCRIPT_CONTEXT_AFTER) : "";
     return [before, `${start ? "…" : ""}${text.slice(start, end)}${end < text.length ? "…" : ""}`, after].filter(Boolean).join("\n\n");
   }
 }

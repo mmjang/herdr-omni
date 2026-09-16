@@ -42,7 +42,7 @@ test("OpenCode paginates global history across projects including deleted worktr
   adapter.close();
 });
 
-test("OpenCode exports only visible messages and completed tool output", async () => {
+test("OpenCode exports conversation text without tool input or output", async () => {
   const data = { info: { id: row.id }, messages: [
     { info: { role: "user" }, parts: [{ type: "text", text: "Question" }, { type: "text", text: "Hidden", synthetic: true }] },
     { info: { role: "assistant" }, parts: [
@@ -55,7 +55,7 @@ test("OpenCode exports only visible messages and completed tool output", async (
     { info: { role: "system" }, parts: [{ type: "text", text: "System" }] },
   ] };
   const adapter = history(`if (JSON.stringify(process.argv.slice(1)) !== JSON.stringify(["export", "ses_test123"])) process.exit(2); console.error("Exporting session"); console.log(${JSON.stringify(JSON.stringify(data))})`);
-  expect(await adapter.read(row.id)).toEqual(["Question", "Answer", "Tool result"]);
+  expect(await adapter.read(row.id)).toEqual(["Question", "Answer"]);
   await expect(adapter.read("--evil")).rejects.toThrow("Invalid OpenCode session ID");
   adapter.close();
 });
