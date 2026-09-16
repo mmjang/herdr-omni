@@ -100,6 +100,8 @@ Type to search, then **Enter** or click to jump. Use `@` for workspaces,
 `>` for agents, or `:` for actions. Omni follows your Herdr theme and shortcuts;
 UI-only actions show their keyboard binding.
 
+Normal search includes saved session titles, projects, and IDs—no prefix needed.
+
 To search local Codex/Claude transcripts, press **→** at the end of your query.
 Matches arrive with context; **Esc** returns to normal search. Transcript search
 uses literal words or quoted phrases, requires the corresponding CLI, and makes
@@ -127,8 +129,18 @@ herdr plugin list
 If you already have a checkout, run the last three commands from its root.
 Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
-## Release
+## Release notes
 
+### 0.7.0
+
+- Find saved Codex and Claude sessions by title, project, or ID in normal search.
+- Press **→** to search session content, with highlighted context and progressive results.
+- Resume sessions in a matching workspace, or choose a suggested destination when the original directory is gone.
+- See a waiting indicator while resuming, with duplicate launches prevented.
+
+## Releasing
+
+Add a short entry under **Release notes** first, then commit your changes.
 Validate the project, bump the minor version, commit, tag, and push:
 
 ```sh

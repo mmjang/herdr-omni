@@ -7,6 +7,27 @@ import type { SavedSession } from "../src/types";
 const session: SavedSession = { provider: "claude", id: "abc-123", title: "Old investigation", cwd: "/repo/shop", updatedAt: 1 };
 const wait = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
+for (const query of ["近期功能", "shop", "abc-123", ">近期功能", "@近期功能", ":近期功能"]) {
+  test(`saved session metadata search respects scope for ${query} without scanning content`, async () => {
+    const h = await createTestRenderer({ width: 110, height: 20 });
+    const requests: string[] = [];
+    mountPalette(h.renderer, [], {
+      sessionJob: async (request, _signal, publish) => {
+        requests.push(request.type);
+        if (request.type === "list") publish({ type: "sessions", sessions: [{ ...session, title: "讨论近期功能规划" }] });
+      }, run: async () => ({ ok: true, message: "" }), close: () => {},
+    });
+    try {
+      await h.mockInput.pasteBracketedText(query); await wait(); await h.renderOnce();
+      const excluded = query.startsWith("@") || query.startsWith(":");
+      expect(requests).toEqual(excluded ? [] : ["list"]);
+      if (excluded) expect(h.captureCharFrame()).not.toContain("讨论近期功能规划");
+      else expect(h.captureCharFrame()).toContain("讨论近期功能规划");
+      expect(h.captureCharFrame()).not.toContain("Transcript matches");
+    } finally { h.renderer.destroy(); }
+  });
+}
+
 test("missing-directory picker preselects suggestion, supports choosing another workspace and cancelling", async () => {
   const h = await createTestRenderer({ width: 110, height: 20 });
   const calls: any[] = [];
@@ -163,7 +184,7 @@ test("Right Arrow still edits mid-query and empty queries never trigger scanning
     h.mockInput.pressArrow("left"); h.mockInput.pressArrow("left");
     h.mockInput.pressArrow("right");
     await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
-    expect(requests).toEqual([]);
+    expect(requests).toEqual(["list"]);
     await h.mockInput.typeText("X"); await h.renderOnce();
     expect(h.captureCharFrame()).toContain("paymenXt");
   } finally { h.renderer.destroy(); }

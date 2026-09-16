@@ -43,11 +43,12 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let transcriptHits: Array<{ session: SavedSession; excerpt: string }> = [];
   const stopScan = () => { clearTimeout(scanTimer); scanController?.abort(); scanController = undefined; };
   const transcriptQuery = () => (">@:".includes(query[0] ?? " ") ? query.slice(1) : query).trim();
-  const sessionSearchVisible = () => query.startsWith(">") || transcripts;
+  const sessionMetadataVisible = () => query.startsWith(">") || (!query.startsWith("@") && !query.startsWith(":"));
+  const sessionSearchVisible = () => (sessionMetadataVisible() && Boolean(query.trim())) || transcripts;
   renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); });
 
   function visibleResults() {
-    const combined = query.startsWith(">") ? mergeSessions(allItems, sessions) : allItems;
+    const combined = sessionMetadataVisible() ? mergeSessions(allItems, sessions) : allItems;
     const normal = searchResults(combined, query, deps.history);
     if (!transcripts) return normal;
     const ids = new Set(normal.map(result => result.item.id));
