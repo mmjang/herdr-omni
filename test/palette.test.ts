@@ -206,7 +206,7 @@ test("initial loading selects the first workspace unless the user has interacted
   }
 });
 
-test("without Recent the first available result remains the initial selection", async () => {
+test("without a query the first available result remains the initial selection", async () => {
   const harness = await createTestRenderer({ width: 80, height: 18 });
   const ran: string[] = [];
   const controller = mountPalette(harness.renderer, [], { run: async entry => { ran.push(entry.id); return { ok: true, message: "" }; }, close: () => {} });
@@ -276,7 +276,7 @@ test("shows each live agent status beside its session title", async () => {
   expect(frame).toContain("Review - project");
 });
 
-test("history never creates a Recent section", async () => {
+test("history never creates an extra section", async () => {
   const harness = await createTestRenderer({ width: 70, height: 18 });
   const mixed = [
     { ...item("first", "First", { kind: "shortcut" }), category: "Tabs" as const },

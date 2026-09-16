@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
 import { transcriptExcerpt, transcriptTerms, savedSessionItem, mergeSessions, runSessionJob } from "../src/sessions";
-import { CodexHistory, codexText, claudeText } from "../src/session-worker";
+import { CodexHistory, codexText, claudeText, prefilterTranscriptSessions, type TranscriptPrefilterRunner } from "../src/session-worker";
 import { filterPaletteItems } from "../src/search";
 import { itemsFromSnapshot } from "../src/live";
 import { resumeSavedSession, findSessionWorkspace, resumeWorkspaceChoices } from "../src/resume-session";
@@ -9,6 +9,13 @@ import { transcriptPreview } from "../src/transcript-preview";
 import type { SavedSession } from "../src/types";
 
 const session: SavedSession = { provider: "codex", id: "019abc-def", title: "Investigate checkout", cwd: "/repo/shop", updatedAt: 1 };
+
+class FakeRg implements TranscriptPrefilterRunner {
+  calls: string[][] = [];
+  constructor(private readonly responses: Array<{ code: number; stdout: string }>) {}
+  async run(args: string[]) { this.calls.push(args); return this.responses.shift() ?? { code: 2, stdout: "" }; }
+  close() {}
+}
 
 test("agent metadata search includes saved sessions and contiguous IDs, not transcript contents", () => {
   const item = savedSessionItem(session);
@@ -91,6 +98,62 @@ test("provider extraction keeps conversation text but excludes all tool content"
   ]);
   expect(messages).toEqual(["question", "answer"]);
   expect(transcriptExcerpt(messages, "tool output")).toBeUndefined();
+});
+
+test("transcript prefilter maps Codex JSONL hits and keeps literal escaped queries safe", async () => {
+  const saved = [{ ...session, id: "019abc-def" }];
+  const rg = new FakeRg([
+    { code: 0, stdout: "/home/.codex/sessions/2026/rollout-2026-019abc-def.jsonl\0" },
+    { code: 2, stdout: "" },
+    { code: 0, stdout: "/home/.codex/sessions/2026/rollout-2026-019abc-def.jsonl\0" },
+  ]);
+  const result = await prefilterTranscriptSessions("codex", saved, 'say "hello"', rg, ["/home/.codex/sessions", "/home/.codex/archived_sessions"]);
+  expect(result).toEqual(new Set(["019abc-def"]));
+  expect(rg.calls[2]).toContain("--fixed-strings");
+  expect(rg.calls[2]).toContain("--glob");
+  expect(rg.calls[2]).toContain("rollout-*.jsonl");
+  expect(rg.calls[2]).toContain("say \"hello\"");
+  expect(rg.calls[2]).toContain('"say \\\"hello\\\""');
+  expect(rg.calls[2]).toContain("--");
+});
+
+test("transcript prefilter maps Claude filenames and distinguishes no-hit from fallback", async () => {
+  const claude = { ...session, provider: "claude" as const, id: "session-1" };
+  const hit = new FakeRg([
+    { code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" },
+    { code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" },
+  ]);
+  expect(await prefilterTranscriptSessions("claude", [claude], "needle", hit, ["/home/.claude/projects"]))
+    .toEqual(new Set(["session-1"]));
+  const noHit = new FakeRg([{ code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" }, { code: 1, stdout: "" }]);
+  expect(await prefilterTranscriptSessions("claude", [claude], "needle", noHit, ["/home/.claude/projects"]))
+    .toEqual(new Set());
+  const missingRoot = new FakeRg([{ code: 2, stdout: "" }]);
+  expect(await prefilterTranscriptSessions("claude", [claude], "needle", missingRoot, ["/home/.claude/projects"]))
+    .toBeUndefined();
+  const emptyRoot = new FakeRg([{ code: 1, stdout: "" }]);
+  expect(await prefilterTranscriptSessions("claude", [claude], "needle", emptyRoot, ["/home/.claude/projects"]))
+    .toBeUndefined();
+});
+
+test("transcript prefilter falls back when a matched file cannot map to a known session", async () => {
+  const rg = new FakeRg([
+    { code: 0, stdout: "/home/.codex/sessions/2026/rollout-2026-unknown.jsonl\0" },
+    { code: 0, stdout: "/home/.codex/sessions/2026/rollout-2026-unknown.jsonl\0" },
+  ]);
+  expect(await prefilterTranscriptSessions("codex", [session], "needle", rg, ["/home/.codex/sessions"]))
+    .toBeUndefined();
+});
+
+test("transcript prefilter includes compact JSON variants used by formatted excerpts", async () => {
+  const rg = new FakeRg([
+    { code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" },
+    { code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" },
+  ]);
+  const claude = { ...session, provider: "claude" as const, id: "session-1" };
+  await prefilterTranscriptSessions("claude", [claude], '"foo": "bar"', rg, ["/home/.claude/projects"]);
+  expect(rg.calls[1]).toContain('"foo":"bar"');
+  expect(rg.calls[1]).toContain('\\"foo\\":\\"bar\\"');
 });
 
 test("an already-aborted session job starts no worker and emits nothing", async () => {

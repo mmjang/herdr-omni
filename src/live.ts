@@ -29,8 +29,9 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const details = `${count(workspace.tab_count)} tabs · ${count(workspace.pane_count)} panes`;
     const item = liveItem(`workspace:${workspaceId}`, label, "Workspace", checkoutPath ? `${details} · ${checkoutPath}` : details, "◇",
       [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, text(workspace.label), [checkoutPath]);
-    // Herdr currently exposes no visit history. Preserve its order instead of
-    // fabricating recency from focus, workspace position, or Omni selections.
+    // Herdr currently exposes no visit history. Keep the source order as the
+    // stable fallback; searchResults may overlay Omni's persisted selection
+    // history when the user is browsing without a query.
     return item;
   });
 

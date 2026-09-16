@@ -15,7 +15,7 @@ const snapshot = {
   agents: [{ pane_id: "w987:p123", workspace_id: "w987", tab_id: "w987:t543", title: "Review checkout", agent: "codex", name: "hidden-control-name", terminal_title: "raw-spinner-metadata", agent_status: "working", cwd: "/Users/binbin/project/feature-checkout" }],
 };
 
-test("ns matches workspace names, not panes metadata, even in Recent", () => {
+test("ns matches workspace names, not panes metadata, while browsing", () => {
   const items = itemsFromSnapshot(snapshot, "w987");
   const history = { [historyKey("live:workspace:w987")]: 100, [historyKey("live:workspace:w985")]: 99 };
   expect(searchResults(items, "@ns", history).map(result => result.item.title)).toEqual(["native_shell"]);

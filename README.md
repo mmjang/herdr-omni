@@ -111,7 +111,8 @@ UI-only actions show their keyboard binding.
 Use **Tab / Shift+Tab** or click a category label to switch lists. **All** previews
 up to five results per category; **View all** opens the complete list. Worktrees
 live under **Workspaces**.
-Workspace browsing currently preserves Herdr's order; Herdr does not expose visit history.
+Workspace browsing uses Herdr's visit time when available, then Omni's persisted selection
+history, with Herdr's order as the final fallback.
 
 Normal search includes saved session titles, projects, and IDs—no prefix needed.
 OpenCode searches local history across projects (top-level sessions, not child-agent sessions).
@@ -146,6 +147,11 @@ If you already have a checkout, run the last three commands from its root.
 Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
+
+### 0.9.0
+
+- Speed up Codex and Claude transcript search with a safe `rg` prefilter while preserving exact conversation-only results.
+- Order empty Workspace, Worktree, and Tab browsing by visit or selection history, with graceful fallbacks.
 
 ### 0.8.1
 

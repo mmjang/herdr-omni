@@ -30,7 +30,7 @@ test("empty searches keep every match in its presentation section", () => {
   const items = Array.from({ length: 10 }, (_, i) => item(`tab${i}`, `Project ${i}`));
   const history = Object.fromEntries(items.map((entry, i) => [historyKey(entry.id), i + 1]));
   const results = searchResults(items, "", history);
-  expect(results.map(result => result.item.id)).toEqual(items.map(entry => entry.id));
+  expect(results.map(result => result.item.id)).toEqual(items.map(entry => entry.id).reverse());
   expect(new Set(results.map(result => result.item.id)).size).toBe(10);
   expect(results.every(result => result.item.category === "Tabs")).toBe(true);
   expect(searchResults(items, "Project 0", history).map(result => result.section)).toEqual(["Tabs"]);
@@ -46,6 +46,18 @@ test("empty workspace searches order destinations by last visit", () => {
   expect(all.map(result => result.item.id)).toEqual(items.map(entry => entry.id).reverse());
   expect(all.every(result => result.section === "Workspace")).toBe(true);
   expect(searchResults(items, "Destination 0", history)).toEqual([{ item: items[0]!, section: "Workspace" }]);
+});
+
+test("empty workspace and tab browsing uses Omni selection history when Herdr has no visit timestamp", () => {
+  const workspaces = ["alpha", "beta", "gamma"].map((title, i) => ({ ...item(`workspace${i}`, title), category: "Workspace" as const }));
+  const tabs = ["one", "two", "three"].map((title, i) => ({ ...item(`tab${i}`, `Project → ${title}`), category: "Tabs" as const }));
+  const history = {
+    [historyKey(workspaces[2]!.id)]: 30,
+    [historyKey(workspaces[0]!.id)]: 10,
+    [historyKey(tabs[1]!.id)]: 20,
+  };
+  expect(searchResults(workspaces, "", history).map(result => result.item.title)).toEqual(["gamma", "alpha", "beta"]);
+  expect(searchResults(tabs, "", history).map(result => result.item.title)).toEqual(["Project → two", "Project → one", "Project → three"]);
 });
 
 test("prefixes scope results without adding a presentation section", () => {
@@ -66,7 +78,7 @@ test("at-sign scopes fuzzy search to workspace and worktree categories", () => {
   const others = [item("live:tab:w1:t1", "ordering-service"), worktree, item("live:agent:w1:p1", "ordering-service"), ...defaultItems()];
   const items = [workspace, recent, ...others];
   const history = { [historyKey(recent.id)]: 10 };
-  expect(filterPaletteItems(items, "@", history)).toEqual([workspace, recent, worktree]);
+  expect(filterPaletteItems(items, "@", history)).toEqual([recent, workspace, worktree]);
   for (const query of ["@ordsvc", "@ ordsvc"]) {
     expect(filterPaletteItems(items, query, history)).toEqual([workspace, worktree]);
   }
@@ -123,7 +135,7 @@ test("keyword relevance beats history while empty searches use workspace visits"
   const missing = item("missing", "xyz");
   const history = { [historyKey("recent")]: 10, [historyKey("missing")]: 20 };
   expect(filterPaletteItems([first, recent, missing], "dev", history)).toEqual([first, recent]);
-  expect(filterPaletteItems([first, recent, missing], "", history)).toEqual([recent, first, missing]);
+  expect(filterPaletteItems([first, recent, missing], "", history)).toEqual([recent, missing, first]);
 });
 
 test("agent scope uses activity rather than status or selection history", () => {

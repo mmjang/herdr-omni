@@ -65,21 +65,36 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
       if (!Number.isFinite(match)) return [];
       score += match;
     }
-    return [{ item, index, score, recent: item.category === "Actions" ? 0 : history[historyKey(item.id)] ?? 0 }];
+    const recordedAt = history[historyKey(item.id)];
+    const recent = item.category === "Actions" || typeof recordedAt !== "number" || !Number.isFinite(recordedAt)
+      ? 0
+      : Math.max(0, recordedAt);
+    return [{ item, index, score, recent }];
   });
   const sortMatches = (a: typeof matches[number], b: typeof matches[number]) => {
     const scoreDifference = b.score - a.score;
     if (scoreDifference) return scoreDifference;
+    const sectionA = presentationSection(a.item);
+    const sectionB = presentationSection(b.item);
+    // Keep the comparator transitive: recency is meaningful inside a
+    // presentation section, while category order handles equal-score rows
+    // from different sections before the groups are rebuilt below.
+    if (sectionA !== sectionB) {
+      const categoryDifference = sectionOrder(sectionA) - sectionOrder(sectionB);
+      if (categoryDifference) return categoryDifference;
+    }
     if (a.item.category === "Agents" && b.item.category === "Agents") {
       const activityDifference = agentActivity(b.item) - agentActivity(a.item);
       if (activityDifference) return activityDifference;
     }
-    if (browsing && (a.item.category === "Workspace" || a.item.category === "Worktrees")
-      && (b.item.category === "Workspace" || b.item.category === "Worktrees")) {
-      const visitedDifference = (lastVisitedAt(b.item) ?? 0) - (lastVisitedAt(a.item) ?? 0);
+    if (browsing && presentationSection(a.item) === presentationSection(b.item)
+      && (a.item.category === "Workspace" || a.item.category === "Worktrees" || a.item.category === "Tabs")) {
+      const visitedDifference = lastVisitedAt(b.item) - lastVisitedAt(a.item);
       if (visitedDifference) return visitedDifference;
+      const recentDifference = b.recent - a.recent;
+      if (recentDifference) return recentDifference;
     }
-    if (!browsing && !(a.item.category === "Agents" && b.item.category === "Agents")) {
+    if (!browsing && sectionA === sectionB && sectionA !== "Agents") {
       const recentDifference = b.recent - a.recent;
       if (recentDifference) return recentDifference;
     }
@@ -87,7 +102,7 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
   };
   const groups = new Map<string, typeof matches>();
   for (const result of matches.sort(sortMatches)) {
-    const section = result.item.category === "Worktrees" ? "Workspace" : result.item.category;
+    const section = presentationSection(result.item);
     const group = groups.get(section);
     if (group) group.push(result);
     else groups.set(section, [result]);
@@ -98,7 +113,17 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
   return orderedGroups.flatMap(([section, group]) => group.map(({ item }) => ({ item, section })));
 }
 
-/** Unknown visit times keep source order; never substitute Omni selections. */
-function lastVisitedAt(item: PaletteItem): number | undefined {
-  return item.lastVisitedAt;
+function presentationSection(item: PaletteItem): string {
+  return item.category === "Worktrees" ? "Workspace" : item.category;
+}
+
+function sectionOrder(section: string): number {
+  const index = CATEGORY_ORDER.indexOf(section as typeof CATEGORY_ORDER[number]);
+  return index >= 0 ? index : CATEGORY_ORDER.length;
+}
+
+/** Invalid/missing visit times keep source order and allow history to decide. */
+function lastVisitedAt(item: PaletteItem): number {
+  const value = item.lastVisitedAt;
+  return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;
 }
