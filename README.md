@@ -1,36 +1,18 @@
 # Herdr Omni
 
-**Less hunting. More building. Your Herdr session, one search away.**
+**Less hunting. More building.**
 
-Jump to the right workspace, find an agent conversation, or run a command
-without breaking your flow. **Herdr Omni** brings VS Code–style fuzzy search
-to [Herdr](https://herdr.dev)—right inside your terminal.
+Your [Herdr](https://herdr.dev) workspaces, tabs, worktrees, agent sessions, and
+actions—one search away.
 
 ![Herdr Omni in action: search agent sessions and run actions from the command palette](docs/herdr-omni-demo.gif)
 
-### One shortcut. Your whole session.
+- **VS Code's actual fuzzy-matching core.** A few letters find the right result.
+- **Find agent conversations by name.** See live status before you jump.
+- **Recent when browsing. Relevance when searching.** History never overrides a better match.
+- **Go straight there.** `@` workspaces · `>` agents · `:` actions.
 
-- **Find it before you finish typing.** Fuzzy search understands abbreviations,
-  word boundaries, and partial names. Type `ordsvc` to find `ordering-service`.
-- **Pick up where you left off.** Recent successful selections rise to the top,
-  with history saved between palette launches.
-- **Find the conversation, not just the agent.** Search agent session titles and
-  workspace names together. See who's working, finished, or waiting for you.
-- **Put attention where it matters.** Agent priority follows Herdr's states:
-  blocked → done → working → idle → unknown, alongside recency and match quality.
-- **Jump with confidence.** Tab results show `workspace → tab`, so three tabs
-  named `dev` no longer look identical.
-- **Switch worktrees from the same search.** Focus an open worktree or open an
-  existing checkout from the current repository.
-- **Go straight to what you need.** Start with `@` for workspaces, `>` for agents, or `:` for actions.
-  Leave the prefix off to search across everything.
-- **Turn forgotten shortcuts into muscle memory.** Actions display your actual
-  keybindings, including remaps, and prompt for names or confirmation when needed.
-- **Feel at home in your terminal.** A lightweight popup follows your Herdr theme
-  and keeps your tiled layout intact.
-
-**Press `cmd+p`. Type a few letters. Hit Enter.**
-Set up the binding below to make it yours.
+Bind to **`cmd+p`** below. Type, then press Enter or click a result.
 
 Built with Bun and OpenTUI. Forked from
 [Herdr Palette](https://github.com/cesarferreira/herdr-palette) by
