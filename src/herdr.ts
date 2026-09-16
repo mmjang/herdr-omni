@@ -2,10 +2,13 @@ import type { SessionTarget } from "./types";
 
 const binary = () => process.env.HERDR_BIN_PATH ?? "herdr";
 
-export async function runHerdr(argv: string[]) {
+export async function runHerdr(argv: string[], timeoutMs?: number) {
   const child = Bun.spawn([binary(), ...argv], { stdout: "pipe", stderr: "pipe" });
-  const [stdout, stderr, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);
-  return { code, stdout, stderr };
+  const timeout = timeoutMs ? setTimeout(() => child.kill(), timeoutMs) : undefined;
+  try {
+    const [stdout, stderr, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);
+    return { code, stdout, stderr };
+  } finally { clearTimeout(timeout); }
 }
 
 /** Herdr reports server errors as JSON on stderr; show its message rather than the raw envelope. */

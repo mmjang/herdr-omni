@@ -1,5 +1,5 @@
 import { basename } from "node:path";
-import { runHerdr, sessionTarget } from "./herdr";
+import { runHerdr, parseLaunchContext } from "./herdr";
 import type { PaletteItem } from "./types";
 
 type JsonRecord = Record<string, unknown>;
@@ -85,19 +85,22 @@ export function itemsFromWorktrees(worktrees: unknown, currentWorkspaceId: strin
 }
 
 /** Load live search targets without allowing a discovery failure to hide static commands. */
-export async function loadLiveItems(): Promise<PaletteItem[]> {
-  const target = await sessionTarget();
-  const snapshotResult = await runHerdr(["api", "snapshot"]);
-  if (snapshotResult.code !== 0) return [];
+export async function loadLiveItems(onSnapshot?: (items: PaletteItem[]) => void): Promise<PaletteItem[]> {
+  const snapshotResult = await runHerdr(["api", "snapshot"], 5000);
+  if (snapshotResult.code !== 0) throw new Error("Unable to refresh Herdr session.");
 
   let snapshot: JsonRecord;
-  try { snapshot = JSON.parse(snapshotResult.stdout)?.result?.snapshot ?? {}; }
-  catch { return []; }
-  const currentWorkspaceId = target?.workspaceId || text(snapshot.focused_workspace_id);
+  try {
+    snapshot = JSON.parse(snapshotResult.stdout)?.result?.snapshot;
+    if (!snapshot || !Array.isArray(snapshot.workspaces)) throw new Error();
+  }
+  catch { throw new Error("Herdr returned an unreadable session snapshot."); }
+  const currentWorkspaceId = parseLaunchContext()?.workspaceId || text(snapshot.focused_workspace_id);
   const items = itemsFromSnapshot(snapshot, currentWorkspaceId);
+  onSnapshot?.(items);
   if (!currentWorkspaceId) return items;
 
-  const worktreeResult = await runHerdr(["worktree", "list", "--workspace", currentWorkspaceId]);
+  const worktreeResult = await runHerdr(["worktree", "list", "--workspace", currentWorkspaceId], 5000);
   if (worktreeResult.code !== 0) return items;
   try {
     const combined = [...items, ...itemsFromWorktrees(JSON.parse(worktreeResult.stdout)?.result?.worktrees, currentWorkspaceId)];

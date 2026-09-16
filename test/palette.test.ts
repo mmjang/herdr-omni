@@ -59,6 +59,48 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 const settleEscape = () => new Promise(resolve => setTimeout(resolve, 30));
 const rowsOf = (frame: string) => frame.split("\n").filter((row, index, all) => index < all.length - 1 || row !== "");
 
+test("live refresh preserves the selected identity as agents reorder", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 18 });
+  const ran: string[] = [];
+  const a = { ...item("live:agent:a", "Review alpha", { kind: "herdr", argv: [] }), priority: 0, agentStatus: "blocked" as const };
+  const b = { ...item("live:agent:b", "Review beta", { kind: "herdr", argv: [] }), priority: 2, agentStatus: "working" as const };
+  const controller = mountPalette(harness.renderer, [a, b], { run: async entry => { ran.push(entry.id); return { ok: false, message: "test" }; }, close: () => {} });
+  await harness.mockInput.typeText(">review");
+  controller.updateItems([{ ...b, priority: 0, agentStatus: "blocked" }, { ...a, priority: 3, agentStatus: "idle" }]);
+  await harness.renderOnce();
+  expect(harness.captureCharFrame()).toContain("[idle]");
+  harness.mockInput.pressEnter();
+  await settle();
+  expect(ran).toEqual([a.id]);
+  harness.renderer.destroy();
+});
+
+test("highlights fuzzy-matched title characters with the theme accent", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 14 });
+  mountPalette(harness.renderer, [item("ordering", "ordering-service", { kind: "shortcut" })], { theme, run: async () => ({ ok: true, message: "" }), close: () => {} });
+  await harness.mockInput.typeText("ordsvc");
+  await harness.renderOnce();
+  const line = harness.captureSpans().lines.find(line => line.spans.map(span => span.text).join("").includes("ordering-service"))!;
+  const highlighted = line.spans.filter(span => hex(span.fg) === theme.accent).map(span => span.text).join("");
+  expect(highlighted).toContain("ordsvc");
+  harness.renderer.destroy();
+});
+
+test("refresh leaves an in-progress rename prompt intact", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 14 });
+  const ran: string[] = [];
+  const controller = mountPalette(harness.renderer, items, { run: async (_entry, input) => { ran.push(input ?? ""); return { ok: true, message: "" }; }, close: () => {} });
+  await harness.mockInput.typeText("rename");
+  harness.mockInput.pressEnter();
+  await settle();
+  await harness.mockInput.typeText("my logs");
+  controller.updateItems([...items, item("new", "New arrival", { kind: "shortcut" })]);
+  harness.mockInput.pressEnter();
+  await settle();
+  expect(ran).toEqual(["my logs"]);
+  harness.renderer.destroy();
+});
+
 test("shows each live agent status beside its session title", async () => {
   const harness = await createTestRenderer({ width: 80, height: 18 });
   const statuses = ["blocked", "done", "working", "idle", "unknown"] as const;

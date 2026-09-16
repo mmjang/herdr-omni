@@ -6,6 +6,8 @@ Jump to the right workspace, find an agent conversation, or run a command
 without breaking your flow. **Herdr Omni** brings VS Code–style fuzzy search
 to [Herdr](https://herdr.dev)—right inside your terminal.
 
+![Herdr Omni in action: search agent sessions and run actions from the command palette](docs/herdr-omni-demo.gif)
+
 ### One shortcut. Your whole session.
 
 - **Find it before you finish typing.** Fuzzy search understands abbreviations,
@@ -29,8 +31,6 @@ to [Herdr](https://herdr.dev)—right inside your terminal.
 
 **Press `cmd+p`. Type a few letters. Hit Enter.**
 Set up the binding below to make it yours.
-
-![Herdr Omni](docs/screenshot4.png)
 
 Built with Bun and OpenTUI. Forked from
 [Herdr Palette](https://github.com/cesarferreira/herdr-palette) by
@@ -100,7 +100,12 @@ Custom commands from your configuration are shown as documentation only; their
 execution semantics remain owned by Herdr. A failing Herdr command shows its
 error and leaves the palette open.
 
-Live results are refreshed each time the palette opens. Tab results include
+The palette opens immediately with actions while live results load in the
+background. Workspace, tab, and agent results appear before worktree discovery
+finishes. Live results refresh automatically every two seconds after each
+refresh completes; the selected item and search cursor are preserved, and failed
+refreshes retain the last available results. Closing the palette stops polling.
+Tab results include
 their workspace as a breadcrumb, so repeated tab names remain unambiguous.
 Start a search with `>` to show only live agents; text after the prefix filters
 those agent results further.
@@ -110,7 +115,8 @@ All Herdr commands appear under **Actions**. Start with `:` to show only actions
 or type a query such as `:split` to fuzzy-search them.
 
 Search supports fuzzy abbreviations, with bonuses for consecutive letters and
-word boundaries. Matching results selected successfully through the palette
+word boundaries. Matching characters in result titles are highlighted using the
+theme's accent color. Matching results selected successfully through the palette
 appear in a **Recent** section with up to seven matching results, newest first.
 Older selections remain in their regular sections without duplicating those seven.
 Recent contains navigation destinations only: workspaces, tabs, worktrees, and

@@ -1,8 +1,8 @@
-import { BoxRenderable, InputRenderable, InputRenderableEvents, TextRenderable, type CliRenderer } from "@opentui/core";
+import { BoxRenderable, InputRenderable, InputRenderableEvents, TextRenderable, StyledText, fg, bold, type CliRenderer } from "@opentui/core";
 import type { CommandResult, PaletteItem } from "./types";
 import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
-import { filterPaletteItems, searchResults } from "./search";
+import { filterPaletteItems, searchResults, matchingPositions } from "./search";
 export { filterPaletteItems } from "./search";
 
 export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
@@ -16,11 +16,15 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let promptItem: PaletteItem | undefined;
   let promptValue = "";
   let panel: BoxRenderable | undefined;
+  let activeInput: InputRenderable | undefined;
+  let loading = false;
+  let refreshError = false;
 
   const visibleItems = () => filterPaletteItems(allItems, query, deps.history);
   const prompting = () => promptItem !== undefined;
 
-  function redraw() {
+  function redraw(preserveCursor = false) {
+    const cursor = preserveCursor ? activeInput?.cursorOffset : undefined;
     panel?.destroy();
     const results = searchResults(allItems, query, deps.history);
     const items = results.map(result => result.item);
@@ -41,6 +45,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       textColor: theme.text,
       cursorColor: theme.accent,
     });
+    activeInput = input;
     input.on(InputRenderableEvents.INPUT, (value: string) => {
       if (prompting()) promptValue = value;
       else { query = value; selected = 0; }
@@ -48,12 +53,13 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       redraw();
     });
     body.add(input); input.focus();
+    if (cursor !== undefined) input.cursorOffset = cursor;
     const list = new BoxRenderable(renderer, { id: "list", flexDirection: "column", flexGrow: 1, marginTop: 1 });
     body.add(list);
     if (prompting()) {
       list.add(new TextRenderable(renderer, { id: "prompt-hint", content: promptItem!.description, fg: theme.muted }));
     } else if (items.length === 0) {
-      list.add(new TextRenderable(renderer, { id: "empty", content: "No results match your search.", fg: theme.muted }));
+      list.add(new TextRenderable(renderer, { id: "empty", content: loading ? "Loading live results…" : "No results match your search.", fg: theme.muted }));
     } else {
       const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0)), result => result.section);
       let category = "";
@@ -65,7 +71,13 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         }
         const row = new BoxRenderable(renderer, { id: `item-${index}`, flexDirection: "row", width: "100%", paddingLeft: 1, paddingRight: 2, backgroundColor: index === selected ? theme.panel : theme.background });
         row.add(new TextRenderable(renderer, { id: `mark-${index}`, content: index === selected ? "┃" : " ", fg: theme.accent }));
-        row.add(new TextRenderable(renderer, { id: `label-${index}`, content: `${item.icon}  ${item.title}`, fg: index === selected ? theme.text : theme.muted, flexGrow: 1 }));
+        const positions = matchingPositions(query, item.title);
+        const normalColor = index === selected ? theme.text : theme.muted;
+        const content = new StyledText([
+          fg(normalColor)(`${item.icon}  `),
+          ...[...item.title].map((char, i) => positions.has(i) ? bold(fg(theme.accent)(char)) : fg(normalColor)(char)),
+        ]);
+        row.add(new TextRenderable(renderer, { id: `label-${index}`, content, fg: normalColor, flexGrow: 1 }));
         row.add(new TextRenderable(renderer, {
           id: `key-${index}`,
           content: item.agentStatus ? ` [${item.agentStatus}]` : item.shortcuts.join(" / "),
@@ -90,7 +102,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else {
       bar.add(key("footer-enter", "enter")); bar.add(label("footer-select", " select   "));
       bar.add(key("footer-arrows", "↑/↓")); bar.add(label("footer-move", " move", true));
-      bar.add(label("footer-count", `${count} results`));
+      bar.add(label("footer-count", loading ? "Loading…" : refreshError ? "Refresh unavailable" : `${count} results`));
     }
     return bar;
   }
@@ -142,4 +154,18 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   });
 
   redraw();
+  return {
+    setLoading(value: boolean) { loading = value; redraw(true); },
+    refreshFailed() { loading = false; refreshError = true; if (!prompting() && !running) redraw(true); },
+    updateItems(items: PaletteItem[]) {
+      const selectedId = visibleItems()[selected]?.id;
+      const changed = JSON.stringify(items) !== JSON.stringify(allItems) || loading || refreshError;
+      allItems = items;
+      loading = false;
+      refreshError = false;
+      const nextIndex = visibleItems().findIndex(item => item.id === selectedId);
+      if (nextIndex >= 0) selected = nextIndex;
+      if (changed && !prompting() && !running) redraw(true);
+    },
+  };
 }

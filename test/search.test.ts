@@ -1,5 +1,5 @@
 import { expect, test } from "bun:test";
-import { filterPaletteItems, fuzzyScore, searchResults } from "../src/search";
+import { filterPaletteItems, fuzzyScore, matchingPositions, searchResults } from "../src/search";
 import { historyKey } from "../src/history";
 import { itemsFromSnapshot } from "../src/live";
 import { defaultItems } from "../src/catalog";
@@ -60,7 +60,19 @@ test("fuzzy search matches abbreviations and favors contiguous and boundary matc
   expect(Number.isFinite(fuzzyScore("ordsvc", "ordering-service"))).toBe(true);
   expect(fuzzyScore("os", "OrderingService")).toBeGreaterThan(fuzzyScore("os", "almost"));
   expect(fuzzyScore("dev", "dev")).toBeGreaterThan(fuzzyScore("dev", "delivery view"));
+  expect(fuzzyScore("dev", "dev") - fuzzyScore("dev", "development")).toBe(100);
   expect(fuzzyScore("xyz", "ordering-service")).toBe(-Infinity);
+});
+
+test("matchingPositions traces repeated-character and abbreviation matches", () => {
+  expect(matchingPositions("aa", "banana")).toEqual(new Set([1, 3]));
+  expect(matchingPositions("ordsvc", "ordering-service")).toEqual(new Set([0, 1, 2, 9, 12, 14]));
+});
+
+test("matchingPositions uses title codepoint indices and combines scoped tokens", () => {
+  expect(matchingPositions("cf", "🚀 café")).toEqual(new Set([2, 4]));
+  expect(matchingPositions(">rv chk", "Review checkout")).toEqual(new Set([0, 2, 7, 8, 11]));
+  expect(matchingPositions("@zz", "世界")).toEqual(new Set());
 });
 
 test("recent matching selections lead across categories but cannot bypass the query", () => {
