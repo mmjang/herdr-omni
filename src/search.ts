@@ -59,7 +59,7 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
   const tokens = (agentsOnly || actionsOnly || workspacesOnly ? query.slice(1) : query).trim().split(/\s+/).filter(Boolean);
   const browsing = tokens.length === 0;
   const matches = items.flatMap((item, index) => {
-    if (agentsOnly && !item.id.startsWith("live:agent:")) return [];
+    if (agentsOnly && !item.id.startsWith("live:agent:") && !item.savedSession) return [];
     if (actionsOnly && item.category !== "Actions") return [];
     if (workspacesOnly && !item.id.startsWith("live:workspace:")) return [];
     let score = 0;
@@ -67,6 +67,7 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
       // Presentation metadata and shortcut syntax are not search keywords.
       const pathMatches = (item.searchPaths ?? []).filter(path => path.toLowerCase().includes(token.toLowerCase()));
       const match = Math.max(fuzzyScore(token, item.searchTitle ?? item.title),
+        item.session?.id.toLowerCase().includes(token.toLowerCase()) ? 1000 : -Infinity,
         ...item.aliases.map(field => fuzzyScore(token, field) - 25),
         ...pathMatches.map(path => fuzzyScore(token, path) - 25));
       if (!Number.isFinite(match)) return [];

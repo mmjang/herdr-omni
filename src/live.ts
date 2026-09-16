@@ -68,6 +68,11 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     item.priority = ["blocked", "done", "working", "idle", "unknown"].indexOf(text(agent.agent_status));
     if (item.priority < 0) item.priority = 4;
     item.agentStatus = (["blocked", "done", "working", "idle", "unknown"] as const)[item.priority];
+    const session = agent.agent_session as JsonRecord | undefined;
+    const provider = text(session?.agent) || text(agent.agent);
+    if (session?.kind === "id" && text(session.value) && (provider === "codex" || provider === "claude")) {
+      item.session = { provider, id: text(session.value), title: sessionName, cwd: text(agent.cwd), updatedAt: 0 };
+    }
     return item;
   });
 

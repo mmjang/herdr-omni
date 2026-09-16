@@ -1,6 +1,7 @@
 import { explain, neighborAgent, neighborTab, neighborWorkspace, runHerdr, sessionTarget, worktreeCreateArgv, worktreeOpenArgv } from "./herdr";
 import type { CommandResult, Invocation, PaletteItem, ResolveAction, SessionTarget } from "./types";
 import { requestHerdr } from "./socket";
+import { resumeSavedSession } from "./resume-session";
 
 type Resolution = { argv: string[] } | { message: string };
 
@@ -59,7 +60,7 @@ async function resolveAction(action: ResolveAction, target: SessionTarget, step:
 }
 
 /** Some Herdr commands take an explicit target, so they need the pane the palette was summoned from. */
-export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut" } | { kind: "pane-api" }>, input = ""): Promise<Resolution> {
+export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut" } | { kind: "pane-api" } | { kind: "resume-session" }>, input = ""): Promise<Resolution> {
   if (invocation.kind === "herdr") return { argv: invocation.argv };
   const target = await sessionTarget();
   if (!target) return { message: "Herdr did not report the pane that opened the palette." };
@@ -67,6 +68,10 @@ export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut"
 }
 
 export async function execute(item: PaletteItem, input = ""): Promise<CommandResult> {
+  if (item.invocation.kind === "resume-session") {
+    if (item.invocation.fallbackWorkspaceId && input.trim().toLowerCase() !== "yes") return { ok: false, message: 'Type "yes" to resume here, or press Esc to cancel.' };
+    return resumeSavedSession(item.invocation.session, undefined, item.invocation.fallbackWorkspaceId, item.invocation.destination);
+  }
   if (item.invocation.kind === "pane-api") {
     const target = await sessionTarget();
     if (!target) return { ok: false, message: "Herdr did not report the pane that opened the palette." };

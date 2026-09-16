@@ -18,6 +18,7 @@ export type ResolveAction =
   | "worktree-remove";
 
 export type Invocation =
+  | { kind: "resume-session"; session: SavedSession; fallbackWorkspaceId?: string; destination?: { id: string; cwd: string } }
   | { kind: "pane-api"; method: "pane.edit_scrollback" }
   | { kind: "herdr"; argv: string[] }
   | { kind: "resolve"; action: ResolveAction; step?: -1 | 1 }
@@ -26,6 +27,14 @@ export type Invocation =
 export interface PromptSpec { placeholder: string; /** Accept an empty submit (used only when the resolver allows it). */ allowEmpty?: boolean }
 
 export interface SessionTarget { paneId: string; tabId: string; workspaceId: string }
+
+export interface SavedSession {
+  provider: "codex" | "claude";
+  id: string;
+  title: string;
+  cwd: string;
+  updatedAt: number;
+}
 
 export interface PaletteItem {
   id: string;
@@ -43,6 +52,9 @@ export interface PaletteItem {
   prompt?: PromptSpec;
   priority?: number;
   agentStatus?: "blocked" | "done" | "working" | "idle" | "unknown";
+  session?: SavedSession;
+  savedSession?: boolean;
 }
 
-export interface CommandResult { ok: boolean; message: string }
+export interface ResumeWorkspaceChoice { id: string; label: string; cwd: string; reason: string }
+export interface CommandResult { ok: boolean; message: string; confirmWorkspace?: { id: string; label: string }; workspaceChoices?: ResumeWorkspaceChoice[] }

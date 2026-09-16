@@ -8,7 +8,7 @@ actions—one search away.
 ![Herdr Omni in action: search agent sessions and run actions from the command palette](docs/herdr-omni-demo.gif)
 
 - **VS Code's actual fuzzy-matching core.** A few letters find the right result.
-- **Find agent conversations by name.** See live status before you jump.
+- **Find the conversation you remember.** Search live and saved Codex/Claude sessions—or press `→` to search their transcripts.
 - **Recent when browsing. Relevance when searching.** History never overrides a better match.
 - **Go straight there.** `@` workspaces · `>` agents · `:` actions.
 
@@ -144,8 +144,21 @@ refreshes retain the last available results. Closing the palette stops polling.
 Tab results include
 their workspace as a breadcrumb, so repeated tab names remain unambiguous.
 Unnamed tabs and tabs with purely numeric names are excluded from results.
-Start a search with `>` to show only live agents; text after the prefix filters
-those agent results further.
+Start a search with `>` to find live agents and saved Codex/Claude sessions by
+name, project, or session ID. Live results appear immediately; saved-session
+metadata loads in the background. Saved sessions are labeled with their provider.
+Enter/click focuses a matching live pane, or resumes a saved session in a new tab
+in a matching workspace, using its original project directory. Workspace matching
+uses pane directories and explicit worktree paths, not workspace names. Multiple
+matches use the first workspace in Herdr's order. If none match, Omni asks before
+using the current workspace: type `yes` to confirm or Esc to cancel.
+If the original directory was removed, choose an existing
+workspace directory from a picker. Omni suggests surviving Git worktree matches,
+then matching project folders, then the current workspace. Enter confirms; Esc
+cancels. This restores conversation history, not deleted files or Git changes.
+While the agent starts, a waiting screen shows elapsed time and prevents duplicate
+launches. Startup failures are reported instead of silently closing the palette.
+Matching live/saved session IDs are deduplicated.
 Use `@` for workspace-only search: `@` lists workspaces, while `@order`
 fuzzy-searches them. Bare prefixes retain Recent; adding keywords ranks by relevance.
 All Herdr commands appear under **Actions**. Start with `:` to show only actions,
@@ -157,7 +170,8 @@ agent priorities. It does not reproduce VS Code's complete file-ranking policy.
 Search fields are explicit: workspace and tab names, agent session/workspace
 names and agent kinds, worktree names/branches, and curated action synonyms.
 Paths support contiguous, case-insensitive text matching rather than scattered
-fuzzy letters. Display descriptions, counts, statuses, internal IDs, automatic
+fuzzy letters. Agent session IDs support contiguous matching. Display descriptions,
+counts, statuses, other internal IDs, automatic
 index numbers, raw terminal titles, and shortcut modifiers are not search fields.
 Recent appears only for an empty query or a bare `@` / `>` prefix, never for
 keyword searches or Actions. Keyword searches keep results in their original
@@ -184,6 +198,38 @@ reopening the palette and is stored under `$XDG_STATE_HOME/herdr-palette`
 record a visit.
 
 The history directory retains its original name to preserve existing selections.
+
+### Optional transcript search
+
+Press **Right Arrow** at the end of a non-empty search query to explore matching
+transcripts. This works with plain queries as well as `>`, `@`, and `:` searches
+(the prefix is omitted from transcript matching). Press **Esc** to return to
+normal results; press Esc again to close Omni. Right Arrow inside the query still
+moves the text cursor. Transcript search is off each time Omni opens.
+Normal results stay available while matching conversations
+arrive under **Transcript matches**; the selected session stays selected. The
+selected transcript match shows up to six lines of surrounding context below the
+list, with literal matches highlighted. The preview centers on the hit, and includes
+neighboring messages when the matching message is short.
+
+- `>payment timeout`: both keywords must occur in the same message.
+- `>"duplicate payment callback"`: match the literal phrase.
+- Chinese text, error codes, and partial IDs work too; transcript text uses
+  case-insensitive literal matching, not scattered-letter fuzzy matching.
+
+Scans run newest-first in a separate, cancellable process. Editing the query,
+leaving transcript search with Esc, or closing Omni cancels stale work. No SQLite,
+persistent transcript index, or model request is used. Up to 100 transcript
+matches are returned per scan, with an explicit notice when the limit is reached.
+
+Codex history uses the installed CLI's app-server `thread/list` and `thread/read`;
+Claude history uses the official Agent SDK's local session readers. Both CLIs must
+be available on PATH for their saved sessions to be discovered. Tested with Codex
+0.154.0 and Claude Code 2.1.273; older/incompatible providers report errors without
+blocking live search. This covers locally available history (unarchived Codex
+threads), not cloud-only or deleted sessions. Searchable content includes exposed
+user/assistant text and supported command/tool output; images, hidden reasoning,
+and internal metadata are excluded. Provider history/compaction limits still apply.
 
 ## Local development
 

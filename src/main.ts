@@ -9,6 +9,7 @@ import { startLiveRefresh } from "./refresh";
 import { CATEGORY_ORDER } from "./constants";
 import { checkForUpdate, dismissUpdate, installUpdate } from "./update";
 import { version } from "../package.json";
+import { runSessionJob } from "./sessions";
 
 // Read Herdr's config before drawing so the popup uses the theme Herdr itself is rendering with.
 const theme = loadTheme();
@@ -18,7 +19,7 @@ const palette = mountPalette(renderer, items, { theme, history: loadHistory(), r
   const result = await execute(item, input);
   if (result.ok && item.category !== "Actions") recordSelection(item.id);
   return result;
-}, close: () => renderer.destroy(), update: installUpdate, dismissUpdate });
+}, close: () => renderer.destroy(), update: installUpdate, dismissUpdate, sessionJob: runSessionJob });
 palette.setLoading(true);
 let firstLoad = true;
 const stopRefresh = startLiveRefresh(async publish => {
