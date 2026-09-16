@@ -4,6 +4,7 @@ import { filterPaletteItems, mountPalette } from "../src/palette";
 import { fallbackTheme } from "../src/theme";
 import type { CommandResult, PaletteItem } from "../src/types";
 import { historyKey } from "../src/history";
+import { defaultItems } from "../src/catalog";
 
 /**
  * A palette deliberately unlike both the built-in fallback and anything a real Herdr config
@@ -315,6 +316,41 @@ test("asks for input before running a prompted command", async () => {
 
   expect(ran).toEqual([{ id: "rename_pane", input: "logs" }, "closed"]);
 });
+
+for (const input of ["feature/my-task", "", null]) {
+  test(`new worktree prompts before ${input === null ? "cancellation" : input ? "named creation" : "automatic naming"}`, async () => {
+    const harness = await createTestRenderer({ width: 80, height: 14 });
+    const ran: Array<string | undefined> = [];
+    const action = defaultItems().find(item => item.id === "new_worktree")!;
+    mountPalette(harness.renderer, [action], {
+      theme,
+      run: async (_item, value) => { ran.push(value); return { ok: true, message: "" }; },
+      close: () => ran.push("closed"),
+    });
+    try {
+      harness.mockInput.pressEnter();
+      await settle();
+      await harness.renderOnce();
+      expect(harness.captureCharFrame()).toContain("Branch name (leave blank for automatic)");
+      expect(ran).toEqual([]);
+      if (input === null) {
+        await harness.mockInput.typeText("discard-me");
+        harness.mockInput.pressEscape();
+        await settleEscape();
+        expect(ran).toEqual([]);
+        await harness.renderOnce();
+        expect(harness.captureCharFrame()).not.toContain("Branch name (leave blank for automatic)");
+      } else {
+        if (input) await harness.mockInput.typeText(input);
+        harness.mockInput.pressEnter();
+        await settle();
+        expect(ran).toEqual([input, "closed"]);
+      }
+    } finally {
+      harness.renderer.destroy();
+    }
+  });
+}
 
 test("returns to search when escaping a prompt", async () => {
   const { mockInput, renderOnce, captureCharFrame, ran } = await palette({ ok: true, message: "" });

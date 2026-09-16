@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { expect, test } from "bun:test";
 import { loadPaletteItems, parseKeyRemaps, unescapeToml } from "../src/config";
 import { defaultItems } from "../src/catalog";
-import { explain, parseLaunchContext, stepAgent, stepTab, stepWorkspace, worktreeOpenArgv } from "../src/herdr";
+import { explain, parseLaunchContext, stepAgent, stepTab, stepWorkspace, worktreeCreateArgv, worktreeOpenArgv } from "../src/herdr";
 
 test("reads the pane, tab, and workspace Herdr injected at launch", () => {
   const context = JSON.stringify({ workspace_id: "wG", tab_id: "wG:t1", focused_pane_id: "wG:p1", focused_pane_cwd: "/tmp" });
@@ -48,6 +48,13 @@ test("steps between agents from the calling pane, else the focused agent", () =>
   expect(stepAgent(agents, "missing", 1)).toEqual({ paneId: "wM:p1" });
   expect(stepAgent(agents.slice(0, 1), "w2:p1", 1)).toEqual({ message: "Only one agent is running." });
   expect(stepAgent([], "w2:p1", 1)).toEqual({ message: "No agents are running." });
+});
+
+test("creates a named worktree or leaves naming to Herdr for blank input", () => {
+  expect(worktreeCreateArgv("wM", " feature/my-task ")).toEqual(["worktree", "create", "--workspace", "wM", "--branch", "feature/my-task", "--focus"]);
+  for (const input of ["", "   "]) {
+    expect(worktreeCreateArgv("wM", input)).toEqual(["worktree", "create", "--workspace", "wM", "--focus"]);
+  }
 });
 
 test("opens a worktree by path or branch depending on the input shape", () => {
@@ -137,5 +144,5 @@ test("Edit scrollback displays its default shortcut and respects remaps", () => 
 
 test("prompts before running commands that need text input", () => {
   const prompted = defaultItems().filter(item => item.prompt).map(item => item.id);
-  expect(prompted).toEqual(["rename_workspace", "rename_tab", "rename_pane", "open_worktree", "remove_worktree"]);
+  expect(prompted).toEqual(["rename_workspace", "rename_tab", "rename_pane", "new_worktree", "open_worktree", "remove_worktree"]);
 });

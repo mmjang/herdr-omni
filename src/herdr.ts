@@ -105,6 +105,11 @@ export async function neighborAgent(target: SessionTarget, step: number): Promis
   } catch { return { message: "Herdr returned an unreadable agent list." }; }
 }
 
+export function worktreeCreateArgv(workspaceId: string, input: string): string[] {
+  const branch = input.trim();
+  return ["worktree", "create", "--workspace", workspaceId, ...(branch ? ["--branch", branch] : []), "--focus"];
+}
+
 /** Prefer --path when the input looks like a filesystem location; otherwise treat it as a branch name. */
 export function worktreeOpenArgv(workspaceId: string, input: string): string[] {
   const value = input.trim();

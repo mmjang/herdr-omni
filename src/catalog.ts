@@ -53,7 +53,7 @@ export const defaultItems = (): PaletteItem[] => [
   resolve("move_pane_new_workspace", "Move pane to new workspace", "Panes", "Move the current pane into a new workspace", "◇", "", "move-pane-new-workspace"),
   resolve("close_pane", "Close pane", "Panes", "Close the focused pane", "×", "prefix+x", "close-pane"),
 
-  resolve("new_worktree", "New worktree", "Worktrees", "Create and open a Git worktree", "◈", "prefix+shift+g", "worktree-create"),
+  resolve("new_worktree", "New worktree", "Worktrees", "Create and open a Git worktree; leave blank for automatic naming", "◈", "prefix+shift+g", "worktree-create", undefined, { placeholder: "Branch name (leave blank for automatic)" }),
   resolve("open_worktree", "Open worktree", "Worktrees", "Open an existing Git worktree by branch or path", "◈", "", "worktree-open", undefined, branchOrPath),
   resolve("remove_worktree", "Remove worktree", "Worktrees", "Remove the current workspace worktree checkout", "×", "", "worktree-remove", undefined, confirmRemove),
 

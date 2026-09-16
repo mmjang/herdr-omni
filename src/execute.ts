@@ -1,4 +1,4 @@
-import { explain, neighborAgent, neighborTab, neighborWorkspace, runHerdr, sessionTarget, worktreeOpenArgv } from "./herdr";
+import { explain, neighborAgent, neighborTab, neighborWorkspace, runHerdr, sessionTarget, worktreeCreateArgv, worktreeOpenArgv } from "./herdr";
 import type { CommandResult, Invocation, PaletteItem, ResolveAction, SessionTarget } from "./types";
 import { requestHerdr } from "./socket";
 
@@ -47,7 +47,7 @@ async function resolveAction(action: ResolveAction, target: SessionTarget, step:
     case "move-pane-new-workspace":
       return { argv: ["pane", "move", target.paneId, "--new-workspace", "--focus"] };
     case "worktree-create":
-      return { argv: ["worktree", "create", "--workspace", target.workspaceId, "--focus"] };
+      return { argv: worktreeCreateArgv(target.workspaceId, input) };
     case "worktree-open": {
       const missing = needInput(input, "branch or path");
       return missing ?? { argv: worktreeOpenArgv(target.workspaceId, input) };
