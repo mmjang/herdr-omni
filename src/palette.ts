@@ -1,10 +1,12 @@
 import { BoxRenderable, InputRenderable, InputRenderableEvents, TextRenderable, StyledText, fg, bold, type CliRenderer } from "@opentui/core";
 import type { CommandResult, PaletteItem, SavedSession, ResumeWorkspaceChoice } from "./types";
-import { mergeSessions, savedSessionItem, sessionKey, cleanText, TRANSCRIPT_DEBOUNCE_MS, type SessionJob } from "./sessions";
+import { mergeSessions, savedSessionItem, sessionKey, cleanText, agentActivity, TRANSCRIPT_DEBOUNCE_MS, type SessionJob } from "./sessions";
+import { activityAge } from "./activity";
 import { transcriptPreview, TRANSCRIPT_PREVIEW_ROWS } from "./transcript-preview";
 import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
 import { searchResults, matchingPositions } from "./search";
+import { resultTabs, tabResults, tabMatchCounts, sectionLabel, type ResultRow } from "./result-tabs";
 import { version } from "../package.json";
 import type { UpdateOffer } from "./update";
 export { filterPaletteItems } from "./search";
@@ -12,11 +14,12 @@ export { filterPaletteItems } from "./search";
 export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
-const CHROME_ROWS = 4;
+const CHROME_ROWS = 5;
 
 export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], deps: PaletteDeps) {
   const theme = deps.theme ?? fallbackTheme;
   let query = "", selected = 0, status = "", running = false;
+  let activeTab = "All";
   let runningTitle = "", runningStarted = 0;
   let runningTimer: ReturnType<typeof setInterval> | undefined;
   let promptItem: PaletteItem | undefined;
@@ -44,12 +47,12 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   const stopScan = () => { clearTimeout(scanTimer); scanController?.abort(); scanController = undefined; };
   const transcriptQuery = () => (">@:".includes(query[0] ?? " ") ? query.slice(1) : query).trim();
   const sessionMetadataVisible = () => query.startsWith(">") || (!query.startsWith("@") && !query.startsWith(":"));
-  const sessionSearchVisible = () => (sessionMetadataVisible() && Boolean(query.trim())) || transcripts;
+  const sessionSearchVisible = () => sessionMetadataVisible() || transcripts;
   renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); });
 
-  function visibleResults() {
+  function allResults(): ResultRow[] {
     const combined = sessionMetadataVisible() ? mergeSessions(allItems, sessions) : allItems;
-    const normal = searchResults(combined, query, deps.history);
+    const normal = searchResults(combined, ">@:".includes(query[0] ?? " ") ? query.slice(1) : query, deps.history);
     if (!transcripts) return normal;
     const ids = new Set(normal.map(result => result.item.id));
     const bySession = new Map(combined.flatMap(item => item.session ? [[sessionKey(item.session), item] as const] : []));
@@ -60,8 +63,47 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       return [{ item, section: "Transcript matches" }];
     })];
   }
+  const tabs = () => [...new Set([...resultTabs(allResults(), [...allItems, ...(sessions.length ? [savedSessionItem(sessions[0]!)] : [])]), activeTab])];
+  const visibleResults = () => tabResults(allResults(), activeTab);
   const visibleItems = () => visibleResults().map(result => result.item);
   const prompting = () => promptItem !== undefined;
+
+  function startTranscriptSearch() {
+    if (transcripts || prompting() || running || updateDialog || workspacePicker || !transcriptQuery() || !deps.sessionJob) return;
+    const id = visibleItems()[selected]?.id;
+    transcripts = true;
+    activeTab = "All";
+    interacted = true;
+    discoverSessions();
+    scheduleScan();
+    const next = visibleItems().findIndex(item => item.id === id);
+    selected = next >= 0 ? next : 0;
+    redraw(true);
+  }
+
+  function transcriptSearchLink(id: string, content: string) {
+    const link = new TextRenderable(renderer, { id, content, fg: theme.accent, height: 1 });
+    let pressed = false;
+    link.onMouseDown = event => { if (event.button === 0) { pressed = true; event.preventDefault(); } };
+    link.onMouseDrag = () => { pressed = false; };
+    link.onMouseOut = () => { pressed = false; };
+    link.onMouseUp = event => {
+      const activate = pressed && event.button === 0;
+      pressed = false;
+      if (activate) { event.preventDefault(); event.stopPropagation(); startTranscriptSearch(); }
+    };
+    return link;
+  }
+
+  function switchTab(tab: string) {
+    activeTab = tab;
+    if (">@:".includes(query[0] ?? " ")) query = query.slice(1);
+    selected = 0;
+    status = "";
+    interacted = true;
+    discoverSessions();
+    redraw();
+  }
 
   function preserveSelection(change: () => void) {
     const previous = visibleItems()[selected];
@@ -131,7 +173,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const heading = new BoxRenderable(renderer, { id: "heading", flexDirection: "row" });
     heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr Omni", fg: theme.text, attributes: 1 }));
     heading.add(new TextRenderable(renderer, { id: "version", content: `  v${version}`, fg: theme.muted, flexGrow: 1 }));
-    heading.add(new TextRenderable(renderer, { id: "escape", content: updating || running ? "" : "esc", fg: theme.muted }));
+    heading.add(new TextRenderable(renderer, { id: "escape", content: updating || running ? "" : prompting() || updateDialog || workspacePicker ? "esc" : "tab switch · esc", fg: theme.muted }));
     body.add(heading);
     if (running) {
       activeInput = undefined;
@@ -202,18 +244,44 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     input.on(InputRenderableEvents.INPUT, (value: string) => {
       interacted = true;
       if (prompting()) promptValue = value;
-      else { query = value; selected = 0; discoverSessions(); scheduleScan(); }
+      else {
+        const previousPrefix = ">@:".includes(query[0] ?? " ") ? query[0] : undefined;
+        query = value;
+        const nextPrefix = ">@:".includes(query[0] ?? " ") ? query[0] : undefined;
+        if (nextPrefix !== previousPrefix) {
+          if (nextPrefix === "@") activeTab = "Workspace";
+          else if (nextPrefix === ">") activeTab = "Agents";
+          else if (nextPrefix === ":") activeTab = "Actions";
+          else if (previousPrefix) activeTab = "All";
+        }
+        selected = 0; discoverSessions(); scheduleScan();
+      }
       status = "";
       redraw(true);
     });
     body.add(input); input.focus();
     input.cursorOffset = cursor ?? input.editBuffer.getEOL().offset;
+    if (!prompting()) {
+      const labels = new BoxRenderable(renderer, { id: "result-tabs", flexDirection: "row", height: 1, flexShrink: 0 });
+      const counts = tabMatchCounts(allResults());
+      for (const tab of [...new Set([...tabs(), activeTab])]) {
+        const count = counts.get(tab) ?? "0";
+        const label = new TextRenderable(renderer, { id: `result-tab-${tab}`, content: tab === activeTab ? `[${sectionLabel(tab)}] (${count}) ` : ` ${sectionLabel(tab)} (${count})  `,
+          fg: tab === activeTab ? theme.accent : theme.muted, attributes: tab === activeTab ? 1 : 0, height: 1, flexShrink: 0 });
+        label.onMouseUp = event => { if (event.button === 0) switchTab(tab); };
+        labels.add(label);
+      }
+      body.add(labels);
+    }
     const list = new BoxRenderable(renderer, { id: "list", flexDirection: "column", flexGrow: 1, marginTop: 1 });
     body.add(list);
     if (prompting()) {
       list.add(new TextRenderable(renderer, { id: "prompt-hint", content: promptItem!.description, fg: theme.muted }));
     } else if (items.length === 0) {
       list.add(new TextRenderable(renderer, { id: "empty", content: loading ? "Loading live results…" : "No results match your search.", fg: theme.muted }));
+      if (!loading && !transcripts && transcriptQuery() && deps.sessionJob) {
+        list.add(transcriptSearchLink("empty-transcripts", "Search session content · Ctrl+F or click"));
+      }
     } else {
       const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0) - (updateOffer ? 1 : 0) - (selectedSession ? 1 : 0) - previewRows - (sessionSearchVisible() && (sessionsLoading || scanStatus || sessionError) ? 1 : 0)), result => result.section);
       let category = "";
@@ -221,7 +289,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         const index = window.start + offset;
         if (results[index]!.section !== category) {
           category = results[index]!.section;
-          list.add(new TextRenderable(renderer, { id: `category-${index}`, content: category, fg: theme.accent, attributes: 1 }));
+          list.add(new TextRenderable(renderer, { id: `category-${index}`, content: sectionLabel(category), fg: theme.accent, attributes: 1 }));
         }
         const row = new BoxRenderable(renderer, { id: `item-${index}`, flexDirection: "row", width: "100%", height: 1, flexShrink: 0, paddingLeft: 1, paddingRight: 2, backgroundColor: index === selected ? theme.panel : theme.background });
         let pressed = false;
@@ -255,7 +323,10 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         row.add(new TextRenderable(renderer, { id: `label-${index}`, content, fg: normalColor, flexGrow: 1, height: 1 }));
         row.add(new TextRenderable(renderer, {
           id: `key-${index}`,
-          content: item.agentStatus ? ` [${item.agentStatus}]` : item.savedSession ? ` Saved · ${item.session!.provider}` : item.shortcuts.join(" / "),
+          content: item.category === "Agents"
+            ? ` ${[item.agentStatus ? `[${item.agentStatus}]` : item.savedSession ? `Saved · ${item.session!.provider}` : "",
+              activityAge(agentActivity(item))].filter(Boolean).join(" · ")}`
+            : item.shortcuts.join(" / "),
           fg: item.agentStatus === "unknown" ? theme.muted : index === selected || item.agentStatus ? theme.accent : theme.shortcut,
           flexShrink: 0,
         }));
@@ -279,7 +350,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       notice.onMouseUp = event => { if (event.button === 0 && !running) openUpgrade(); };
       body.add(notice);
     }
-    panel.add(footerBar(prompting() ? 0 : items.length));
+    panel.add(footerBar(prompting() ? 0 : allResults().filter(row => activeTab === "All" || row.section === activeTab).length));
     renderer.root.add(panel);
   }
 
@@ -293,7 +364,9 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else {
       bar.add(key("footer-enter", "enter/click")); bar.add(label("footer-select", " select   "));
       bar.add(key("footer-arrows", "↑/↓")); bar.add(label("footer-move", " move", true));
-      if (deps.sessionJob && transcriptQuery()) bar.add(label("footer-transcripts", transcripts ? " esc back · content search on  " : " Press → to search session content  "));
+      if (deps.sessionJob) bar.add(transcripts
+        ? label("footer-transcripts", " esc back · content search on  ")
+        : transcriptSearchLink("footer-transcripts", " Ctrl+F · Search session content  "));
       bar.add(label("footer-count", loading ? "Loading…" : refreshError ? "Refresh unavailable" : `${count} results`));
     }
     return bar;
@@ -378,6 +451,8 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     if (prompting()) return run(promptItem!, promptValue);
     const item = visibleItems()[selected];
     if (!item) { status = "No results match your search."; return redraw(); }
+    const viewAll = visibleResults()[selected]?.viewAll;
+    if (viewAll) return switchTab(viewAll);
     if (item.prompt) {
       promptItem = item;
       promptValue = "";
@@ -415,18 +490,9 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       return;
     }
     if (key.ctrl && key.name === "u" && updateOffer) return openUpgrade();
-    if (key.name === "right" && !key.ctrl && !key.meta && !key.shift && !prompting() && !running && transcriptQuery() && deps.sessionJob
-      && activeInput?.logicalCursor.col === activeInput?.editBuffer.getEOL().col) {
+    if (key.ctrl && key.name === "f" && !prompting()) {
       key.preventDefault();
-      if (transcripts) return;
-      const id = visibleItems()[selected]?.id;
-      transcripts = true;
-      interacted = true;
-      discoverSessions();
-      scheduleScan();
-      const next = visibleItems().findIndex(item => item.id === id);
-      selected = next >= 0 ? next : 0;
-      return redraw(true);
+      return startTranscriptSearch();
     }
     if (["up", "down", "left", "right", "home", "end"].includes(key.name) || (key.ctrl && ["p", "n"].includes(key.name))) interacted = true;
     if (key.name === "escape") {
@@ -441,6 +507,12 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       if (key.name === "return" && !running) return select();
       return;
     }
+    if (key.name === "tab") {
+      key.preventDefault();
+      const available = tabs();
+      const index = available.indexOf(activeTab);
+      return switchTab(available[(index + (key.shift ? -1 : 1) + available.length) % available.length]!);
+    }
     const total = visibleItems().length;
     if (key.name === "up" || (key.ctrl && key.name === "p")) { selected = (selected - 1 + total) % Math.max(1, total); return redraw(); }
     if (key.name === "down" || (key.ctrl && key.name === "n")) { selected = (selected + 1) % Math.max(1, total); return redraw(); }
@@ -448,6 +520,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   });
 
   redraw();
+  discoverSessions();
   return {
     offerUpdate(offer: UpdateOffer) {
       if (destroyed || !deps.update || updated || updateOffer) return;

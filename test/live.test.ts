@@ -68,7 +68,7 @@ test("prefers session title metadata over terminal and control names", () => {
   expect(agent?.title).toBe("Audit checkout flow - alpha");
 });
 
-test("focuses an already-open worktree and opens a closed one in the current workspace", () => {
+test("represents only unopened worktrees as workspace destinations", () => {
   const worktrees = [
     { branch: "main", label: "main", path: "/repo", open_workspace_id: "w1", is_bare: false, is_detached: false, is_linked_worktree: false, is_prunable: false },
     { branch: "feature/logs", label: "logs", path: "/repo-logs", open_workspace_id: "w2", is_bare: false, is_detached: false, is_linked_worktree: true, is_prunable: false },
@@ -76,11 +76,8 @@ test("focuses an already-open worktree and opens a closed one in the current wor
   ];
   const items = itemsFromWorktrees(worktrees, "w1");
 
-  const current = items.find(item => item.title === "main");
-  expect(current?.invocation).toEqual({ kind: "herdr", argv: ["workspace", "focus", "w1"] });
-
-  const otherOpen = items.find(item => item.title === "logs");
-  expect(otherOpen?.invocation).toEqual({ kind: "herdr", argv: ["workspace", "focus", "w2"] });
+  expect(items.map(item => item.title)).toEqual(["new"]);
+  expect(items[0]).toMatchObject({ id: "live:workspace:worktree:/repo-new", category: "Workspace" });
 
   const closed = items.find(item => item.title === "new");
   expect(closed?.invocation).toEqual({
@@ -89,10 +86,22 @@ test("focuses an already-open worktree and opens a closed one in the current wor
   });
 });
 
-test("includes worktrees attached to other open workspaces", () => {
+test("does not duplicate worktrees already represented by open workspaces", () => {
   const items = itemsFromSnapshot(snapshot, "w1");
   const worktree = items.find(item => item.id === "live:worktree:/repo-beta");
 
-  expect(worktree).toMatchObject({ title: "beta", category: "Worktrees" });
-  expect(worktree?.invocation).toEqual({ kind: "herdr", argv: ["workspace", "focus", "w2"] });
+  expect(worktree).toBeUndefined();
+  expect(items.filter(item => item.category === "Workspace").map(item => item.title)).toEqual(["alpha", "beta"]);
+});
+
+test("does not fabricate visit timestamps from focus or workspace order", () => {
+  const items = itemsFromSnapshot({
+    workspaces: [
+      { workspace_id: "w1", label: "alpha", number: 2, focused: true },
+      { workspace_id: "w2", label: "beta", number: 1, focused: false },
+    ],
+  }, "w1");
+
+  expect(items.find(item => item.title === "alpha")?.lastVisitedAt).toBeUndefined();
+  expect(items.find(item => item.title === "beta")?.lastVisitedAt).toBeUndefined();
 });

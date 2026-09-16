@@ -77,7 +77,7 @@ export async function resumeWorkspaceChoices(state: any, original: string, curre
 }
 
 export async function resumeSavedSession(session: SavedSession, deps: Omit<typeof defaults, "related"> & Partial<Pick<typeof defaults, "related">> = defaults, confirmedWorkspaceId?: string, destination?: { id: string; cwd: string }): Promise<CommandResult> {
-  if (!["codex", "claude"].includes(session.provider) || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,199}$/.test(session.id)) return { ok: false, message: "Invalid saved session identifier." };
+  if (!["codex", "claude", "opencode"].includes(session.provider) || !/^[a-zA-Z0-9][a-zA-Z0-9_-]{0,199}$/.test(session.id)) return { ok: false, message: "Invalid saved session identifier." };
   // Recheck live identity immediately before launching, not just when the popup opened.
   const snapshot = await deps.run(["api", "snapshot"], 5000);
   if (snapshot.code !== 0) return { ok: false, message: "Cannot verify whether this session is already open. Try again." };
@@ -117,13 +117,14 @@ export async function resumeSavedSession(session: SavedSession, deps: Omit<typeo
   let pane: string;
   try { pane = JSON.parse(created.stdout).result.root_pane.pane_id; if (!pane) throw new Error(); }
   catch { return { ok: false, message: "A tab was created, but Herdr did not return its pane. Check the new tab before retrying." }; }
-  const args = session.provider === "codex" ? ["resume", session.id] : ["--resume", session.id];
+  const args = session.provider === "codex" ? ["resume", session.id]
+    : session.provider === "opencode" ? ["--session", session.id] : ["--resume", session.id];
   if (session.provider === "codex" && destination) args.push("--cd", cwd);
   const started = await deps.run(["agent", "start", `omni-${randomUUID().slice(0, 8)}`, "--kind", session.provider, "--pane", pane, "--", ...args], 35_000);
   if (started.code !== 0) {
-    await deps.focus(pane);
+    // Keep the popup visible so its error is not hidden by switching tabs.
     // Retain the tab for diagnostics rather than close a possibly running agent.
-    return { ok: false, message: `Resume could not be confirmed. Check the new tab before retrying: ${explain(started.stderr, started.code)}` };
+    return { ok: false, message: `Resume could not be confirmed in ${pane}. Check the new tab before retrying: ${explain(started.stderr, started.code)}` };
   }
   return deps.focus(pane);
 }

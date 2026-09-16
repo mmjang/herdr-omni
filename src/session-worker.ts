@@ -1,5 +1,6 @@
 import { spawn, type ChildProcessWithoutNullStreams } from "node:child_process";
 import type { SavedSession } from "./types";
+import { OpenCodeHistory } from "./opencode-history";
 import { SESSION_REQUEST_TIMEOUT_MS, TRANSCRIPT_RESULT_LIMIT, transcriptExcerpt, type SessionEvent, type SessionRequest } from "./sessions";
 
 /** Private read-only app-server connection; never starts or resumes a turn. */
@@ -77,12 +78,18 @@ export function codexText(thread: any): string[] {
 
 async function work(request: SessionRequest, publish: (event: SessionEvent) => void) {
   const codex = new CodexHistory();
-  const stop = () => { codex.close(); process.exit(0); };
+  const opencode = new OpenCodeHistory();
+  const stop = () => { codex.close(); opencode.close(); process.exit(0); };
   process.on("SIGTERM", stop);
   process.on("SIGINT", stop);
   try {
     if (request.type === "list") {
       await Promise.all([
+        (async () => {
+          if (!Bun.which("opencode")) return;
+          try { publish({ type: "sessions", sessions: await opencode.list() }); }
+          catch { publish({ type: "error", message: "OpenCode history unavailable (requires the global session API)." }); }
+        })(),
         (async () => {
           if (!Bun.which("codex")) return;
           try {
@@ -119,6 +126,8 @@ async function work(request: SessionRequest, publish: (event: SessionEvent) => v
           if (session.provider === "codex") {
             await codex.start();
             messages = codexText((await codex.call("thread/read", { threadId: session.id, includeTurns: true })).thread);
+          } else if (session.provider === "opencode") {
+            messages = await opencode.read(session.id);
           } else {
             const { getSessionMessages } = await import("@anthropic-ai/claude-agent-sdk");
             messages = claudeText(await getSessionMessages(session.id, { dir: session.cwd || undefined }));
@@ -134,6 +143,7 @@ async function work(request: SessionRequest, publish: (event: SessionEvent) => v
     publish({ type: "done" });
   } finally {
     codex.close();
+    opencode.close();
     process.removeListener("SIGTERM", stop);
     process.removeListener("SIGINT", stop);
   }

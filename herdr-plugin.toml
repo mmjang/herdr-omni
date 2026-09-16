@@ -13,5 +13,5 @@ id = "picker"
 title = "Herdr Omni"
 placement = "popup"
 width = "80%"
-height = 20
+height = "80%"
 command = ["bun", "run", "src/main.ts"]

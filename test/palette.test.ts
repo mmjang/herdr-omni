@@ -61,6 +61,61 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 const settleEscape = () => new Promise(resolve => setTimeout(resolve, 30));
 const rowsOf = (frame: string) => frame.split("\n").filter((row, index, all) => index < all.length - 1 || row !== "");
 
+test("Tab and Shift+Tab switch categories; View all opens the full list without executing", async () => {
+  const h = await createTestRenderer({ width: 100, height: 30 });
+  const ran: string[] = [];
+  const workspaces = Array.from({ length: 8 }, (_, index) => ({ ...item(`workspace-${index}`, `Project ${index}`, { kind: "shortcut" }), category: "Workspace" as const }));
+  const controller = mountPalette(h.renderer, workspaces, { run: async row => { ran.push(row.id); return { ok: false, message: "" }; }, close: () => {} });
+  try {
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[All]");
+    expect(h.captureCharFrame()).not.toContain("Project 5");
+    expect(h.captureCharFrame()).toContain("8 results");
+    for (let i = 0; i < 5; i++) h.mockInput.pressArrow("down");
+    h.mockInput.pressEnter();
+    await settle(); await h.renderOnce();
+    expect(ran).toEqual([]);
+    expect(h.captureCharFrame()).toContain("[Workspaces]");
+    expect(h.captureCharFrame()).toContain("Project 7");
+    h.mockInput.pressTab({ shift: true });
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[All]");
+    h.mockInput.pressTab();
+    await h.mockInput.typeText("Project 7");
+    controller.updateItems([...workspaces]);
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[Workspaces]");
+    expect(h.captureCharFrame()).toContain("1 results");
+    h.mockInput.pressTab();
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[Tabs]");
+    expect(h.captureCharFrame()).toContain("No results");
+  } finally { h.renderer.destroy(); }
+});
+
+test("category labels and View all are clickable; prefixes select their category", async () => {
+  const h = await createTestRenderer({ width: 100, height: 25 });
+  const ran: string[] = [];
+  mountPalette(h.renderer, [{ ...items[0]!, category: "Actions" }], { run: async row => { ran.push(row.id); return { ok: false, message: "" }; }, close: () => {} });
+  try {
+    await h.renderOnce();
+    const y = rowsOf(h.captureCharFrame()).findIndex(row => row.includes("View all Actions"));
+    await h.mockMouse.click(8, y);
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[Actions]");
+    expect(ran).toEqual([]);
+    await h.mockInput.typeText("@project");
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[Workspaces]");
+    const rows = rowsOf(h.captureCharFrame());
+    const tabsY = rows.findIndex(row => row.includes("[Workspaces]"));
+    await h.mockMouse.click(rows[tabsY]!.indexOf("All") + 1, tabsY);
+    await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[All]");
+    expect(h.captureCharFrame()).not.toContain("@project");
+  } finally { h.renderer.destroy(); }
+});
+
 test("clicking a result label or shortcut runs that row rather than the keyboard selection", async () => {
   for (const x of [8, 50]) {
     const harness = await palette({ ok: true, message: "" });
@@ -122,7 +177,7 @@ test("headers, right-clicks and drag gestures do not activate results", async ()
   } finally { harness.renderer.destroy(); }
 });
 
-test("initial loading selects the first Recent result unless the user has interacted", async () => {
+test("initial loading selects the first workspace unless the user has interacted", async () => {
   for (const interaction of ["none", "typing", "arrow", "click"] as const) {
     const harness = await createTestRenderer({ width: 80, height: 18 });
     const ran: string[] = [];
@@ -135,7 +190,7 @@ test("initial loading selects the first Recent result unless the user has intera
     try {
       controller.setLoading(true);
       if (interaction === "typing") await harness.mockInput.typeText("review");
-      if (interaction === "arrow") harness.mockInput.pressArrow("down");
+      if (interaction === "arrow") { harness.mockInput.pressArrow("down"); harness.mockInput.pressArrow("up"); }
       if (interaction === "click") {
         await harness.renderOnce();
         const y = rowsOf(harness.captureCharFrame()).findIndex(row => row.includes("Review action"));
@@ -166,13 +221,15 @@ test("without Recent the first available result remains the initial selection", 
 test("live refresh preserves the selected identity as agents reorder", async () => {
   const harness = await createTestRenderer({ width: 80, height: 18 });
   const ran: string[] = [];
-  const a = { ...item("live:agent:a", "Review alpha", { kind: "herdr", argv: [] }), priority: 0, agentStatus: "blocked" as const };
-  const b = { ...item("live:agent:b", "Review beta", { kind: "herdr", argv: [] }), priority: 2, agentStatus: "working" as const };
+  const a = { ...item("live:agent:a", "Review alpha", { kind: "herdr", argv: [] }), category: "Agents" as const, lastActiveAt: Date.now() - 3_600_000, priority: 0, agentStatus: "blocked" as const };
+  const b = { ...item("live:agent:b", "Review beta", { kind: "herdr", argv: [] }), category: "Agents" as const, priority: 2, agentStatus: "working" as const };
   const controller = mountPalette(harness.renderer, [a, b], { run: async entry => { ran.push(entry.id); return { ok: false, message: "test" }; }, close: () => {} });
   await harness.mockInput.typeText(">review");
   controller.updateItems([{ ...b, priority: 0, agentStatus: "blocked" }, { ...a, priority: 3, agentStatus: "idle" }]);
   await harness.renderOnce();
   expect(harness.captureCharFrame()).toContain("[idle]");
+  expect(harness.captureCharFrame()).toContain("1h ago");
+  expect(harness.captureCharFrame()).toContain("unknown activity");
   harness.mockInput.pressEnter();
   await settle();
   expect(ran).toEqual([a.id]);
@@ -219,7 +276,7 @@ test("shows each live agent status beside its session title", async () => {
   expect(frame).toContain("Review - project");
 });
 
-test("Recent stays a single section across destination categories", async () => {
+test("history never creates a Recent section", async () => {
   const harness = await createTestRenderer({ width: 70, height: 18 });
   const mixed = [
     { ...item("first", "First", { kind: "shortcut" }), category: "Tabs" as const },
@@ -229,9 +286,9 @@ test("Recent stays a single section across destination categories", async () => 
   mountPalette(harness.renderer, mixed, { history: { first: 3, second: 2, third: 1 }, run: async () => ({ ok: false, message: "" }), close: () => {} });
   await harness.renderOnce();
   const frame = harness.captureCharFrame();
-  expect(frame.indexOf("First")).toBeLessThan(frame.indexOf("Second"));
-  expect(frame.indexOf("Second")).toBeLessThan(frame.indexOf("Third"));
-  expect(rowsOf(frame).filter(row => row.trim() === "Recent")).toHaveLength(1);
+  expect(frame.indexOf("Second")).toBeLessThan(frame.indexOf("First"));
+  expect(frame.indexOf("First")).toBeLessThan(frame.indexOf("Third"));
+  expect(frame).not.toContain("Recent");
   harness.renderer.destroy();
 });
 
@@ -248,7 +305,7 @@ test("keyword results render each category header once", async () => {
     await harness.renderOnce();
     const rows = rowsOf(harness.captureCharFrame());
     expect(rows.filter(row => row.trim() === "Tabs")).toHaveLength(1);
-    expect(rows.filter(row => row.trim() === "Workspace")).toHaveLength(1);
+    expect(rows.filter(row => row.trim() === "Workspaces")).toHaveLength(1);
   } finally { harness.renderer.destroy(); }
 });
 

@@ -7,6 +7,26 @@ import type { SavedSession } from "../src/types";
 const session: SavedSession = { provider: "claude", id: "abc-123", title: "Old investigation", cwd: "/repo/shop", updatedAt: 1 };
 const wait = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
+test("opening the palette loads saved metadata newest first without searching transcripts", async () => {
+  const h = await createTestRenderer({ width: 110, height: 20 });
+  const requests: string[] = [];
+  mountPalette(h.renderer, [], {
+    sessionJob: async (request, _signal, publish) => {
+      requests.push(request.type);
+      if (request.type === "list") publish({ type: "sessions", sessions: [session,
+        { ...session, id: "new", title: "Newest session", updatedAt: 100 }] });
+    }, run: async () => ({ ok: true, message: "" }), close: () => {},
+  });
+  try {
+    await wait(); await h.renderOnce();
+    const frame = h.captureCharFrame();
+    expect(requests).toEqual(["list"]);
+    expect(frame).toContain("Newest session");
+    expect(frame.trimEnd().split("\n").at(-1)).toContain("Ctrl+F · Search session content");
+    expect(frame.indexOf("Newest session")).toBeLessThan(frame.indexOf("Old investigation"));
+  } finally { h.renderer.destroy(); }
+});
+
 for (const query of ["近期功能", "shop", "abc-123", ">近期功能", "@近期功能", ":近期功能"]) {
   test(`saved session metadata search respects scope for ${query} without scanning content`, async () => {
     const h = await createTestRenderer({ width: 110, height: 20 });
@@ -20,7 +40,7 @@ for (const query of ["近期功能", "shop", "abc-123", ">近期功能", "@近�
     try {
       await h.mockInput.pasteBracketedText(query); await wait(); await h.renderOnce();
       const excluded = query.startsWith("@") || query.startsWith(":");
-      expect(requests).toEqual(excluded ? [] : ["list"]);
+      expect(requests).toEqual(["list"]);
       if (excluded) expect(h.captureCharFrame()).not.toContain("讨论近期功能规划");
       else expect(h.captureCharFrame()).toContain("讨论近期功能规划");
       expect(h.captureCharFrame()).not.toContain("Transcript matches");
@@ -99,9 +119,9 @@ test("transcripts are opt-in, progressive, deduplicated, and selection remains o
     await h.mockInput.typeText(">payment"); await wait(); await h.renderOnce();
     expect(calls).toEqual(["list"]);
     expect(h.captureCharFrame()).toContain("Payment work");
-    expect(h.captureCharFrame()).toContain("Press → to search session content");
+    expect(h.captureCharFrame()).toContain("Ctrl+F · Search session content");
     expect(h.captureCharFrame()).not.toContain("Old investigation");
-    h.mockInput.pressArrow("right");
+    h.mockInput.pressKey("f", { ctrl: true });
     await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
     expect(calls).toEqual(["list", "search"]);
     publish({ type: "hit", session, excerpt: "payment callback timed out" });
@@ -125,7 +145,7 @@ test("query changes, escaping, and closing cancel scans and ignore stale hits", 
   }, run: async () => ({ ok: true, message: "" }), close: () => {} });
   try {
     await h.mockInput.typeText(">payment"); await wait();
-    h.mockInput.pressArrow("right"); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
+    h.mockInput.pressKey("f", { ctrl: true }); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
     await h.mockInput.typeText(" new");
     expect(scans[0]!.signal.aborted).toBe(true);
     scans[0]!.publish({ type: "hit", session, excerpt: "stale hit" });
@@ -136,7 +156,7 @@ test("query changes, escaping, and closing cancel scans and ignore stale hits", 
     h.mockInput.pressEscape(); await wait(30);
     expect(scans[1]!.signal.aborted).toBe(true);
     await h.renderOnce(); expect(h.captureCharFrame()).not.toContain("Old investigation");
-    h.mockInput.pressArrow("right"); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
+    h.mockInput.pressKey("f", { ctrl: true }); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
     h.renderer.destroy();
     expect(scans[2]!.signal.aborted).toBe(true);
     scans[2]!.publish({ type: "hit", session, excerpt: "too late" });
@@ -144,7 +164,7 @@ test("query changes, escaping, and closing cancel scans and ignore stale hits", 
 });
 
 for (const query of ["payment", ">payment", "@payment", ":payment", "支付回调🙂"]) {
-  test(`Right Arrow explores transcripts for ${query} without changing the query`, async () => {
+  test(`Ctrl+F explores transcripts for ${query} without changing the query`, async () => {
     const h = await createTestRenderer({ width: 100, height: 20 });
     const requests: string[] = [];
     let closes = 0;
@@ -155,32 +175,33 @@ for (const query of ["payment", ">payment", "@payment", ":payment", "支付回�
     try {
       await h.mockInput.pasteBracketedText(query); await wait();
       expect(requests).toEqual([]);
-      h.mockInput.pressArrow("right"); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
+      h.mockInput.pressKey("f", { ctrl: true }); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
       expect(requests).toEqual([query.replace(/^[>@:]/, "")]);
       await h.renderOnce();
       expect(h.captureCharFrame()).toContain(query);
       expect(h.captureCharFrame()).toContain("Transcript matches");
       expect(h.captureCharFrame()).toContain("matching excerpt");
-      h.mockInput.pressArrow("right"); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
+      h.mockInput.pressKey("f", { ctrl: true }); await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
       expect(requests).toHaveLength(1);
       h.mockInput.pressEscape(); await wait(30); await h.renderOnce();
       expect(closes).toBe(0);
       expect(h.captureCharFrame()).not.toContain("Transcript matches");
-      expect(h.captureCharFrame()).toContain("Press → to search session content");
+      expect(h.captureCharFrame()).toContain("Ctrl+F · Search session content");
       h.mockInput.pressEscape(); await wait(30);
       expect(closes).toBe(1);
     } finally { h.renderer.destroy(); }
   });
 }
 
-test("Right Arrow still edits mid-query and empty queries never trigger scanning", async () => {
+test("arrows only move the cursor and empty Ctrl+F never triggers scanning", async () => {
   const h = await createTestRenderer({ width: 100, height: 20 });
   const requests: string[] = [];
   mountPalette(h.renderer, [], { sessionJob: async request => { requests.push(request.type); }, run: async () => ({ ok: true, message: "" }), close: () => {} });
   try {
-    h.mockInput.pressArrow("right"); await wait();
-    expect(requests).toEqual([]);
+    h.mockInput.pressKey("f", { ctrl: true }); await wait();
+    expect(requests).toEqual(["list"]);
     await h.mockInput.typeText("payment");
+    h.mockInput.pressArrow("right");
     h.mockInput.pressArrow("left"); h.mockInput.pressArrow("left");
     h.mockInput.pressArrow("right");
     await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
@@ -190,6 +211,30 @@ test("Right Arrow still edits mid-query and empty queries never trigger scanning
   } finally { h.renderer.destroy(); }
 });
 
+for (const location of ["empty", "footer"] as const) {
+  test(`clicking the ${location} content-search link starts one scan`, async () => {
+    const h = await createTestRenderer({ width: 110, height: 20 });
+    const requests: string[] = [];
+    mountPalette(h.renderer, [], { sessionJob: async request => {
+      if (request.type === "search") requests.push(request.query);
+    }, run: async () => ({ ok: true, message: "" }), close: () => {} });
+    try {
+      await h.mockInput.typeText("missing phrase"); await wait(); await h.renderOnce();
+      const rows = h.captureCharFrame().split("\n");
+      const y = location === "empty"
+        ? rows.findIndex(row => row.includes("Ctrl+F or click"))
+        : rows.findIndex(row => row.includes("Ctrl+F · Search"));
+      expect(y).toBeGreaterThan(-1);
+      const x = rows[y]!.indexOf("Search session content") + 2;
+      await h.mockMouse.click(x, y, 2);
+      expect(requests).toEqual([]);
+      await h.mockMouse.click(x, y);
+      await wait(TRANSCRIPT_DEBOUNCE_MS + 20);
+      expect(requests).toEqual(["missing phrase"]);
+    } finally { h.renderer.destroy(); }
+  });
+}
+
 test("selected transcript shows multi-line context while keeping results and footer visible", async () => {
   const h = await createTestRenderer({ width: 70, height: 20 });
   mountPalette(h.renderer, [], { sessionJob: async (request, _signal, publish) => {
@@ -197,7 +242,7 @@ test("selected transcript shows multi-line context while keeping results and foo
     else publish({ type: "hit", session, excerpt: "Before context explains the investigation.\n\nThe needle is here in the matching sentence.\n\nAfter context explains the resolution." });
   }, run: async () => ({ ok: true, message: "" }), close: () => {} });
   try {
-    await h.mockInput.typeText("needle"); h.mockInput.pressArrow("right");
+    await h.mockInput.typeText("needle"); h.mockInput.pressKey("f", { ctrl: true });
     await wait(TRANSCRIPT_DEBOUNCE_MS + 30); await h.renderOnce();
     const frame = h.captureCharFrame();
     expect(frame).toContain("Old investigation");

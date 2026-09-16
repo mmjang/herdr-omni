@@ -1,7 +1,8 @@
 import type { PaletteItem } from "./types";
 import { historyKey } from "./history";
+import { agentActivity } from "./sessions";
 import { scoreFuzzy } from "./vendor/vscode/fuzzyScorer";
-import { RECENT_CANDIDATE_LIMIT, RECENT_DISPLAY_LIMIT, CATEGORY_ORDER } from "./constants";
+import { CATEGORY_ORDER } from "./constants";
 
 /** VS Code's Ctrl+P core returns UTF-16 offsets; OpenTUI titles use codepoints. */
 function fuzzyMatch(query: string, value: string, trace = false): { score: number; positions: number[] } {
@@ -43,16 +44,7 @@ export function filterPaletteItems(items: PaletteItem[], query: string, history:
   return searchResults(items, query, history).map(result => result.item);
 }
 
-/** Recent is a presentation section; the item's category and action remain intact. */
 export function searchResults(items: PaletteItem[], query: string, history: Record<string, number> = {}): { item: PaletteItem; section: string }[] {
-  // Select a global pool of distinct, available navigation destinations first.
-  // Searching or changing scope must not promote older history into Recent.
-  const candidates = [...new Map(items.filter(item => item.category !== "Actions")
-    .map(item => [item.id, { id: item.id, recent: history[historyKey(item.id)] ?? 0 }])).values()]
-    .filter(item => item.recent > 0)
-    .sort((a, b) => b.recent - a.recent)
-    .slice(0, RECENT_CANDIDATE_LIMIT);
-  const candidateIds = new Set(candidates.map(item => item.id));
   const agentsOnly = query.startsWith(">");
   const actionsOnly = query.startsWith(":");
   const workspacesOnly = query.startsWith("@");
@@ -61,7 +53,7 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
   const matches = items.flatMap((item, index) => {
     if (agentsOnly && !item.id.startsWith("live:agent:") && !item.savedSession) return [];
     if (actionsOnly && item.category !== "Actions") return [];
-    if (workspacesOnly && !item.id.startsWith("live:workspace:")) return [];
+    if (workspacesOnly && item.category !== "Workspace" && item.category !== "Worktrees") return [];
     let score = 0;
     for (const token of tokens) {
       // Presentation metadata and shortcut syntax are not search keywords.
@@ -75,22 +67,38 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
     }
     return [{ item, index, score, recent: item.category === "Actions" ? 0 : history[historyKey(item.id)] ?? 0 }];
   });
-  const recent = matches.filter(result => browsing && candidateIds.has(result.item.id))
-    .sort((a, b) => b.recent - a.recent || a.index - b.index).slice(0, RECENT_DISPLAY_LIMIT);
-  const recentIds = new Set(recent.map(result => result.item.id));
-  const rest = matches.filter(result => !recentIds.has(result.item.id))
-    .sort((a, b) => b.score - a.score || (a.item.priority ?? 5) - (b.item.priority ?? 5)
-      || (!browsing ? b.recent - a.recent : 0) || a.index - b.index);
-  const groups = new Map<PaletteItem["category"], typeof rest>();
-  for (const result of rest) {
-    const group = groups.get(result.item.category);
+  const sortMatches = (a: typeof matches[number], b: typeof matches[number]) => {
+    const scoreDifference = b.score - a.score;
+    if (scoreDifference) return scoreDifference;
+    if (a.item.category === "Agents" && b.item.category === "Agents") {
+      const activityDifference = agentActivity(b.item) - agentActivity(a.item);
+      if (activityDifference) return activityDifference;
+    }
+    if (browsing && (a.item.category === "Workspace" || a.item.category === "Worktrees")
+      && (b.item.category === "Workspace" || b.item.category === "Worktrees")) {
+      const visitedDifference = (lastVisitedAt(b.item) ?? 0) - (lastVisitedAt(a.item) ?? 0);
+      if (visitedDifference) return visitedDifference;
+    }
+    if (!browsing && !(a.item.category === "Agents" && b.item.category === "Agents")) {
+      const recentDifference = b.recent - a.recent;
+      if (recentDifference) return recentDifference;
+    }
+    return a.index - b.index;
+  };
+  const groups = new Map<string, typeof matches>();
+  for (const result of matches.sort(sortMatches)) {
+    const section = result.item.category === "Worktrees" ? "Workspace" : result.item.category;
+    const group = groups.get(section);
     if (group) group.push(result);
-    else groups.set(result.item.category, [result]);
+    else groups.set(section, [result]);
   }
   const orderedGroups = [...groups.entries()].sort(([categoryA, a], [categoryB, b]) =>
-    b[0]!.score - a[0]!.score || CATEGORY_ORDER.indexOf(categoryA) - CATEGORY_ORDER.indexOf(categoryB));
-  return [
-    ...recent.map(({ item }) => ({ item, section: "Recent" })),
-    ...orderedGroups.flatMap(([section, group]) => group.map(({ item }) => ({ item, section }))),
-  ];
+    b[0]!.score - a[0]!.score
+      || CATEGORY_ORDER.indexOf(categoryA as typeof CATEGORY_ORDER[number]) - CATEGORY_ORDER.indexOf(categoryB as typeof CATEGORY_ORDER[number]));
+  return orderedGroups.flatMap(([section, group]) => group.map(({ item }) => ({ item, section })));
+}
+
+/** Unknown visit times keep source order; never substitute Omni selections. */
+function lastVisitedAt(item: PaletteItem): number | undefined {
+  return item.lastVisitedAt;
 }

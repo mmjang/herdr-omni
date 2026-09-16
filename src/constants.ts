@@ -1,8 +1,5 @@
-/** Recent eligibility is fixed before query text or category prefixes are applied. */
-export const RECENT_CANDIDATE_LIMIT = 10;
-
-/** Maximum matching candidates displayed in the Recent section. */
-export const RECENT_DISPLAY_LIMIT = 7;
+/** Maximum rows shown per section in the All results tab. */
+export const ALL_SECTION_LIMIT = 5;
 
 /** Stable group order for browsing and equal best-match scores. */
-export const CATEGORY_ORDER = ["Actions", "Workspace", "Tabs", "Worktrees", "Agents", "Panes", "Herdr", "Custom"] as const;
+export const CATEGORY_ORDER = ["Workspace", "Tabs", "Agents", "Actions", "Panes", "Herdr", "Custom", "Worktrees"] as const;

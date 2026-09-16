@@ -5,11 +5,11 @@
 Your [Herdr](https://herdr.dev) workspaces, tabs, worktrees, agent sessions, and
 actions—one search away.
 
-![Search workspaces, tabs, worktrees, and live or saved agent sessions in one palette](docs/omni-search-everything.png)
+![Search workspaces, tabs, worktrees, and live or saved agent sessions in one palette](docs/omni-search-everything-redacted.png)
 
 - **VS Code's actual fuzzy-matching core.** A few letters find the right result.
-- **Find the conversation you remember.** Search live and saved Codex/Claude sessions—or press `→` to search their transcripts.
-- **Recent when browsing. Relevance when searching.** History never overrides a better match.
+- **Find the conversation you remember.** Search live and saved Codex, Claude Code, and OpenCode sessions—or press `Ctrl+F` to search their transcripts.
+- **Browse by category. Search everything.** Preview each category in All, or open its full list with a click.
 - **Go straight there.** `@` workspaces · `>` agents · `:` actions.
 
 Bind to **`cmd+p` on macOS** or **`ctrl+alt+p` on Linux** below.
@@ -19,7 +19,7 @@ Find actions with a few letters.
 
 ![Fuzzy search highlights matching words in Herdr actions](docs/omni-fuzzy-search.png)
 
-Remember the conversation, not its name? Press **→** to search session content.
+Remember the conversation, not its name? Press **Ctrl+F** to search session content.
 
 ![Search saved session content with highlighted matches and surrounding context](docs/omni-session-content-search.png)
 
@@ -108,9 +108,16 @@ Type to search, then **Enter** or click to jump. Use `@` for workspaces,
 `>` for agents, or `:` for actions. Omni follows your Herdr theme and shortcuts;
 UI-only actions show their keyboard binding.
 
-Normal search includes saved session titles, projects, and IDs—no prefix needed.
+Use **Tab / Shift+Tab** or click a category label to switch lists. **All** previews
+up to five results per category; **View all** opens the complete list. Worktrees
+live under **Workspaces**.
+Workspace browsing currently preserves Herdr's order; Herdr does not expose visit history.
 
-To search local Codex/Claude transcripts, press **→** at the end of your query.
+Normal search includes saved session titles, projects, and IDs—no prefix needed.
+OpenCode searches local history across projects (top-level sessions, not child-agent sessions).
+
+To search local Codex, Claude Code, or OpenCode transcripts, press **Ctrl+F** or click
+**Search session content**. Left and right arrows always move the text cursor.
 Matches arrive with context; **Esc** returns to normal search. Transcript search
 uses literal words or quoted phrases, requires the corresponding CLI, and makes
 no model requests.
@@ -138,6 +145,14 @@ If you already have a checkout, run the last three commands from its root.
 Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
+
+### 0.8.0
+
+- Use Ctrl+F or clickable search hints for session content; arrows remain available for editing.
+- Browse category tabs, with five-result previews and View all in All; no separate Recent section.
+- Search and resume saved OpenCode sessions, including opt-in transcript search.
+- Agent results use last activity for ordering and show relative activity times.
+- Category labels show match counts (capped at 99+); the popup adapts to 80% of terminal height.
 
 ### 0.7.0
 

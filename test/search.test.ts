@@ -4,7 +4,7 @@ import { historyKey } from "../src/history";
 import { itemsFromSnapshot } from "../src/live";
 import { defaultItems } from "../src/catalog";
 import type { PaletteItem } from "../src/types";
-import { RECENT_CANDIDATE_LIMIT, RECENT_DISPLAY_LIMIT } from "../src/constants";
+import { ALL_SECTION_LIMIT } from "../src/constants";
 
 const item = (id: string, title: string): PaletteItem => ({ id, title, category: "Tabs", description: "", icon: "▣", aliases: [], shortcuts: [], invocation: { kind: "herdr", argv: [] } });
 
@@ -26,49 +26,49 @@ test("Edit scrollback is searchable as an action by title and terminal history",
   }
 });
 
-test("Recent holds seven matching selections without duplicates or hiding older results", () => {
+test("empty searches keep every match in its presentation section", () => {
   const items = Array.from({ length: 10 }, (_, i) => item(`tab${i}`, `Project ${i}`));
   const history = Object.fromEntries(items.map((entry, i) => [historyKey(entry.id), i + 1]));
   const results = searchResults(items, "", history);
-  expect(results.filter(result => result.section === "Recent").map(result => result.item.id)).toEqual(["tab9", "tab8", "tab7", "tab6", "tab5", "tab4", "tab3"]);
-  expect(results.slice(7).map(result => result.item.id)).toEqual(["tab0", "tab1", "tab2"]);
+  expect(results.map(result => result.item.id)).toEqual(items.map(entry => entry.id));
   expect(new Set(results.map(result => result.item.id)).size).toBe(10);
   expect(results.every(result => result.item.category === "Tabs")).toBe(true);
   expect(searchResults(items, "Project 0", history).map(result => result.section)).toEqual(["Tabs"]);
-  expect(searchResults(items, "", {}).some(result => result.section === "Recent")).toBe(false);
 });
 
-test("Recent searches only its newest candidates without hiding older destinations", () => {
-  const items = Array.from({ length: RECENT_CANDIDATE_LIMIT + 2 }, (_, i) => item(`tab${i}`, `Destination ${i}`));
-  items[0]!.title = "Ancient unique";
-  items[2]!.title = "Boundary unique";
+test("empty workspace searches order destinations by last visit", () => {
+  const items = Array.from({ length: ALL_SECTION_LIMIT + 2 }, (_, i) => ({
+    ...item(`workspace${i}`, `Destination ${i}`), category: "Workspace" as const,
+    lastVisitedAt: i + 1,
+  }));
   const history = Object.fromEntries(items.map((entry, i) => [historyKey(entry.id), i + 1]));
   const all = searchResults(items, "", history);
-  expect(all.filter(result => result.section === "Recent")).toHaveLength(RECENT_DISPLAY_LIMIT);
-  expect(new Set(all.map(result => result.item.id)).size).toBe(items.length);
-  expect(searchResults(items, "Ancient", history)).toEqual([{ item: items[0]!, section: "Tabs" }]);
-  // Keyword searches return candidates in their original sections as well.
-  expect(searchResults(items, "Boundary", history)).toEqual([{ item: items[2]!, section: "Tabs" }]);
+  expect(all.map(result => result.item.id)).toEqual(items.map(entry => entry.id).reverse());
+  expect(all.every(result => result.section === "Workspace")).toBe(true);
+  expect(searchResults(items, "Destination 0", history)).toEqual([{ item: items[0]!, section: "Workspace" }]);
 });
 
-test("prefixes do not expand Recent eligibility and actions never consume candidate slots", () => {
+test("prefixes scope results without adding a presentation section", () => {
   const oldWorkspace = { ...item("live:workspace:old", "Old workspace"), category: "Workspace" as const };
-  const newer = Array.from({ length: RECENT_CANDIDATE_LIMIT }, (_, i) => item(`tab${i}`, `New tab ${i}`));
+  const worktree = { ...item("live:worktree:/repo", "Checkout"), category: "Worktrees" as const };
+  const newer = Array.from({ length: 3 }, (_, i) => item(`tab${i}`, `New tab ${i}`));
   const actions = defaultItems();
-  const history = Object.fromEntries([oldWorkspace, ...newer, ...actions].map((entry, i) => [historyKey(entry.id), i + 1]));
-  expect(searchResults([oldWorkspace, ...newer, ...actions], "@", history)).toEqual([{ item: oldWorkspace, section: "Workspace" }]);
-  expect(searchResults([oldWorkspace, ...newer, ...actions], "", history).filter(result => result.section === "Recent")).toHaveLength(RECENT_DISPLAY_LIMIT);
+  const all = searchResults([oldWorkspace, worktree, ...newer, ...actions], "", Object.fromEntries([oldWorkspace, ...newer, ...actions].map((entry, i) => [historyKey(entry.id), i + 1])));
+  expect(searchResults([oldWorkspace, worktree, ...newer, ...actions], "@", {})).toEqual([
+    { item: oldWorkspace, section: "Workspace" }, { item: worktree, section: "Workspace" },
+  ]);
 });
 
-test("at-sign scopes fuzzy search and recency to workspaces", () => {
+test("at-sign scopes fuzzy search to workspace and worktree categories", () => {
   const workspace = { ...item("live:workspace:w1", "ordering-service"), category: "Workspace" as const };
   const recent = { ...item("live:workspace:w2", "portal"), category: "Workspace" as const };
-  const others = [item("live:tab:w1:t1", "ordering-service"), item("live:worktree:/repo", "ordering-service"), item("live:agent:w1:p1", "ordering-service"), ...defaultItems()];
+  const worktree = { ...item("live:worktree:/repo", "ordering-service"), category: "Worktrees" as const };
+  const others = [item("live:tab:w1:t1", "ordering-service"), worktree, item("live:agent:w1:p1", "ordering-service"), ...defaultItems()];
   const items = [workspace, recent, ...others];
   const history = { [historyKey(recent.id)]: 10 };
-  expect(filterPaletteItems(items, "@", history)).toEqual([recent, workspace]);
+  expect(filterPaletteItems(items, "@", history)).toEqual([workspace, recent, worktree]);
   for (const query of ["@ordsvc", "@ ordsvc"]) {
-    expect(filterPaletteItems(items, query, history)).toEqual([workspace]);
+    expect(filterPaletteItems(items, query, history)).toEqual([workspace, worktree]);
   }
   expect(filterPaletteItems(items, "@zzzz")).toEqual([]);
 });
@@ -86,13 +86,13 @@ test("colon scopes fuzzy search to the unified Actions category", () => {
   expect(filterPaletteItems([...actions, live], ">")).toEqual([]);
 });
 
-test("previously recorded actions never occupy Recent slots or receive recency boosts", () => {
+test("actions remain in their category and history does not reorder empty actions", () => {
   const actions = defaultItems();
   const lastAction = actions.at(-1)!;
   const workspace = { ...item("live:workspace:w1", "Project"), category: "Workspace" as const };
   const history = { [historyKey(lastAction.id)]: 100, [historyKey(workspace.id)]: 10 };
   const results = searchResults([...actions, workspace], "", history);
-  expect(results.filter(result => result.section === "Recent").map(result => result.item)).toEqual([workspace]);
+  expect(results.filter(result => result.section === "Workspace").map(result => result.item)).toEqual([workspace]);
   expect(results.filter(result => result.section === "Actions").map(result => result.item)).toEqual(actions);
   expect(searchResults(actions, ":", history).every(result => result.section === "Actions")).toBe(true);
 });
@@ -117,31 +117,37 @@ test("matchingPositions uses title codepoint indices and combines scoped tokens"
   expect(matchingPositions("@zz", "世界")).toEqual(new Set());
 });
 
-test("keyword relevance beats recency while empty searches retain Recent", () => {
+test("keyword relevance beats history while empty searches use workspace visits", () => {
   const first = item("first", "dev");
   const recent = { ...item("recent", "development"), category: "Workspace" as const };
   const missing = item("missing", "xyz");
   const history = { [historyKey("recent")]: 10, [historyKey("missing")]: 20 };
   expect(filterPaletteItems([first, recent, missing], "dev", history)).toEqual([first, recent]);
-  expect(filterPaletteItems([first, recent, missing], "", history)).toEqual([missing, recent, first]);
+  expect(filterPaletteItems([first, recent, missing], "", history)).toEqual([recent, first, missing]);
 });
 
-test("agent scope orders attention priority and honors recent selections", () => {
+test("agent scope uses activity rather than status or selection history", () => {
   const statuses = ["unknown", "idle", "working", "done", "blocked"];
   const items = itemsFromSnapshot({ agents: statuses.map((status, i) => ({ pane_id: `w1:p${i}`, workspace_id: "w1", tab_id: "w1:t1", title: "Review checkout", agent_status: status })) }, "w1");
-  expect(filterPaletteItems(items, ">").map(item => item.priority)).toEqual([0, 1, 2, 3, 4]);
-  expect(filterPaletteItems(items, ">rvchk", { [historyKey(items[0]!.id)]: 1 })[0]?.priority).toBe(0);
+  items.forEach((item, i) => { item.lastActiveAt = (i + 1) * 100; });
+  const history = { [historyKey(items[0]!.id)]: 9999 };
+  for (const query of ["", ">", ">rvchk", "rvchk"]) {
+    expect(filterPaletteItems(items, query, history).map(item => item.lastActiveAt)).toEqual([500, 400, 300, 200, 100]);
+  }
+  items[0]!.lastActiveAt = 1000;
+  expect(filterPaletteItems(items, ">", history)[0]).toBe(items[0]!);
 });
 
-test("Recent is only shown while browsing, including bare prefixes and whitespace", () => {
+test("bare prefixes and whitespace do not create extra sections", () => {
   const workspace = { ...item("live:workspace:w1", "native_shell"), category: "Workspace" as const };
   const agent = { ...item("live:agent:w1:p1", "Review native_shell"), category: "Agents" as const };
   const history = { [historyKey(workspace.id)]: 1, [historyKey(agent.id)]: 2 };
-  for (const query of ["", "   ", "@", "@  ", ">", ">  "]) {
-    expect(searchResults([workspace, agent], query, history).some(result => result.section === "Recent")).toBe(true);
+  const sections = ["Workspace", "Tabs", "Agents", "Actions", "Panes", "Herdr", "Custom"];
+  for (const query of ["", "   ", "@", "@  "]) {
+    expect(searchResults([workspace, agent], query, history).every(result => sections.includes(result.section))).toBe(true);
   }
-  for (const query of ["ns", "@ns", ">ns", ":", ":copy"]) {
-    expect(searchResults([workspace, agent, ...defaultItems()], query, history).some(result => result.section === "Recent")).toBe(false);
+  for (const query of [">", ">  ", "ns", "@ns", ">ns", ":", ":copy"]) {
+    expect(searchResults([workspace, agent, ...defaultItems()], query, history).every(result => sections.includes(result.section))).toBe(true);
   }
 });
 

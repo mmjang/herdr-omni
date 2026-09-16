@@ -27,18 +27,11 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const worktree = typeof workspace.worktree === "object" && workspace.worktree !== null ? workspace.worktree as JsonRecord : undefined;
     const checkoutPath = text(worktree?.checkout_path);
     const details = `${count(workspace.tab_count)} tabs · ${count(workspace.pane_count)} panes`;
-    return liveItem(`workspace:${workspaceId}`, label, "Workspace", checkoutPath ? `${details} · ${checkoutPath}` : details, "◇",
+    const item = liveItem(`workspace:${workspaceId}`, label, "Workspace", checkoutPath ? `${details} · ${checkoutPath}` : details, "◇",
       [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, text(workspace.label), [checkoutPath]);
-  });
-
-  const openWorktreeItems = workspaces.flatMap(workspace => {
-    const worktree = typeof workspace.worktree === "object" && workspace.worktree !== null ? workspace.worktree as JsonRecord : undefined;
-    const path = text(worktree?.checkout_path);
-    if (!path) return [];
-    const workspaceId = text(workspace.workspace_id);
-    const label = text(workspace.label) || text(worktree?.repo_name) || basename(path);
-    return [liveItem(`worktree:${path}`, label, "Worktrees", `${text(worktree?.repo_name)} · ${path}`, "◈",
-      [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, label, [path, text(worktree?.repo_root)])];
+    // Herdr currently exposes no visit history. Preserve its order instead of
+    // fabricating recency from focus, workspace position, or Omni selections.
+    return item;
   });
 
   // Generated numeric tab labels add no useful destination information.
@@ -70,25 +63,22 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     item.agentStatus = (["blocked", "done", "working", "idle", "unknown"] as const)[item.priority];
     const session = agent.agent_session as JsonRecord | undefined;
     const provider = text(session?.agent) || text(agent.agent);
-    if (session?.kind === "id" && text(session.value) && (provider === "codex" || provider === "claude")) {
+    if (session?.kind === "id" && text(session.value) && (provider === "codex" || provider === "claude" || provider === "opencode")) {
       item.session = { provider, id: text(session.value), title: sessionName, cwd: text(agent.cwd), updatedAt: 0 };
     }
     return item;
   });
 
-  return [...workspaceItems, ...tabItems, ...openWorktreeItems, ...agentItems];
+  return [...workspaceItems, ...tabItems, ...agentItems];
 }
 
 export function itemsFromWorktrees(worktrees: unknown, currentWorkspaceId: string): PaletteItem[] {
-  return records(worktrees).map(worktree => {
+  return records(worktrees).filter(worktree => !text(worktree.open_workspace_id)).map(worktree => {
     const path = text(worktree.path);
     const branch = text(worktree.branch);
     const label = text(worktree.label) || branch || basename(path) || path;
-    const openWorkspaceId = text(worktree.open_workspace_id);
-    const invocation: PaletteItem["invocation"] = openWorkspaceId
-      ? { kind: "herdr", argv: ["workspace", "focus", openWorkspaceId] }
-      : { kind: "herdr", argv: ["worktree", "open", "--workspace", currentWorkspaceId, "--path", path, "--focus"] };
-    return liveItem(`worktree:${path}`, label, "Worktrees", `${branch || "detached"} · ${path}`, "◈",
+    const invocation: PaletteItem["invocation"] = { kind: "herdr", argv: ["worktree", "open", "--workspace", currentWorkspaceId, "--path", path, "--focus"] };
+    return liveItem(`workspace:worktree:${path}`, label, "Workspace", `${branch || "detached"} · ${path}`, "◇",
       [branch], invocation, label, [path]);
   });
 }

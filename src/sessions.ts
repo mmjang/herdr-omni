@@ -19,6 +19,11 @@ export type SessionJob = (request: SessionRequest, signal: AbortSignal, publish:
 export const sessionKey = (session: Pick<SavedSession, "provider" | "id">) => `${session.provider}:${session.id}`;
 export const cleanText = (value: string) => value.replace(/[\x00-\x1f\x7f-\x9f]/g, " ").replace(/\s+/g, " ").trim();
 
+export function agentActivity(item: PaletteItem): number {
+  return Math.max(...[item.lastActiveAt, item.session?.updatedAt, 0]
+    .map(value => typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0));
+}
+
 export function savedSessionItem(session: SavedSession): PaletteItem {
   const title = `${cleanText(session.title).slice(0, 160) || session.provider} - ${cleanText(basename(session.cwd)) || "Unknown project"}`;
   return { id: `saved:agent:${sessionKey(session)}`, title, category: "Agents", icon: "◈",
@@ -29,7 +34,15 @@ export function savedSessionItem(session: SavedSession): PaletteItem {
 /** Never infer identity from titles: two conversations can have identical names. */
 export function mergeSessions(live: PaletteItem[], sessions: SavedSession[]): PaletteItem[] {
   const known = new Set(live.flatMap(item => item.session ? [sessionKey(item.session)] : []));
-  return [...live, ...sessions.filter(session => !known.has(sessionKey(session))).map(savedSessionItem)];
+  const activity = new Map<string, number>();
+  for (const session of sessions) {
+    const key = sessionKey(session);
+    const updated = Number.isFinite(session.updatedAt) ? session.updatedAt : 0;
+    activity.set(key, Math.max(activity.get(key) ?? 0, updated));
+  }
+  const enriched = live.map(item => item.session ? { ...item,
+    lastActiveAt: Math.max(agentActivity(item), activity.get(sessionKey(item.session)) ?? 0) } : item);
+  return [...enriched, ...sessions.filter(session => !known.has(sessionKey(session))).map(savedSessionItem)];
 }
 
 /** AND of literal tokens/quoted phrases, within one message, not scattered fuzzy letters. */

@@ -29,7 +29,7 @@ export interface PromptSpec { placeholder: string; /** Accept an empty submit (u
 export interface SessionTarget { paneId: string; tabId: string; workspaceId: string }
 
 export interface SavedSession {
-  provider: "codex" | "claude";
+  provider: "codex" | "claude" | "opencode";
   id: string;
   title: string;
   cwd: string;
@@ -51,6 +51,10 @@ export interface PaletteItem {
   invocation: Invocation;
   prompt?: PromptSpec;
   priority?: number;
+  /** Session activity as Unix milliseconds; absent means unknown, not recently selected. */
+  lastActiveAt?: number;
+  /** Herdr workspace visit time as Unix milliseconds; absent when Herdr does not report it. */
+  lastVisitedAt?: number;
   agentStatus?: "blocked" | "done" | "working" | "idle" | "unknown";
   session?: SavedSession;
   savedSession?: boolean;

@@ -33,7 +33,7 @@ test("meaningful titles, kinds, branches and contiguous path fragments remain se
   expect(filterPaletteItems(items, ">rvchk herdr").map(item => item.title)).toEqual(["Review checkout - herdr-palette"]);
   expect(filterPaletteItems(items, ">codex")).toHaveLength(1);
   expect(filterPaletteItems(items, "@feature-checkout").map(item => item.title)).toEqual(["feedme-workbench"]);
-  const worktrees = itemsFromWorktrees([{ label: "release", branch: "feature/payments", path: "/Users/binbin/project/checkout", open_workspace_id: "w987" }], "w987");
+  const worktrees = itemsFromWorktrees([{ label: "release", branch: "feature/payments", path: "/Users/binbin/project/checkout" }], "w987");
   expect(filterPaletteItems(worktrees, "payments")).toHaveLength(1);
   expect(filterPaletteItems(worktrees, "project/checkout")).toHaveLength(1);
   expect(filterPaletteItems(worktrees, "ubpc")).toEqual([]);

@@ -25,6 +25,22 @@ test("deduplicates live and saved sessions by provider and ID, not title", () =>
   const merged = mergeSessions(live, [session, { ...session, id: "different" }, { ...session, provider: "claude" }]);
   expect(merged).toHaveLength(3);
   expect(merged[0]!.invocation).toEqual({ kind: "herdr", argv: ["agent", "focus", "w1:p1"] });
+  expect(merged[0]!.lastActiveAt).toBe(session.updatedAt);
+  expect(live[0]!.lastActiveAt).toBeUndefined();
+});
+
+test("live and saved agents share activity ordering with relevance first and unknown timestamps last", () => {
+  const older = savedSessionItem({ ...session, id: "old", updatedAt: 100 });
+  const newer = savedSessionItem({ ...session, id: "new", updatedAt: 300 });
+  const live = { ...older, id: "live:agent:p1", savedSession: false, lastActiveAt: 200 };
+  const unknown = savedSessionItem({ ...session, id: "unknown", updatedAt: NaN });
+  for (const query of ["", ">", ">checkout", "checkout"]) {
+    expect(filterPaletteItems([unknown, older, live, newer], query).map(item => item.id))
+      .toEqual([newer.id, live.id, older.id, unknown.id]);
+  }
+  const exact = savedSessionItem({ ...session, id: "exact", title: "checkout", updatedAt: 1 });
+  expect(filterPaletteItems([newer, exact], ">checkout")[0]).toBe(exact);
+  expect(mergeSessions([{ ...live, lastActiveAt: 500 }], [session])[0]!.lastActiveAt).toBe(500);
 });
 
 test("transcripts use literal AND keywords, quoted phrases, Chinese, punctuation, and safe excerpts", () => {
@@ -98,12 +114,39 @@ test("resume rechecks live identity and focuses instead of opening a duplicate",
   expect(calls).toEqual([["api", "snapshot"], ["focus", "w2:p3"]]);
 });
 
+test("OpenCode metadata joins live agents by provider and session ID and focuses the existing pane", async () => {
+  const saved: SavedSession = { ...session, provider: "opencode", id: "ses_example", updatedAt: Date.now() };
+  const agent = { agent: "opencode", pane_id: "w2:p3", title: session.title,
+    agent_session: { kind: "id", agent: "opencode", value: saved.id } };
+  const merged = mergeSessions(itemsFromSnapshot({ agents: [agent] }, "w2"), [saved]);
+  expect(merged).toHaveLength(1);
+  expect(merged[0]!.lastActiveAt).toBe(saved.updatedAt);
+  expect(filterPaletteItems(merged, ">opencode")).toHaveLength(1);
+  expect(filterPaletteItems([savedSessionItem(saved)], "ses_example")).toHaveLength(1);
+  const { deps, calls } = resumeDeps([agent]);
+  expect((await resumeSavedSession(saved, deps)).ok).toBe(true);
+  expect(calls).toEqual([["api", "snapshot"], ["focus", "w2:p3"]]);
+});
+
+test("failed resume keeps Omni focused and displays the launch error", async () => {
+  const { deps, calls } = resumeDeps();
+  const originalRun = deps.run;
+  deps.run = async argv => argv[0] === "agent"
+    ? { code: 1, stdout: "", stderr: JSON.stringify({ error: { message: "Shell is not ready" } }) }
+    : originalRun(argv);
+  const result = await resumeSavedSession({ ...session, provider: "opencode" }, deps);
+  expect(result.ok).toBe(false);
+  expect(result.message).toContain("Shell is not ready");
+  expect(result.message).toContain("w1:p9");
+  expect(calls.some(argv => argv[0] === "focus")).toBe(false);
+});
+
 test("resume opens a tab in the original cwd and passes native arguments without a shell", async () => {
-  for (const provider of ["codex", "claude"] as const) {
+  for (const provider of ["codex", "claude", "opencode"] as const) {
     const { deps, calls } = resumeDeps();
     expect((await resumeSavedSession({ ...session, provider }, deps)).ok).toBe(true);
     expect(calls[1]).toEqual(["tab", "create", "--workspace", "w2", "--cwd", "/repo/shop", "--label", session.title, "--no-focus"]);
-    expect(calls[2]!.slice(3)).toEqual(["--kind", provider, "--pane", "w1:p9", "--", provider === "codex" ? "resume" : "--resume", session.id]);
+    expect(calls[2]!.slice(3)).toEqual(["--kind", provider, "--pane", "w1:p9", "--", provider === "codex" ? "resume" : provider === "opencode" ? "--session" : "--resume", session.id]);
     expect(calls[3]).toEqual(["focus", "w1:p9"]);
   }
 });
@@ -172,7 +215,7 @@ test("excerpts retain surrounding messages and preview centers/highlights the ac
   }
 });
 
-test("missing directories offer ranked destinations and require an explicit valid choice for both providers", async () => {
+test("missing directories offer ranked destinations and require an explicit valid choice for all providers", async () => {
   const state = { workspaces: [{ workspace_id: "w1", label: "Current" }, { workspace_id: "w2", label: "Shop" }], panes: [
     { workspace_id: "w1", cwd: "/repo/current" }, { workspace_id: "w2", cwd: "/repo/shop" },
   ] };
@@ -183,7 +226,7 @@ test("missing directories offer ranked destinations and require an explicit vali
   expect(choices[0]!.reason).toBe("Matching project folder");
   const gitChoices = await resumeWorkspaceChoices(state, missing.cwd, "w1", directory, async cwd => cwd === "/repo/current");
   expect(gitChoices[0]!.reason).toBe("Same Git repository");
-  for (const provider of ["codex", "claude"] as const) {
+  for (const provider of ["codex", "claude", "opencode"] as const) {
     const { deps, calls } = resumeDeps([], state);
     deps.directory = directory;
     const saved = { ...missing, provider };
@@ -193,7 +236,7 @@ test("missing directories offer ranked destinations and require an explicit vali
     expect(calls).toHaveLength(2);
     expect((await resumeSavedSession(saved, deps, undefined, choices[0])).ok).toBe(true);
     expect(calls[3]!.slice(0, 6)).toEqual(["tab", "create", "--workspace", "w2", "--cwd", "/repo/shop"]);
-    expect(calls[4]!.slice(8)).toEqual(provider === "codex" ? ["resume", session.id, "--cd", "/repo/shop"] : ["--resume", session.id]);
+    expect(calls[4]!.slice(8)).toEqual(provider === "codex" ? ["resume", session.id, "--cd", "/repo/shop"] : [provider === "opencode" ? "--session" : "--resume", session.id]);
   }
 });
 
