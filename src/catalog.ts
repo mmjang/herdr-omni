@@ -63,5 +63,6 @@ export const defaultItems = (): PaletteItem[] => [
   shortcut("help", "Keyboard shortcuts", "Herdr", "Show Herdr's shortcut guide", "?", "prefix+?"),
   shortcut("settings", "Settings", "Herdr", "Open Herdr settings", "≡", "prefix+s"),
   shortcut("copy_mode", "Copy mode", "Herdr", "Enter copy mode", "▧", "prefix+["),
+  entry("edit_scrollback", "Edit scrollback", "Herdr", "Open pane terminal history in your editor", "▤", "prefix+e", { kind: "pane-api", method: "pane.edit_scrollback" }),
   shortcut("detach", "Detach", "Herdr", "Leave the current Herdr session", "»", "prefix+q"),
 ];

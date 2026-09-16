@@ -1,5 +1,6 @@
 import { explain, neighborAgent, neighborTab, neighborWorkspace, runHerdr, sessionTarget, worktreeOpenArgv } from "./herdr";
 import type { CommandResult, Invocation, PaletteItem, ResolveAction, SessionTarget } from "./types";
+import { requestHerdr } from "./socket";
 
 type Resolution = { argv: string[] } | { message: string };
 
@@ -58,7 +59,7 @@ async function resolveAction(action: ResolveAction, target: SessionTarget, step:
 }
 
 /** Some Herdr commands take an explicit target, so they need the pane the palette was summoned from. */
-export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut" }>, input = ""): Promise<Resolution> {
+export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut" } | { kind: "pane-api" }>, input = ""): Promise<Resolution> {
   if (invocation.kind === "herdr") return { argv: invocation.argv };
   const target = await sessionTarget();
   if (!target) return { message: "Herdr did not report the pane that opened the palette." };
@@ -66,9 +67,15 @@ export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut"
 }
 
 export async function execute(item: PaletteItem, input = ""): Promise<CommandResult> {
+  if (item.invocation.kind === "pane-api") {
+    const target = await sessionTarget();
+    if (!target) return { ok: false, message: "Herdr did not report the pane that opened the palette." };
+    return requestHerdr(item.invocation.method, { pane_id: target.paneId });
+  }
   if (item.invocation.kind === "shortcut") {
     const keys = item.shortcuts.join(" / ");
-    return { ok: false, message: keys ? `Press ${keys} — Herdr only runs this one from the keyboard.` : "Herdr only runs this one from the keyboard." };
+    const limitation = "Herdr does not expose this client action to plugins.";
+    return { ok: false, message: keys ? `Close Omni (Esc), then press ${keys}. ${limitation}` : `${limitation} Configure its Herdr keybinding first.` };
   }
   const resolved = await resolve(item.invocation, input);
   if ("message" in resolved) return { ok: false, message: resolved.message };

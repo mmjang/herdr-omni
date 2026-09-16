@@ -123,7 +123,16 @@ test("runs every catalog entry Herdr's CLI can perform", () => {
   expect(runnable).toContain("new_worktree");
   expect(runnable).toContain("open_worktree");
   expect(runnable).toContain("remove_worktree");
+  expect(runnable).toContain("edit_scrollback");
   expect(shortcuts).toEqual(["cycle_pane_next", "cycle_pane_previous", "last_pane", "help", "settings", "copy_mode", "detach"]);
+});
+
+test("Edit scrollback displays its default shortcut and respects remaps", () => {
+  expect(defaultItems().find(item => item.id === "edit_scrollback")?.shortcuts).toEqual(["prefix+e"]);
+  const dir = mkdtempSync(join(tmpdir(), "herdr-palette-"));
+  const path = join(dir, "config.toml");
+  writeFileSync(path, '[keys]\nedit_scrollback = "ctrl+alt+e"\n');
+  expect(loadPaletteItems(path).find(item => item.id === "edit_scrollback")?.shortcuts).toEqual(["ctrl+alt+e"]);
 });
 
 test("prompts before running commands that need text input", () => {

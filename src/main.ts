@@ -11,7 +11,7 @@ import { startLiveRefresh } from "./refresh";
 const theme = loadTheme();
 const categoryOrder = ["Actions", "Workspace", "Tabs", "Worktrees", "Agents", "Custom"];
 const items = loadPaletteItems();
-const renderer = await createCliRenderer({ exitOnCtrlC: true, backgroundColor: theme.background });
+const renderer = await createCliRenderer({ exitOnCtrlC: true, useMouse: true, backgroundColor: theme.background });
 const palette = mountPalette(renderer, items, { theme, history: loadHistory(), run: async (item, input) => {
   const result = await execute(item, input);
   if (result.ok && item.category !== "Actions") recordSelection(item.id);

@@ -18,6 +18,7 @@ export type ResolveAction =
   | "worktree-remove";
 
 export type Invocation =
+  | { kind: "pane-api"; method: "pane.edit_scrollback" }
   | { kind: "herdr"; argv: string[] }
   | { kind: "resolve"; action: ResolveAction; step?: -1 | 1 }
   | { kind: "shortcut" };

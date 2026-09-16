@@ -92,10 +92,15 @@ opens. No extra configuration is needed.
 
 Only actions documented by Herdr and backed by its CLI/API run directly from the
 palette, including rename, close, workspace/agent navigation, resize, swap, move
-pane, and worktree create/open/remove. Commands that need text (rename, open
+pane, worktree create/open/remove, and Edit scrollback (through Herdr's session
+socket API). Edit scrollback targets the pane that opened Omni; the palette
+closes after Herdr confirms the editor opened. Commands that need text (rename, open
 worktree, remove confirmation) prompt inside the palette before running. Herdr's
 UI-only commands — cycle/last pane, the shortcut guide, settings, copy mode, and
-detach — have no CLI equivalent, so enter reports the shortcut to press instead.
+detach — are shortcut-only entries. In Herdr 0.9.0, native Copy mode is client-local
+and has no plugin-callable API: close Omni with Esc, then use its displayed binding.
+Sending keys to a pane would send them to the running application, not invoke
+Herdr's Copy mode.
 Custom commands from your configuration are shown as documentation only; their
 execution semantics remain owned by Herdr. A failing Herdr command shows its
 error and leaves the palette open.

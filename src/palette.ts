@@ -70,6 +70,26 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           list.add(new TextRenderable(renderer, { id: `category-${index}`, content: category, fg: theme.accent, attributes: 1 }));
         }
         const row = new BoxRenderable(renderer, { id: `item-${index}`, flexDirection: "row", width: "100%", paddingLeft: 1, paddingRight: 2, backgroundColor: index === selected ? theme.panel : theme.background });
+        let pressed = false;
+        row.onMouseDown = event => {
+          if (event.button !== 0 || running) return;
+          pressed = true;
+          event.preventDefault();
+        };
+        row.onMouseDrag = () => { pressed = false; };
+        row.onMouseOut = () => { pressed = false; };
+        row.onMouseUp = event => {
+          if (event.button !== 0 || !pressed) return;
+          pressed = false;
+          event.preventDefault();
+          event.stopPropagation();
+          if (running || prompting()) return;
+          // Resolve the rendered identity, not an index that live refresh may have changed.
+          const currentIndex = visibleItems().findIndex(candidate => candidate.id === item.id);
+          if (currentIndex < 0) return;
+          selected = currentIndex;
+          void select();
+        };
         row.add(new TextRenderable(renderer, { id: `mark-${index}`, content: index === selected ? "┃" : " ", fg: theme.accent }));
         const positions = matchingPositions(query, item.title);
         const normalColor = index === selected ? theme.text : theme.muted;
@@ -100,7 +120,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       bar.add(key("footer-enter", "enter")); bar.add(label("footer-select", " confirm   "));
       bar.add(key("footer-esc", "esc")); bar.add(label("footer-back", " back", true));
     } else {
-      bar.add(key("footer-enter", "enter")); bar.add(label("footer-select", " select   "));
+      bar.add(key("footer-enter", "enter/click")); bar.add(label("footer-select", " select   "));
       bar.add(key("footer-arrows", "↑/↓")); bar.add(label("footer-move", " move", true));
       bar.add(label("footer-count", loading ? "Loading…" : refreshError ? "Refresh unavailable" : `${count} results`));
     }

@@ -7,6 +7,13 @@ import type { PaletteItem } from "../src/types";
 
 const item = (id: string, title: string): PaletteItem => ({ id, title, category: "Tabs", description: "", icon: "▣", aliases: [], shortcuts: [], invocation: { kind: "herdr", argv: [] } });
 
+test("Edit scrollback is searchable as an action by title and terminal history", () => {
+  for (const query of ["edit scrollback", ":scrollback", ":edsc", ":terminal history"]) {
+    const matches = filterPaletteItems(defaultItems(), query);
+    expect(matches.some(item => item.id === "edit_scrollback" && item.category === "Actions")).toBe(true);
+  }
+});
+
 test("Recent holds seven matching selections without duplicates or hiding older results", () => {
   const items = Array.from({ length: 10 }, (_, i) => item(`tab${i}`, `Project ${i}`));
   const history = Object.fromEntries(items.map((entry, i) => [historyKey(entry.id), i + 1]));

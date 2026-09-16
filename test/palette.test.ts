@@ -59,6 +59,67 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 const settleEscape = () => new Promise(resolve => setTimeout(resolve, 30));
 const rowsOf = (frame: string) => frame.split("\n").filter((row, index, all) => index < all.length - 1 || row !== "");
 
+test("clicking a result label or shortcut runs that row rather than the keyboard selection", async () => {
+  for (const x of [8, 50]) {
+    const harness = await palette({ ok: true, message: "" });
+    try {
+      await harness.renderOnce();
+      const y = rowsOf(harness.captureCharFrame()).findIndex(row => row.includes("Settings"));
+      await harness.mockMouse.click(x, y);
+      await settle();
+      expect(harness.ran).toEqual([{ id: "settings" }, "closed"]);
+    } finally { harness.renderer.destroy(); }
+  }
+});
+
+test("clicking a prompted action opens its prompt without executing it", async () => {
+  const harness = await palette({ ok: true, message: "" });
+  try {
+    await harness.renderOnce();
+    const y = rowsOf(harness.captureCharFrame()).findIndex(row => row.includes("Rename pane"));
+    await harness.mockMouse.click(8, y);
+    await harness.renderOnce();
+    expect(harness.ran).toEqual([]);
+    expect(harness.captureCharFrame()).toContain("New name");
+    await harness.mockInput.typeText("renamed");
+    harness.mockInput.pressEnter();
+    await settle();
+    expect(harness.ran).toEqual([{ id: "rename_pane", input: "renamed" }, "closed"]);
+  } finally { harness.renderer.destroy(); }
+});
+
+test("repeated clicks while an action is running execute only once", async () => {
+  const harness = await createTestRenderer({ width: 60, height: 14 });
+  let calls = 0;
+  let finish!: (result: CommandResult) => void;
+  const pending = new Promise<CommandResult>(resolve => { finish = resolve; });
+  mountPalette(harness.renderer, items, { run: () => { calls++; return pending; }, close: () => {} });
+  try {
+    await harness.renderOnce();
+    const y = rowsOf(harness.captureCharFrame()).findIndex(row => row.includes("Zoom pane"));
+    await harness.mockMouse.click(8, y);
+    await harness.mockMouse.click(8, y);
+    expect(calls).toBe(1);
+  } finally {
+    finish({ ok: true, message: "" });
+    await settle();
+    harness.renderer.destroy();
+  }
+});
+
+test("headers, right-clicks and drag gestures do not activate results", async () => {
+  const harness = await palette({ ok: true, message: "" });
+  try {
+    await harness.renderOnce();
+    const rows = rowsOf(harness.captureCharFrame());
+    const y = rows.findIndex(row => row.includes("Zoom pane"));
+    await harness.mockMouse.click(8, y - 1);
+    await harness.mockMouse.click(8, y, 2);
+    await harness.mockMouse.drag(8, y, 15, y);
+    expect(harness.ran).toEqual([]);
+  } finally { harness.renderer.destroy(); }
+});
+
 test("live refresh preserves the selected identity as agents reorder", async () => {
   const harness = await createTestRenderer({ width: 80, height: 18 });
   const ran: string[] = [];
@@ -160,7 +221,7 @@ test("sets the footer apart as a full-width bar", async () => {
   const footer = captureSpans().lines.at(-1)!;
   expect(footer.spans.map(span => hex(span.bg))).toEqual(footer.spans.map(() => theme.footer));
   expect(footer.spans.reduce((width, span) => width + span.text.length, 0)).toBe(renderer.width);
-  expect(footer.spans.filter(span => hex(span.fg) === theme.accent).map(span => span.text)).toEqual(["enter", "↑/↓"]);
+  expect(footer.spans.filter(span => hex(span.fg) === theme.accent).map(span => span.text)).toEqual(["enter/click", "↑/↓"]);
 });
 
 test("closes the palette once a Herdr command succeeds", async () => {
