@@ -7,6 +7,8 @@ import { loadLiveItems } from "./live";
 import { loadHistory, recordSelection } from "./history";
 import { startLiveRefresh } from "./refresh";
 import { CATEGORY_ORDER } from "./constants";
+import { checkForUpdate, dismissUpdate, installUpdate } from "./update";
+import { version } from "../package.json";
 
 // Read Herdr's config before drawing so the popup uses the theme Herdr itself is rendering with.
 const theme = loadTheme();
@@ -16,7 +18,7 @@ const palette = mountPalette(renderer, items, { theme, history: loadHistory(), r
   const result = await execute(item, input);
   if (result.ok && item.category !== "Actions") recordSelection(item.id);
   return result;
-}, close: () => renderer.destroy() });
+}, close: () => renderer.destroy(), update: installUpdate, dismissUpdate });
 palette.setLoading(true);
 let firstLoad = true;
 const stopRefresh = startLiveRefresh(async publish => {
@@ -27,3 +29,8 @@ const stopRefresh = startLiveRefresh(async publish => {
   palette.updateItems([...items, ...liveItems].sort((left, right) => CATEGORY_ORDER.indexOf(left.category) - CATEGORY_ORDER.indexOf(right.category)));
 }, () => palette.refreshFailed());
 renderer.on("destroy", stopRefresh);
+const updateCheck = new AbortController();
+renderer.on("destroy", () => updateCheck.abort());
+void checkForUpdate(version, updateCheck.signal).then(offer => {
+  if (offer && !updateCheck.signal.aborted) palette.offerUpdate(offer);
+}).catch(() => { /* Updates must never prevent normal navigation. */ });

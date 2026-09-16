@@ -2,8 +2,8 @@ import type { SessionTarget } from "./types";
 
 const binary = () => process.env.HERDR_BIN_PATH ?? "herdr";
 
-export async function runHerdr(argv: string[], timeoutMs?: number) {
-  const child = Bun.spawn([binary(), ...argv], { stdout: "pipe", stderr: "pipe" });
+export async function runHerdr(argv: string[], timeoutMs?: number, cwd?: string) {
+  const child = Bun.spawn([binary(), ...argv], { cwd, stdout: "pipe", stderr: "pipe" });
   const timeout = timeoutMs ? setTimeout(() => child.kill(), timeoutMs) : undefined;
   try {
     const [stdout, stderr, code] = await Promise.all([new Response(child.stdout).text(), new Response(child.stderr).text(), child.exited]);

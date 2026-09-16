@@ -96,6 +96,24 @@ herdr server reload-config
 
 ## Configuration and scope
 
+### Updates
+
+Omni checks for newer stable versions in the background when you open it, with
+checks cached for an hour. When an update is available, choose **Update** to
+install it through Herdr, or **Later** to hide that version's reminder for a day.
+The dialog defaults to **Later**. If you have already started searching, Omni
+shows a notice instead; press `ctrl+u` or click the notice to review the update.
+
+After installation, close and reopen Omni to use the new version. Your settings
+and search history are preserved. Failed checks do not interrupt search, and
+installation errors stay visible with a retry option.
+
+Update checks apply to official GitHub installs of `mmjang/herdr-omni`.
+Local development links and manually pinned installs are left alone. Versions
+installed by Omni's updater remain eligible for future update prompts.
+
+### Behavior
+
 The palette reads Herdr's `config.toml`, including `[keys]` remaps, custom
 `[[keys.command]]` bindings, and `[theme]`, so it displays your effective
 shortcuts and paints itself with your effective theme. Bindings keep the word

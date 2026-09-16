@@ -4,9 +4,10 @@ import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
 import { filterPaletteItems, searchResults, matchingPositions } from "./search";
 import { version } from "../package.json";
+import type { UpdateOffer } from "./update";
 export { filterPaletteItems } from "./search";
 
-export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
+export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
 const CHROME_ROWS = 4;
@@ -21,11 +22,20 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let loading = false;
   let refreshError = false;
   let interacted = false;
+  let updateOffer: UpdateOffer | undefined;
+  let updateDialog = false;
+  let updateSelected = false; // Default to Later; Enter must never silently approve an upgrade.
+  let updating = false;
+  let updated = false;
+  let updateError = "";
+  let destroyed = false;
+  renderer.on("destroy", () => { destroyed = true; });
 
   const visibleItems = () => filterPaletteItems(allItems, query, deps.history);
   const prompting = () => promptItem !== undefined;
 
   function redraw(preserveCursor = false) {
+    if (destroyed) return;
     const cursor = preserveCursor ? activeInput?.cursorOffset : undefined;
     panel?.destroy();
     const results = searchResults(allItems, query, deps.history);
@@ -37,8 +47,37 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const heading = new BoxRenderable(renderer, { id: "heading", flexDirection: "row" });
     heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr Omni", fg: theme.text, attributes: 1 }));
     heading.add(new TextRenderable(renderer, { id: "version", content: `  v${version}`, fg: theme.muted, flexGrow: 1 }));
-    heading.add(new TextRenderable(renderer, { id: "escape", content: "esc", fg: theme.muted }));
+    heading.add(new TextRenderable(renderer, { id: "escape", content: updating ? "" : "esc", fg: theme.muted }));
     body.add(heading);
+    if (updateDialog && updateOffer) {
+      activeInput = undefined;
+      const dialog = new BoxRenderable(renderer, { id: "update-dialog", flexDirection: "column", flexGrow: 1, paddingTop: 1 });
+      dialog.add(new TextRenderable(renderer, { id: "update-title", content: updated ? `Updated to v${updateOffer.version}` : `Herdr Omni v${updateOffer.version} is available`, fg: theme.accent, attributes: 1 }));
+      dialog.add(new TextRenderable(renderer, { id: "update-description", content: updated ? "Reopen Omni to use the new version." : updating ? "Installing update…" : `Upgrade from v${version}? Your settings and history will be kept.`, fg: theme.text }));
+      if (updateError) dialog.add(new TextRenderable(renderer, { id: "update-error", content: updateError.replace(/\s+/g, " ").slice(0, 300), fg: theme.accent }));
+      const buttons = new BoxRenderable(renderer, { id: "update-buttons", flexDirection: "row", marginTop: 1 });
+      const button = (id: string, label: string, selected: boolean, action: () => void) => {
+        const control = new TextRenderable(renderer, { id, content: ` ${selected ? "[" : " "}${label}${selected ? "]" : " "} `, fg: selected ? theme.accent : theme.muted, attributes: selected ? 1 : 0 });
+        let pressed = false;
+        control.onMouseDown = event => { if (event.button === 0) { pressed = true; event.preventDefault(); } };
+        control.onMouseDrag = () => { pressed = false; };
+        control.onMouseOut = () => { pressed = false; };
+        control.onMouseUp = event => { const activate = pressed && event.button === 0 && !updating; pressed = false; if (activate) action(); };
+        buttons.add(control);
+      };
+      if (updated) button("update-close", "Close", true, deps.close);
+      else if (!updating) {
+        button("update-install", updateError ? "Retry" : "Update", updateSelected, () => { void performUpdate(); });
+        button("update-later", "Later", !updateSelected, dismissUpgrade);
+      }
+      dialog.add(buttons);
+      body.add(dialog);
+      const footer = new BoxRenderable(renderer, { id: "update-footer", height: 1, flexShrink: 0, backgroundColor: theme.footer });
+      footer.add(new TextRenderable(renderer, { id: "update-footer-text", content: updating ? "  Please wait for installation to finish." : updated ? "  enter/esc close" : "  ←/→ or tab choose · enter confirm · esc later", fg: theme.footerText }));
+      panel.add(footer);
+      renderer.root.add(panel);
+      return;
+    }
     const input = new InputRenderable(renderer, {
       id: "search",
       value: prompting() ? promptValue : query,
@@ -65,7 +104,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     } else if (items.length === 0) {
       list.add(new TextRenderable(renderer, { id: "empty", content: loading ? "Loading live results…" : "No results match your search.", fg: theme.muted }));
     } else {
-      const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0)), result => result.section);
+      const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0) - (updateOffer ? 1 : 0)), result => result.section);
       let category = "";
       items.slice(window.start, window.end).forEach((item, offset) => {
         const index = window.start + offset;
@@ -113,6 +152,11 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       });
     }
     if (status) body.add(new TextRenderable(renderer, { id: "status", content: status.replace(/\s+/g, " ").slice(0, Math.max(20, renderer.width - 4)), fg: theme.accent }));
+    if (updateOffer) {
+      const notice = new TextRenderable(renderer, { id: "update-notice", content: `v${updateOffer.version} available · ctrl+u to review update`, fg: theme.accent });
+      notice.onMouseUp = event => { if (event.button === 0 && !running) openUpgrade(); };
+      body.add(notice);
+    }
     panel.add(footerBar(prompting() ? 0 : items.length));
     renderer.root.add(panel);
   }
@@ -136,6 +180,40 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     promptItem = undefined;
     promptValue = "";
     status = "";
+    redraw();
+  }
+
+  function openUpgrade() {
+    if (!updateOffer || !deps.update || running) return;
+    updateDialog = true;
+    updateSelected = false;
+    activeInput?.blur();
+    redraw();
+  }
+
+  function dismissUpgrade() {
+    if (updating) return;
+    if (updateOffer) deps.dismissUpdate?.(updateOffer);
+    updateOffer = undefined;
+    updateDialog = false;
+    updateError = "";
+    redraw();
+  }
+
+  async function performUpdate() {
+    if (updating || !updateOffer || !deps.update) return;
+    updating = true;
+    updateError = "";
+    redraw();
+    try {
+      const result = await deps.update(updateOffer);
+      if (result.ok) updated = true;
+      else updateError = result.message;
+    } catch (error) {
+      updateError = error instanceof Error ? error.message : String(error);
+    } finally {
+      updating = false;
+    }
     redraw();
   }
 
@@ -168,6 +246,18 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   }
 
   renderer.keyInput.on("keypress", async key => {
+    if (updateDialog) {
+      if (updating) return;
+      if (updated) { if (key.name === "return" || key.name === "escape") deps.close(); return; }
+      if (key.name === "escape") return dismissUpgrade();
+      if (["tab", "left", "right"].includes(key.name)) {
+        updateSelected = key.name === "left" ? true : key.name === "right" ? false : !updateSelected;
+        return redraw();
+      }
+      if (key.name === "return") return updateSelected ? performUpdate() : dismissUpgrade();
+      return;
+    }
+    if (key.ctrl && key.name === "u" && updateOffer) return openUpgrade();
     if (["up", "down", "left", "right", "home", "end"].includes(key.name) || (key.ctrl && ["p", "n"].includes(key.name))) interacted = true;
     if (key.name === "escape") return prompting() ? cancelPrompt() : deps.close();
     if (prompting()) {
@@ -182,6 +272,12 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
 
   redraw();
   return {
+    offerUpdate(offer: UpdateOffer) {
+      if (destroyed || !deps.update || updated || updateOffer) return;
+      updateOffer = offer;
+      if (!interacted && !query && !prompting() && !running) openUpgrade();
+      else redraw(true);
+    },
     setLoading(value: boolean) { loading = value; redraw(true); },
     refreshFailed() { loading = false; refreshError = true; if (!prompting() && !running) redraw(true); },
     updateItems(items: PaletteItem[]) {
