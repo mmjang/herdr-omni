@@ -31,8 +31,10 @@ Please install and configure Herdr Omni for me:
    using the official instructions at https://bun.sh and make sure it is
    on the PATH available to Herdr.
 2. Run `herdr plugin install mmjang/herdr-omni`.
-3. Add the following binding to Herdr's active config.toml, preserving
-   existing settings and avoiding duplicates. If Cmd+P is already bound
+3. Add the following binding to ~/.config/herdr/config.toml (the default).
+   If HERDR_CONFIG_PATH is set, use that path instead; `herdr --help`
+   shows the resolved config path. Preserve existing settings and avoid
+   duplicates. If Cmd+P is already bound
    to another command, ask me how to resolve the conflict:
 
 [[keys.command]]
@@ -62,7 +64,9 @@ Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
 
 #### Open the palette
 
-Add this direct binding to Herdr's `config.toml`:
+Add this direct binding to `~/.config/herdr/config.toml`. If
+`HERDR_CONFIG_PATH` is set, use that path instead. Run `herdr --help` to
+check the resolved config path:
 
 ```toml
 [[keys.command]]
