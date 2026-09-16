@@ -19,6 +19,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let activeInput: InputRenderable | undefined;
   let loading = false;
   let refreshError = false;
+  let interacted = false;
 
   const visibleItems = () => filterPaletteItems(allItems, query, deps.history);
   const prompting = () => promptItem !== undefined;
@@ -47,6 +48,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     });
     activeInput = input;
     input.on(InputRenderableEvents.INPUT, (value: string) => {
+      interacted = true;
       if (prompting()) promptValue = value;
       else { query = value; selected = 0; }
       status = "";
@@ -73,6 +75,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         let pressed = false;
         row.onMouseDown = event => {
           if (event.button !== 0 || running) return;
+          interacted = true;
           pressed = true;
           event.preventDefault();
         };
@@ -149,6 +152,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   }
 
   async function select() {
+    interacted = true;
     if (prompting()) return run(promptItem!, promptValue);
     const item = visibleItems()[selected];
     if (!item) { status = "No results match your search."; return redraw(); }
@@ -162,6 +166,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   }
 
   renderer.keyInput.on("keypress", async key => {
+    if (["up", "down", "left", "right", "home", "end"].includes(key.name) || (key.ctrl && ["p", "n"].includes(key.name))) interacted = true;
     if (key.name === "escape") return prompting() ? cancelPrompt() : deps.close();
     if (prompting()) {
       if (key.name === "return" && !running) return select();
@@ -184,7 +189,8 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       loading = false;
       refreshError = false;
       const nextIndex = visibleItems().findIndex(item => item.id === selectedId);
-      if (nextIndex >= 0) selected = nextIndex;
+      if (!interacted) selected = 0;
+      else if (nextIndex >= 0) selected = nextIndex;
       if (changed && !prompting() && !running) redraw(true);
     },
   };

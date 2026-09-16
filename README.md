@@ -115,15 +115,34 @@ their workspace as a breadcrumb, so repeated tab names remain unambiguous.
 Start a search with `>` to show only live agents; text after the prefix filters
 those agent results further.
 Use `@` for workspace-only search: `@` lists workspaces, while `@order`
-fuzzy-searches them. Recent selections retain priority within this scope.
+fuzzy-searches them. Bare prefixes retain Recent; adding keywords ranks by relevance.
 All Herdr commands appear under **Actions**. Start with `:` to show only actions,
 or type a query such as `:split` to fuzzy-search them.
 
+Search uses the actual VS Code Quick Open core scorer (vendored under MIT),
+with Omni-specific field weighting, an exact-match bonus, Recent grouping, and
+agent priorities. It does not reproduce VS Code's complete file-ranking policy.
+Search fields are explicit: workspace and tab names, agent session/workspace
+names and agent kinds, worktree names/branches, and curated action synonyms.
+Paths support contiguous, case-insensitive text matching rather than scattered
+fuzzy letters. Display descriptions, counts, statuses, internal IDs, automatic
+index numbers, raw terminal titles, and shortcut modifiers are not search fields.
+Recent appears only for an empty query or a bare `@` / `>` prefix, never for
+keyword searches or Actions. Keyword searches keep results in their original
+sections and rank by match quality, then agent attention priority; recency only
+breaks remaining navigation ties. Action rankings never use history.
+Each category appears once. Groups rank by their best match score, with ties
+resolved by `CATEGORY_ORDER` in `src/constants.ts`; results within each group
+retain their relevance ordering.
 Search supports fuzzy abbreviations, with bonuses for consecutive letters and
 word boundaries. Matching characters in result titles are highlighted using the
 theme's accent color. Matching results selected successfully through the palette
-appear in a **Recent** section with up to seven matching results, newest first.
-Older selections remain in their regular sections without duplicating those seven.
+are eligible for **Recent** only among the 10 most recently used available
+navigation destinations, chosen before filtering by query or prefix. Up to 7
+eligible candidates are shown while browsing, newest first. Older selections remain searchable
+in their regular sections without duplicating the displayed Recent results.
+These limits are configured by `RECENT_CANDIDATE_LIMIT` and `RECENT_DISPLAY_LIMIT`
+in [`src/constants.ts`](src/constants.ts).
 Recent contains navigation destinations only: workspaces, tabs, worktrees, and
 agent sessions. Actions stay in **Actions** and do not occupy recent slots.
 Remaining results are ordered by match quality and agent attention
@@ -135,6 +154,10 @@ record a visit.
 The history directory retains its original name to preserve existing selections.
 
 ## Credits
+
+Fuzzy matching uses Microsoft's [VS Code Quick Open scorer](https://github.com/microsoft/vscode/blob/6182a6ebe7cfcf1ce05126fcd475f66a5650cebc/src/vs/base/common/fuzzyScorer.ts).
+See the [vendored source notes](src/vendor/vscode/README.md) and
+[Microsoft MIT license](src/vendor/vscode/LICENSE.txt).
 
 Herdr Omni is a fork of [Herdr Palette](https://github.com/cesarferreira/herdr-palette),
 created by [César Ferreira (@cesarferreira)](https://github.com/cesarferreira).

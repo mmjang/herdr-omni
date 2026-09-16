@@ -1,7 +1,7 @@
 import type { Invocation, PaletteItem, PromptSpec, ResolveAction } from "./types";
 
 const entry = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, key: string, invocation: Invocation, prompt?: PromptSpec): PaletteItem =>
-  ({ id, title, category: "Actions", description, icon, aliases: [category], shortcuts: key ? [key] : [], invocation, ...(prompt ? { prompt } : {}) });
+  ({ id, title, category: "Actions", description, icon, aliases: [], shortcuts: key ? [key] : [], invocation, ...(prompt ? { prompt } : {}) });
 
 const action = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, shortcut: string, argv: string[]): PaletteItem =>
   entry(id, title, category, description, icon, shortcut, { kind: "herdr", argv });
@@ -63,6 +63,6 @@ export const defaultItems = (): PaletteItem[] => [
   shortcut("help", "Keyboard shortcuts", "Herdr", "Show Herdr's shortcut guide", "?", "prefix+?"),
   shortcut("settings", "Settings", "Herdr", "Open Herdr settings", "≡", "prefix+s"),
   shortcut("copy_mode", "Copy mode", "Herdr", "Enter copy mode", "▧", "prefix+["),
-  entry("edit_scrollback", "Edit scrollback", "Herdr", "Open pane terminal history in your editor", "▤", "prefix+e", { kind: "pane-api", method: "pane.edit_scrollback" }),
+  { ...entry("edit_scrollback", "Edit scrollback", "Herdr", "Open pane terminal history in your editor", "▤", "prefix+e", { kind: "pane-api", method: "pane.edit_scrollback" }), aliases: ["terminal history", "editor"] },
   shortcut("detach", "Detach", "Herdr", "Leave the current Herdr session", "»", "prefix+q"),
 ];

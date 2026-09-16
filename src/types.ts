@@ -34,6 +34,10 @@ export interface PaletteItem {
   description: string;
   icon: string;
   aliases: string[];
+  /** Optional semantic title when the displayed title contains fallback IDs. */
+  searchTitle?: string;
+  /** Paths are searchable by contiguous text, never scattered fuzzy letters. */
+  searchPaths?: string[];
   shortcuts: string[];
   invocation: Invocation;
   prompt?: PromptSpec;

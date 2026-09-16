@@ -1,66 +1,24 @@
 import type { PaletteItem } from "./types";
 import { historyKey } from "./history";
+import { scoreFuzzy } from "./vendor/vscode/fuzzyScorer";
+import { RECENT_CANDIDATE_LIMIT, RECENT_DISPLAY_LIMIT, CATEGORY_ORDER } from "./constants";
 
-/** Ordered subsequence matching with bonuses for contiguous letters and word/camel boundaries. */
-type FuzzyMatch = { score: number; positions: number[] };
-
-function fuzzyMatch(query: string, value: string, trace = false): FuzzyMatch {
-  const needle = [...query.toLowerCase()];
-  const original = [...value];
-  const target = [...value.toLowerCase()];
-  if (!needle.length) return { score: 0, positions: [] };
-  let previous = new Array<number>(target.length).fill(-Infinity);
-  const parents = trace ? Array.from({ length: needle.length }, () => new Array<number>(target.length).fill(-1)) : undefined;
-  for (let i = 0; i < needle.length; i++) {
-    const current = new Array<number>(target.length).fill(-Infinity);
-    let best = -Infinity;
-    let bestIndex = -1;
-    for (let j = 0; j < target.length; j++) {
-      if (j > 0) {
-        const candidate = previous[j - 1]! + (j - 1) * 0.15;
-        if (candidate > best) {
-          best = candidate;
-          bestIndex = j - 1;
-        }
-      }
-      if (needle[i] !== target[j]) continue;
-      const boundary = j === 0 || /[\s_./\\\-→]/.test(original[j - 1]!) || (/[a-z]/.test(original[j - 1]!) && /[A-Z]/.test(original[j]!));
-      const bonus = 10 + (boundary ? 12 : 0);
-      if (i === 0) {
-        current[j] = bonus - j * 0.15;
-      } else {
-        const gap = best - j * 0.15;
-        const contiguous = j > 0 ? previous[j - 1]! + 16 : -Infinity;
-        current[j] = bonus + Math.max(gap, contiguous);
-        // Keep the same candidate ordering as Math.max above when scores tie.
-        if (trace) parents![i]![j] = gap >= contiguous ? bestIndex : j - 1;
-      }
-    }
-    previous = current;
+/** VS Code's Ctrl+P core returns UTF-16 offsets; OpenTUI titles use codepoints. */
+function fuzzyMatch(query: string, value: string, trace = false): { score: number; positions: number[] } {
+  if (!query) return { score: 0, positions: [] };
+  const [score, offsets] = scoreFuzzy(value, query, query.toLowerCase(), true);
+  if (score === 0) return { score: -Infinity, positions: [] };
+  // Omni policy: prefer an exact field match over a longer label with the same prefix.
+  const rankedScore = score + (value.toLowerCase() === query.toLowerCase() ? 100 : 0);
+  if (!trace) return { score: rankedScore, positions: [] };
+  const offsetToCodepoint: number[] = [];
+  let offset = 0;
+  let index = 0;
+  for (const char of value) {
+    for (let unit = 0; unit < char.length; unit++) offsetToCodepoint[offset++] = index;
+    index++;
   }
-  const score = Math.max(...previous) + (value.toLowerCase() === query.toLowerCase() ? 100 : 0);
-  if (!trace || !Number.isFinite(score)) return { score, positions: [] };
-
-  let end = 0;
-  for (let j = 1; j < previous.length; j++) {
-    if (previous[j]! > previous[end]!) end = j;
-  }
-  const targetPositions = new Array<number>(needle.length);
-  for (let i = needle.length - 1, j = end; i >= 0; i--) {
-    targetPositions[i] = j;
-    j = parents![i]![j]!;
-  }
-
-  // Lowercasing can expand a codepoint (for example, İ). Map each generated
-  // lowercased codepoint back to its original title codepoint.
-  const targetToOriginal: number[] = [];
-  for (let j = 0; j < original.length; j++) {
-    for (const _ of [...original[j]!.toLowerCase()]) targetToOriginal.push(j);
-  }
-  return {
-    score,
-    positions: targetPositions.map(position => targetToOriginal[position] ?? position),
-  };
+  return { score: rankedScore, positions: offsets.map(position => offsetToCodepoint[position]!) };
 }
 
 export function fuzzyScore(query: string, value: string): number {
@@ -87,29 +45,51 @@ export function filterPaletteItems(items: PaletteItem[], query: string, history:
 
 /** Recent is a presentation section; the item's category and action remain intact. */
 export function searchResults(items: PaletteItem[], query: string, history: Record<string, number> = {}): { item: PaletteItem; section: string }[] {
+  // Select a global pool of distinct, available navigation destinations first.
+  // Searching or changing scope must not promote older history into Recent.
+  const candidates = [...new Map(items.filter(item => item.category !== "Actions")
+    .map(item => [item.id, { id: item.id, recent: history[historyKey(item.id)] ?? 0 }])).values()]
+    .filter(item => item.recent > 0)
+    .sort((a, b) => b.recent - a.recent)
+    .slice(0, RECENT_CANDIDATE_LIMIT);
+  const candidateIds = new Set(candidates.map(item => item.id));
   const agentsOnly = query.startsWith(">");
   const actionsOnly = query.startsWith(":");
   const workspacesOnly = query.startsWith("@");
   const tokens = (agentsOnly || actionsOnly || workspacesOnly ? query.slice(1) : query).trim().split(/\s+/).filter(Boolean);
+  const browsing = tokens.length === 0;
   const matches = items.flatMap((item, index) => {
     if (agentsOnly && !item.id.startsWith("live:agent:")) return [];
     if (actionsOnly && item.category !== "Actions") return [];
     if (workspacesOnly && !item.id.startsWith("live:workspace:")) return [];
     let score = 0;
     for (const token of tokens) {
-      const match = Math.max(fuzzyScore(token, item.title), ...[item.description, ...item.aliases, ...item.shortcuts].map(field => fuzzyScore(token, field) - 25));
+      // Presentation metadata and shortcut syntax are not search keywords.
+      const pathMatches = (item.searchPaths ?? []).filter(path => path.toLowerCase().includes(token.toLowerCase()));
+      const match = Math.max(fuzzyScore(token, item.searchTitle ?? item.title),
+        ...item.aliases.map(field => fuzzyScore(token, field) - 25),
+        ...pathMatches.map(path => fuzzyScore(token, path) - 25));
       if (!Number.isFinite(match)) return [];
       score += match;
     }
-    return [{ item, index, score, recent: history[historyKey(item.id)] ?? 0 }];
+    return [{ item, index, score, recent: item.category === "Actions" ? 0 : history[historyKey(item.id)] ?? 0 }];
   });
-  const recent = matches.filter(result => result.recent > 0 && result.item.category !== "Actions")
-    .sort((a, b) => b.recent - a.recent || a.index - b.index).slice(0, 7);
+  const recent = matches.filter(result => browsing && candidateIds.has(result.item.id))
+    .sort((a, b) => b.recent - a.recent || a.index - b.index).slice(0, RECENT_DISPLAY_LIMIT);
   const recentIds = new Set(recent.map(result => result.item.id));
   const rest = matches.filter(result => !recentIds.has(result.item.id))
-    .sort((a, b) => b.score - a.score || (a.item.priority ?? 5) - (b.item.priority ?? 5) || a.index - b.index);
+    .sort((a, b) => b.score - a.score || (a.item.priority ?? 5) - (b.item.priority ?? 5)
+      || (!browsing ? b.recent - a.recent : 0) || a.index - b.index);
+  const groups = new Map<PaletteItem["category"], typeof rest>();
+  for (const result of rest) {
+    const group = groups.get(result.item.category);
+    if (group) group.push(result);
+    else groups.set(result.item.category, [result]);
+  }
+  const orderedGroups = [...groups.entries()].sort(([categoryA, a], [categoryB, b]) =>
+    b[0]!.score - a[0]!.score || CATEGORY_ORDER.indexOf(categoryA) - CATEGORY_ORDER.indexOf(categoryB));
   return [
     ...recent.map(({ item }) => ({ item, section: "Recent" })),
-    ...rest.map(({ item }) => ({ item, section: item.category })),
+    ...orderedGroups.flatMap(([section, group]) => group.map(({ item }) => ({ item, section }))),
   ];
 }

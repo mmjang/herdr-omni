@@ -6,10 +6,10 @@ import { loadTheme } from "./theme";
 import { loadLiveItems } from "./live";
 import { loadHistory, recordSelection } from "./history";
 import { startLiveRefresh } from "./refresh";
+import { CATEGORY_ORDER } from "./constants";
 
 // Read Herdr's config before drawing so the popup uses the theme Herdr itself is rendering with.
 const theme = loadTheme();
-const categoryOrder = ["Actions", "Workspace", "Tabs", "Worktrees", "Agents", "Custom"];
 const items = loadPaletteItems();
 const renderer = await createCliRenderer({ exitOnCtrlC: true, useMouse: true, backgroundColor: theme.background });
 const palette = mountPalette(renderer, items, { theme, history: loadHistory(), run: async (item, input) => {
@@ -24,6 +24,6 @@ const stopRefresh = startLiveRefresh(async publish => {
   firstLoad = false;
   return liveItems;
 }, liveItems => {
-  palette.updateItems([...items, ...liveItems].sort((left, right) => categoryOrder.indexOf(left.category) - categoryOrder.indexOf(right.category)));
+  palette.updateItems([...items, ...liveItems].sort((left, right) => CATEGORY_ORDER.indexOf(left.category) - CATEGORY_ORDER.indexOf(right.category)));
 }, () => palette.refreshFailed());
 renderer.on("destroy", stopRefresh);

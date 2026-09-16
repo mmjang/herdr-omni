@@ -3,6 +3,7 @@ import { expect, test } from "bun:test";
 import { filterPaletteItems, mountPalette } from "../src/palette";
 import { fallbackTheme } from "../src/theme";
 import type { CommandResult, PaletteItem } from "../src/types";
+import { historyKey } from "../src/history";
 
 /**
  * A palette deliberately unlike both the built-in fallback and anything a real Herdr config
@@ -120,6 +121,47 @@ test("headers, right-clicks and drag gestures do not activate results", async ()
   } finally { harness.renderer.destroy(); }
 });
 
+test("initial loading selects the first Recent result unless the user has interacted", async () => {
+  for (const interaction of ["none", "typing", "arrow", "click"] as const) {
+    const harness = await createTestRenderer({ width: 80, height: 18 });
+    const ran: string[] = [];
+    const action = { ...item("action", "Review action", { kind: "shortcut" }), category: "Actions" as const };
+    const recent = { ...item("live:workspace:recent", "Review workspace", { kind: "herdr", argv: [] }), category: "Workspace" as const };
+    const controller = mountPalette(harness.renderer, [action], {
+      history: { [historyKey(recent.id)]: 1 },
+      run: async entry => { ran.push(entry.id); return { ok: false, message: "test" }; }, close: () => {},
+    });
+    try {
+      controller.setLoading(true);
+      if (interaction === "typing") await harness.mockInput.typeText("review");
+      if (interaction === "arrow") harness.mockInput.pressArrow("down");
+      if (interaction === "click") {
+        await harness.renderOnce();
+        const y = rowsOf(harness.captureCharFrame()).findIndex(row => row.includes("Review action"));
+        await harness.mockMouse.click(8, y);
+      }
+      await settle();
+      ran.length = 0;
+      controller.updateItems([action, recent]);
+      harness.mockInput.pressEnter();
+      await settle();
+      expect(ran).toEqual([interaction === "none" ? recent.id : action.id]);
+    } finally { harness.renderer.destroy(); }
+  }
+});
+
+test("without Recent the first available result remains the initial selection", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 18 });
+  const ran: string[] = [];
+  const controller = mountPalette(harness.renderer, [], { run: async entry => { ran.push(entry.id); return { ok: true, message: "" }; }, close: () => {} });
+  try {
+    controller.updateItems(items);
+    harness.mockInput.pressEnter();
+    await settle();
+    expect(ran).toEqual([items[0]!.id]);
+  } finally { harness.renderer.destroy(); }
+});
+
 test("live refresh preserves the selected identity as agents reorder", async () => {
   const harness = await createTestRenderer({ width: 80, height: 18 });
   const ran: string[] = [];
@@ -176,7 +218,7 @@ test("shows each live agent status beside its session title", async () => {
   expect(frame).toContain("Review - project");
 });
 
-test("renders repeated categories when recent results cross category boundaries", async () => {
+test("Recent stays a single section across destination categories", async () => {
   const harness = await createTestRenderer({ width: 70, height: 18 });
   const mixed = [
     { ...item("first", "First", { kind: "shortcut" }), category: "Tabs" as const },
@@ -188,6 +230,25 @@ test("renders repeated categories when recent results cross category boundaries"
   const frame = harness.captureCharFrame();
   expect(frame.indexOf("First")).toBeLessThan(frame.indexOf("Second"));
   expect(frame.indexOf("Second")).toBeLessThan(frame.indexOf("Third"));
+  expect(rowsOf(frame).filter(row => row.trim() === "Recent")).toHaveLength(1);
+  harness.renderer.destroy();
+});
+
+test("keyword results render each category header once", async () => {
+  const harness = await createTestRenderer({ width: 80, height: 18 });
+  const mixed = [
+    { ...item("tab-best", "ns", { kind: "shortcut" }), category: "Tabs" as const },
+    { ...item("workspace", "native_shell", { kind: "shortcut" }), category: "Workspace" as const },
+    { ...item("tab-weak", "notes", { kind: "shortcut" }), category: "Tabs" as const },
+  ];
+  try {
+    mountPalette(harness.renderer, mixed, { run: async () => ({ ok: false, message: "" }), close: () => {} });
+    await harness.mockInput.typeText("ns");
+    await harness.renderOnce();
+    const rows = rowsOf(harness.captureCharFrame());
+    expect(rows.filter(row => row.trim() === "Tabs")).toHaveLength(1);
+    expect(rows.filter(row => row.trim() === "Workspace")).toHaveLength(1);
+  } finally { harness.renderer.destroy(); }
 });
 
 test("paints the palette background across the whole popup", async () => {

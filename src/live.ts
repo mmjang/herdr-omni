@@ -10,8 +10,8 @@ const records = (value: unknown): JsonRecord[] => Array.isArray(value)
 const text = (value: unknown) => typeof value === "string" ? value : "";
 const count = (value: unknown) => typeof value === "number" ? value : 0;
 
-function liveItem(id: string, title: string, category: PaletteItem["category"], description: string, icon: string, aliases: string[], invocation: PaletteItem["invocation"]): PaletteItem {
-  return { id: `live:${id}`, title, category, description, icon, aliases: aliases.filter(Boolean), shortcuts: [], invocation };
+function liveItem(id: string, title: string, category: PaletteItem["category"], description: string, icon: string, aliases: string[], invocation: PaletteItem["invocation"], searchTitle = title, searchPaths: string[] = []): PaletteItem {
+  return { id: `live:${id}`, title, category, description, icon, aliases: [...new Set(aliases.filter(Boolean))], searchTitle, searchPaths: [...new Set(searchPaths.filter(Boolean))], shortcuts: [], invocation };
 }
 
 export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: string): PaletteItem[] {
@@ -28,7 +28,7 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const checkoutPath = text(worktree?.checkout_path);
     const details = `${count(workspace.tab_count)} tabs · ${count(workspace.pane_count)} panes`;
     return liveItem(`workspace:${workspaceId}`, label, "Workspace", checkoutPath ? `${details} · ${checkoutPath}` : details, "◇",
-      [workspaceId, String(workspace.number ?? ""), checkoutPath, text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] });
+      [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, text(workspace.label), [checkoutPath]);
   });
 
   const openWorktreeItems = workspaces.flatMap(workspace => {
@@ -38,7 +38,7 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const workspaceId = text(workspace.workspace_id);
     const label = text(workspace.label) || text(worktree?.repo_name) || basename(path);
     return [liveItem(`worktree:${path}`, label, "Worktrees", `${text(worktree?.repo_name)} · ${path}`, "◈",
-      [path, workspaceId, text(worktree?.repo_root)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] })];
+      [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, label, [path, text(worktree?.repo_root)])];
   });
 
   const tabItems = tabs.map(tab => {
@@ -48,7 +48,7 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const workspace = workspaceLabels.get(workspaceId) || workspaceId;
     const title = [workspace, label].filter(Boolean).join(" → ");
     return liveItem(`tab:${tabId}`, title, "Tabs", `${count(tab.pane_count)} panes · ${text(tab.agent_status)}`, "▣",
-      [label, tabId, workspaceId, workspace, String(tab.number ?? "")], { kind: "herdr", argv: ["tab", "focus", tabId] });
+      [], { kind: "herdr", argv: ["tab", "focus", tabId] }, [workspaceLabels.get(workspaceId), text(tab.label)].filter(Boolean).join(" → "));
   });
 
   const agentItems = agents.map(agent => {
@@ -60,7 +60,7 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const workspace = workspaceLabels.get(workspaceId) || workspaceId;
     const title = `${sessionName} - ${workspace}`;
     const item = liveItem(`agent:${paneId}`, title, "Agents", `${text(agent.agent_status)} · ${tabLabels.get(tabId) || tabId}`, "◈",
-      [sessionName, workspace, paneId, workspaceId, tabId, kind, text(agent.name), text(agent.cwd), text(agent.terminal_title)], { kind: "herdr", argv: ["agent", "focus", paneId] });
+      [kind], { kind: "herdr", argv: ["agent", "focus", paneId] }, [sessionName, workspaceLabels.get(workspaceId)].filter(Boolean).join(" - "), [text(agent.cwd)]);
     item.priority = ["blocked", "done", "working", "idle", "unknown"].indexOf(text(agent.agent_status));
     if (item.priority < 0) item.priority = 4;
     item.agentStatus = (["blocked", "done", "working", "idle", "unknown"] as const)[item.priority];
@@ -80,7 +80,7 @@ export function itemsFromWorktrees(worktrees: unknown, currentWorkspaceId: strin
       ? { kind: "herdr", argv: ["workspace", "focus", openWorkspaceId] }
       : { kind: "herdr", argv: ["worktree", "open", "--workspace", currentWorkspaceId, "--path", path, "--focus"] };
     return liveItem(`worktree:${path}`, label, "Worktrees", `${branch || "detached"} · ${path}`, "◈",
-      [path, branch, openWorkspaceId], invocation);
+      [branch], invocation, label, [path]);
   });
 }
 
