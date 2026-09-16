@@ -10,12 +10,13 @@ import { CATEGORY_ORDER } from "./constants";
 import { checkForUpdate, dismissUpdate, installUpdate } from "./update";
 import { version } from "../package.json";
 import { runSessionJob } from "./sessions";
+import { parseLaunchContext } from "./herdr";
 
 // Read Herdr's config before drawing so the popup uses the theme Herdr itself is rendering with.
 const theme = loadTheme();
 const items = loadPaletteItems();
 const renderer = await createCliRenderer({ exitOnCtrlC: true, useMouse: true, backgroundColor: theme.background });
-const palette = mountPalette(renderer, items, { theme, history: loadHistory(), run: async (item, input) => {
+const palette = mountPalette(renderer, items, { theme, history: loadHistory(), currentWorkspaceId: parseLaunchContext()?.workspaceId, run: async (item, input) => {
   const result = await execute(item, input);
   if (result.ok && item.category !== "Actions") recordSelection(item.id);
   return result;

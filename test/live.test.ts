@@ -59,6 +59,7 @@ test("focuses agents by pane ID, even when agent names are duplicated", () => {
     ["agent", "focus", "w1:p1"],
     ["agent", "focus", "w2:p1"],
   ]);
+  expect(agents.map(agent => agent.currentWorkspace)).toEqual([true, false]);
 });
 
 test("prefers session title metadata over terminal and control names", () => {

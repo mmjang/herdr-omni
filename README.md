@@ -160,6 +160,7 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 - Browse category tabs, with five-result previews and View all in All; no separate Recent section.
 - Search and resume saved OpenCode sessions, including opt-in transcript search.
 - Agent results use last activity for ordering and show relative activity times.
+- Agents in the workspace that opened Omni are marked with a blue dot and `current`.
 - Category labels show match counts (capped at 99+); the popup adapts to 80% of terminal height.
 
 ### 0.7.0

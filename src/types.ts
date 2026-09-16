@@ -56,6 +56,8 @@ export interface PaletteItem {
   /** Herdr workspace visit time as Unix milliseconds; absent when Herdr does not report it. */
   lastVisitedAt?: number;
   agentStatus?: "blocked" | "done" | "working" | "idle" | "unknown";
+  /** Live agent is hosted by the workspace that opened Omni. */
+  currentWorkspace?: boolean;
   session?: SavedSession;
   savedSession?: boolean;
 }

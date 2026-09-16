@@ -11,7 +11,7 @@ import { version } from "../package.json";
 import type { UpdateOffer } from "./update";
 export { filterPaletteItems } from "./search";
 
-export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob }
+export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; currentWorkspaceId?: string; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
 const CHROME_ROWS = 5;
@@ -345,7 +345,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         const positions = results[index]!.section === "Transcript matches" ? new Set<number>() : matchingPositions(query, item.title);
         const normalColor = index === selected ? theme.text : theme.muted;
         const content = new StyledText([
-          fg(normalColor)(`${item.icon}  `),
+          fg(item.currentWorkspace && item.category === "Agents" ? theme.accent : normalColor)(`${item.currentWorkspace && item.category === "Agents" ? "●" : item.icon}  `),
           ...[...item.title].map((char, i) => positions.has(i) ? bold(fg(theme.accent)(char)) : fg(normalColor)(char)),
         ]);
         row.add(new TextRenderable(renderer, { id: `label-${index}`, content, fg: normalColor, flexGrow: 1, height: 1 }));
@@ -353,7 +353,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           id: `key-${index}`,
           content: item.category === "Agents"
             ? ` ${[item.agentStatus ? `[${item.agentStatus}]` : item.savedSession ? `Saved · ${item.session!.provider}` : "",
-              activityAge(agentActivity(item))].filter(Boolean).join(" · ")}`
+              activityAge(agentActivity(item)), item.currentWorkspace ? "current" : ""].filter(Boolean).join(" · ")}`
             : item.shortcuts.join(" / "),
           fg: item.agentStatus === "unknown" ? theme.muted : index === selected || item.agentStatus ? theme.accent : theme.shortcut,
           flexShrink: 0,
