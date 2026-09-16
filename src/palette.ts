@@ -3,6 +3,7 @@ import type { CommandResult, PaletteItem } from "./types";
 import { fallbackTheme, type PaletteTheme } from "./theme";
 import { viewport } from "./viewport";
 import { filterPaletteItems, searchResults, matchingPositions } from "./search";
+import { version } from "../package.json";
 export { filterPaletteItems } from "./search";
 
 export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void }
@@ -34,7 +35,8 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const body = new BoxRenderable(renderer, { id: "body", flexDirection: "column", flexGrow: 1, paddingLeft: 2, paddingRight: 2 });
     panel.add(body);
     const heading = new BoxRenderable(renderer, { id: "heading", flexDirection: "row" });
-    heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr", fg: theme.text, attributes: 1, flexGrow: 1 }));
+    heading.add(new TextRenderable(renderer, { id: "title", content: prompting() ? promptItem!.title : "Herdr Omni", fg: theme.text, attributes: 1 }));
+    heading.add(new TextRenderable(renderer, { id: "version", content: `  v${version}`, fg: theme.muted, flexGrow: 1 }));
     heading.add(new TextRenderable(renderer, { id: "escape", content: "esc", fg: theme.muted }));
     body.add(heading);
     const input = new InputRenderable(renderer, {
