@@ -20,16 +20,6 @@ Built with Bun and OpenTUI. Forked from
 
 ## Install
 
-Install [Herdr](https://herdr.dev) and [Bun](https://bun.sh), then run:
-
-```sh
-herdr plugin install mmjang/herdr-omni
-```
-
-Herdr downloads the plugin and runs its dependency installation. Follow the
-prompts, then configure the shortcut under **Open the palette** below.
-Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
-
 ### Ask your agent to install
 
 Copy this prompt into your coding agent:
@@ -58,22 +48,19 @@ description = "Open Herdr Omni"
 Please execute these steps, troubleshoot any errors, and report the result.
 ```
 
-### Local development
+### Manual install
 
-To work on the plugin source, clone the repository and link your checkout:
+Install [Herdr](https://herdr.dev) and [Bun](https://bun.sh), then run:
 
 ```sh
-git clone https://github.com/mmjang/herdr-omni.git
-cd herdr-omni
-bun install
-herdr plugin link .
-herdr plugin list
+herdr plugin install mmjang/herdr-omni
 ```
 
-If you already have a checkout, run the last three commands from its root.
-Keep the checkout in place: Herdr runs the linked plugin from this directory.
+Herdr downloads the plugin and runs its dependency installation. Follow the
+prompts, then configure the shortcut under **Open the palette** below.
+Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
 
-## Open the palette
+#### Open the palette
 
 Add this direct binding to Herdr's `config.toml`:
 
@@ -93,16 +80,6 @@ running configuration with:
 ```sh
 herdr server reload-config
 ```
-
-## Release
-
-Validate the project, bump the minor version, commit, tag, and push:
-
-```sh
-make release
-```
-
-Use `make release LEVEL=patch` or `LEVEL=major` for a different bump.
 
 ## Configuration and scope
 
@@ -182,6 +159,31 @@ reopening the palette and is stored under `$XDG_STATE_HOME/herdr-palette`
 record a visit.
 
 The history directory retains its original name to preserve existing selections.
+
+## Local development
+
+To work on the plugin source, clone the repository and link your checkout:
+
+```sh
+git clone https://github.com/mmjang/herdr-omni.git
+cd herdr-omni
+bun install
+herdr plugin link .
+herdr plugin list
+```
+
+If you already have a checkout, run the last three commands from its root.
+Keep the checkout in place: Herdr runs the linked plugin from this directory.
+
+## Release
+
+Validate the project, bump the minor version, commit, tag, and push:
+
+```sh
+make release
+```
+
+Use `make release LEVEL=patch` or `LEVEL=major` for a different bump.
 
 ## Credits
 
