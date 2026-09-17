@@ -149,6 +149,10 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
 
+### 0.12.2
+
+- Use the consistent result tab order **All → Workspace → Agents → Tabs → Actions** in both the tab bar and All view.
+
 ### 0.12.1
 
 - Put **Agents** immediately after **All** in the result tab bar for faster session navigation.

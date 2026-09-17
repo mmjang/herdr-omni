@@ -16,9 +16,8 @@ export function tabMatchCounts(results: ResultRow[]): Map<string, string> {
 
 export function resultTabs(results: ResultRow[], items: PaletteItem[]): string[] {
   const sections = new Set(["Workspace", "Tabs", "Agents", "Actions", ...items.map(item => item.category === "Worktrees" ? "Workspace" : item.category), ...results.map(row => row.section)]);
-  // Agents are the most frequently used destination after the aggregate view.
-  // Keep the remaining sections in the established category order.
-  return ["All", "Agents", ...CATEGORY_ORDER.filter(section => section !== "Agents" && sections.has(section)), ...[...sections].filter(section => !(CATEGORY_ORDER as readonly string[]).includes(section))];
+  const tabOrder = ["Workspace", "Agents", "Tabs", "Actions", ...CATEGORY_ORDER.filter(section => !["Workspace", "Agents", "Tabs", "Actions"].includes(section))];
+  return ["All", ...tabOrder.filter(section => sections.has(section)), ...[...sections].filter(section => !tabOrder.includes(section))];
 }
 
 /** Navigation rows never leave the UI or enter execution/history. */
@@ -30,7 +29,13 @@ export function tabResults(results: ResultRow[], tab: string): ResultRow[] {
     group.push(row);
     groups.set(row.section, group);
   }
-  return [...groups].flatMap(([section, rows]) => [
+  const tabOrder = ["Workspace", "Agents", "Tabs", "Actions", ...CATEGORY_ORDER.filter(section => !["Workspace", "Agents", "Tabs", "Actions"].includes(section))];
+  const orderedGroups = [...groups].sort(([left], [right]) => {
+    const leftOrder = tabOrder.indexOf(left);
+    const rightOrder = tabOrder.indexOf(right);
+    return (leftOrder < 0 ? tabOrder.length : leftOrder) - (rightOrder < 0 ? tabOrder.length : rightOrder);
+  });
+  return orderedGroups.flatMap(([section, rows]) => [
     ...rows.slice(0, ALL_SECTION_LIMIT),
     { section, viewAll: section, item: {
       id: `ui:view-all:${section}`, title: `View all ${sectionLabel(section)} (${rows.length})`,

@@ -7,8 +7,9 @@ const rows = (category: PaletteItem["category"], length: number) => Array.from({
 }));
 
 test("All caps each section at five and appends View all; detail tabs are uncapped", () => {
-  const results = [...rows("Workspace", 9), ...rows("Agents", 12), ...rows("Actions", 2)];
+  const results = [...rows("Actions", 2), ...rows("Agents", 12), ...rows("Workspace", 9)];
   const all = tabResults(results, "All");
+  expect([...new Set(all.filter(row => !row.viewAll).map(row => row.section))]).toEqual(["Workspace", "Agents", "Actions"]);
   expect(all.filter(row => !row.viewAll && row.section === "Workspace")).toHaveLength(5);
   expect(all.filter(row => !row.viewAll && row.section === "Agents")).toHaveLength(5);
   expect(all.filter(row => !row.viewAll && row.section === "Actions")).toHaveLength(2);
@@ -18,7 +19,7 @@ test("All caps each section at five and appends View all; detail tabs are uncapp
 });
 
 test("core tabs remain stable with no results and extra sections get their own tab", () => {
-  expect(resultTabs([], [])).toEqual(["All", "Agents", "Workspace", "Tabs", "Actions"]);
+  expect(resultTabs([], [])).toEqual(["All", "Workspace", "Agents", "Tabs", "Actions"]);
   expect(resultTabs([{ ...rows("Agents", 1)[0]!, section: "Transcript matches" }], []).at(-1)).toBe("Transcript matches");
 });
 
