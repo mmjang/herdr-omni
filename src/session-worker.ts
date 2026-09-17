@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { basename, join } from "node:path";
 import type { SavedSession } from "./types";
 import { OpenCodeHistory } from "./opencode-history";
-import { SESSION_REQUEST_TIMEOUT_MS, TRANSCRIPT_RESULT_LIMIT, transcriptExcerpt, transcriptTerms, type SessionEvent, type SessionRequest } from "./sessions";
+import { SESSION_REQUEST_TIMEOUT_MS, TRANSCRIPT_RESULT_LIMIT, sessionKey, transcriptExcerpt, transcriptTerms, type SessionEvent, type SessionRequest } from "./sessions";
 
 type RgResult = { code: number; stdout: string };
 
@@ -64,6 +64,12 @@ const transcriptRoots = (provider: "codex" | "claude", home = homedir()): string
   : [join(home, ".claude", "projects")];
 
 const splitNull = (stdout: string) => stdout.split("\0").filter(Boolean);
+const escapeRegex = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+// Keep short-lived probes responsive on laptops; rg otherwise uses every
+// available core for each of the broad and record-level scans.
+const TRANSCRIPT_RG_THREADS = 4;
+const rgThreadArgs = ["--threads", String(TRANSCRIPT_RG_THREADS)];
+const OPENCODE_READ_CONCURRENCY = 4;
 
 /**
  * Find sessions whose JSONL files are coarse candidates for a literal query.
@@ -85,7 +91,7 @@ export async function prefilterTranscriptSessions(
   const files: string[] = [];
   try {
     for (const root of roots) {
-      const listed = await runner.run(["--files", "--null", "--hidden", "--no-ignore", "--glob", glob, "--", root]);
+      const listed = await runner.run(["--files", "--null", "--hidden", "--no-ignore", "--glob", glob, ...rgThreadArgs, "--", root]);
       // rg uses 2 for an absent/unreadable root. Other roots can still be
       // valid (archived_sessions is commonly absent), so defer fallback until
       // we know whether any usable corpus exists.
@@ -118,7 +124,7 @@ export async function prefilterTranscriptSessions(
       encodedCompactPhrase,
       encodedCompactPhrase.slice(1, -1),
     ])];
-    const args = ["--files-with-matches", "--null", "--hidden", "--no-ignore", "--ignore-case", "--fixed-strings", "--glob", glob];
+    const args = ["--files-with-matches", "--null", "--hidden", "--no-ignore", "--ignore-case", "--fixed-strings", "--glob", glob, ...rgThreadArgs];
     for (const pattern of patterns) args.push("-e", pattern);
     const matches = await runner.run([...args, "--", ...existingRoots]);
     if (matches.code === 1) return new Set();
@@ -126,17 +132,64 @@ export async function prefilterTranscriptSessions(
 
     const matchedFiles = splitNull(matches.stdout);
     if (!matchedFiles.length) return new Set();
+
+    // The on-disk corpus can contain child/desktop sessions that the provider
+    // API deliberately leaves out of its session list. Build the mapping from
+    // every listed file first, so those extra files do not force a full scan
+    // when the known session corpus is otherwise healthy.
     const byClaudeFilename = new Map(sessions.map(session => [`${session.id}.jsonl`, session.id]));
+    const codexIds = provider === "codex" ? sessions.map(session => session.id).sort((a, b) => b.length - a.length) : [];
+    const mapFile = (path: string): string | undefined => {
+      const file = basename(path);
+      if (provider === "claude") return byClaudeFilename.get(file);
+      return codexIds.find(id => file === `${id}.jsonl` || file.endsWith(`-${id}.jsonl`));
+    };
+    const mappedCorpus = new Set(files.map(mapFile).filter((id): id is string => Boolean(id)));
+    // If no known session maps to the discovered corpus, the filename/layout
+    // assumption is likely stale. Fall back rather than risk false negatives.
+    if (!mappedCorpus.size) return undefined;
+
     const ids = new Set<string>();
     for (const path of matchedFiles) {
-      const file = basename(path);
-      const id = provider === "claude"
-        ? byClaudeFilename.get(file)
-        : sessions.find(session => file === `${session.id}.jsonl` || file.endsWith(`-${session.id}.jsonl`))?.id;
-      // A hit that cannot be mapped is evidence our filename assumption is
-      // stale; retain the old full scan rather than dropping a real result.
-      if (!id) return undefined;
-      ids.add(id);
+      const id = mapFile(path);
+      // Ignore files outside the provider API's known session set (for
+      // example Codex child-agent rollouts). They cannot produce a result for
+      // this request, which only contains the known sessions.
+      if (id) ids.add(id);
+    }
+
+    // File-level matching is intentionally broad because tool output and
+    // reasoning are mixed into the same JSONL files. When every known broad
+    // hit uses the provider's recognizable conversation record shape, run a
+    // second regex probe that requires the query and that record marker on the
+    // same line. This avoids expensive SDK reads for files that only mention
+    // the query inside tool calls. If the shape cannot be verified, retain the
+    // broad set so format changes never become false negatives.
+    if (ids.size) {
+      const marker = provider === "codex"
+        ? '"type"[[:space:]]*:[[:space:]]*"message"'
+        : '"type"[[:space:]]*:[[:space:]]*"(?:user|assistant)"';
+      const markerProbe = await runner.run([
+        "--files-with-matches", "--null", "--hidden", "--no-ignore", "--ignore-case", "--glob", glob, ...rgThreadArgs,
+        "-e", marker, "--", ...matchedFiles,
+      ]);
+      if (markerProbe.code === 0) {
+        const structuredIds = new Set(splitNull(markerProbe.stdout).map(mapFile).filter((id): id is string => Boolean(id)));
+        if ([...ids].every(id => structuredIds.has(id))) {
+          const conversationPatterns = patterns.map(pattern => {
+            const escaped = escapeRegex(pattern);
+            return `(?:${marker}.*${escaped}|${escaped}.*${marker})`;
+          });
+          const conversationProbeArgs = ["--files-with-matches", "--null", "--hidden", "--no-ignore", "--ignore-case", "--glob", glob, ...rgThreadArgs];
+          for (const pattern of conversationPatterns) conversationProbeArgs.push("-e", pattern);
+          const conversationProbe = await runner.run([...conversationProbeArgs, "--", ...matchedFiles]);
+          if (conversationProbe.code === 0) return new Set(splitNull(conversationProbe.stdout).map(mapFile).filter((id): id is string => Boolean(id)));
+          // Exit 1 means the broad hits were all in non-conversation records.
+          // Other exit codes are operational/format failures, so keep the
+          // broad candidates and let the SDK remain authoritative.
+          if (conversationProbe.code === 1) return new Set();
+        }
+      }
     }
     return ids;
   } catch {
@@ -274,6 +327,29 @@ async function work(request: SessionRequest, publish: (event: SessionEvent) => v
         const allowed = prefiltered.get(session.provider as "codex" | "claude");
         return !allowed || allowed.has(session.id);
       });
+      // `opencode export` starts a short-lived CLI process for each session.
+      // Launch independent reads through a small pool; keeping them serial
+      // turns a small OpenCode history into one startup delay per session,
+      // while an unbounded Promise.all would create too many processes when a
+      // larger history is available.
+      const opencodeReads = new Map<string, Promise<{ messages?: string[] }>>();
+      const opencodeResolvers = new Map<string, (result: { messages?: string[] }) => void>();
+      const opencodeSessions = sessionsToScan.filter(session => session.provider === "opencode");
+      for (const session of opencodeSessions) {
+        let resolve!: (result: { messages?: string[] }) => void;
+        opencodeReads.set(sessionKey(session), new Promise(result => { resolve = result; }));
+        opencodeResolvers.set(sessionKey(session), resolve);
+      }
+      let nextOpenCode = 0;
+      const readOpenCode = async () => {
+        while (nextOpenCode < opencodeSessions.length) {
+          const session = opencodeSessions[nextOpenCode++]!;
+          const resolve = opencodeResolvers.get(sessionKey(session))!;
+          try { resolve({ messages: await opencode.read(session.id) }); }
+          catch { resolve({}); }
+        }
+      };
+      void Promise.all(Array.from({ length: Math.min(OPENCODE_READ_CONCURRENCY, opencodeSessions.length) }, readOpenCode));
       let hits = 0, scanned = 0, failures = 0;
       for (const session of sessionsToScan) {
         try {
@@ -282,7 +358,9 @@ async function work(request: SessionRequest, publish: (event: SessionEvent) => v
             await codex.start();
             messages = codexText((await codex.call("thread/read", { threadId: session.id, includeTurns: true })).thread);
           } else if (session.provider === "opencode") {
-            messages = await opencode.read(session.id);
+            const result = await opencodeReads.get(sessionKey(session));
+            if (!result?.messages) throw new Error("OpenCode session unavailable");
+            messages = result.messages;
           } else {
             const { getSessionMessages } = await import("@anthropic-ai/claude-agent-sdk");
             messages = claudeText(await getSessionMessages(session.id, { dir: session.cwd || undefined }));

@@ -148,6 +148,11 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
 
+### 0.10.0
+
+- Speed up transcript search by skipping provider-invisible rollouts and tool-only matches before exact SDK reads.
+- Keep searches responsive with bounded `rg` CPU usage and parallel OpenCode history exports.
+
 ### 0.9.0
 
 - Speed up Codex and Claude transcript search with a safe `rg` prefilter while preserving exact conversation-only results.

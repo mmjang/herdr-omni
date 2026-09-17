@@ -145,6 +145,41 @@ test("transcript prefilter falls back when a matched file cannot map to a known 
     .toBeUndefined();
 });
 
+test("transcript prefilter ignores extra matching files when known mappings are healthy", async () => {
+  const known = [
+    { ...session, id: "known-1" },
+    { ...session, id: "known-2" },
+  ];
+  const files = (ids: string[]) => [
+    ...ids.map(id => `/home/.codex/sessions/2026/rollout-2026-${id}.jsonl`),
+    "/home/.codex/sessions/2026/rollout-2026-unknown.jsonl",
+  ].join("\0") + "\0";
+  for (const ids of [["known-1"], ["known-1", "known-2"]]) {
+    const rg = new FakeRg([
+      { code: 0, stdout: files(ids) },
+      { code: 0, stdout: files(ids) },
+    ]);
+    expect(await prefilterTranscriptSessions("codex", known, "needle", rg, ["/home/.codex/sessions"]))
+      .toEqual(new Set(ids));
+  }
+});
+
+test("transcript prefilter narrows broad hits to conversation records when the JSONL shape is known", async () => {
+  const known = [{ ...session, id: "known-1" }];
+  const knownFile = "/home/.codex/sessions/2026/rollout-2026-known-1.jsonl";
+  const unknownFile = "/home/.codex/sessions/2026/rollout-2026-child.jsonl";
+  const rg = new FakeRg([
+    { code: 0, stdout: `${knownFile}\0${unknownFile}\0` },
+    { code: 0, stdout: `${knownFile}\0${unknownFile}\0` },
+    { code: 0, stdout: `${knownFile}\0${unknownFile}\0` },
+    { code: 0, stdout: `${knownFile}\0${unknownFile}\0` },
+  ]);
+  expect(await prefilterTranscriptSessions("codex", known, "needle", rg, ["/home/.codex/sessions"]))
+    .toEqual(new Set(["known-1"]));
+  expect(rg.calls[3]).not.toContain("--fixed-strings");
+  expect(rg.calls[3]!.some(argument => argument.includes("message"))).toBe(true);
+});
+
 test("transcript prefilter includes compact JSON variants used by formatted excerpts", async () => {
   const rg = new FakeRg([
     { code: 0, stdout: "/home/.claude/projects/repo/session-1.jsonl\0" },

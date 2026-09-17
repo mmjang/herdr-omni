@@ -114,11 +114,13 @@ Claude 同理，排除含 `"tool_result"` / `"tool_use"` 的行。
 实测效果（查询 `herdr omni`）：**813 文件 → 5 候选 → 2 候选，0.23s**（warm cache）。
 进入昂贵阶段的输入量降低约两个数量级。
 
-这一步是进一步降噪的可选技巧；当前实现优先保持对 CLI/JSON 格式变化的容错，使用安全的文件级粗筛，并由 SDK 精读做最终语义过滤。
+本机查询 `shuyi` 的实际结果是 Codex **592 个已知 session → 71 个文件级候选 → 8 个 conversation 候选**；OpenCode 的独立 export 读取也限制为 4 路并行，避免小语料被逐进程启动拖慢。
+
+当前实现会在文件级粗筛后尝试这一层：只有当命中文件都能识别出对应的 conversation record 时才缩小候选；格式不确定、`rg` 出错或文件在扫描期间消失时，保留文件级候选交给 SDK，避免静默漏搜。
 
 ### 方案
 
-两段式，**粗筛放在 worker 内、现有循环之前**：
+两段式（文件级粗筛可再做一层 record 级降噪），**粗筛放在 worker 内、现有循环之前**：
 
 1. **粗筛**（Codex/Claude 用 rg，~1s 覆盖 JSONL；OpenCode 保持现有 API）→ 候选文件 → 会话 ID
 2. **精读**（现有 `thread/read` / `getSessionMessages` / OpenCode API）只跑候选，照旧排除 tool call、生成摘录
@@ -127,11 +129,11 @@ Claude 同理，排除含 `"tool_result"` / `"tool_use"` 的行。
 
 ### 已实现
 
-- `src/session-worker.ts` 增加可取消、有输出上限的 `RgRunner`，在 worker 收到搜索请求后并行粗筛 Codex 和 Claude 的 JSONL。
+- `src/session-worker.ts` 增加可取消、有输出上限的 `RgRunner`，在 worker 收到搜索请求后并行粗筛 Codex 和 Claude 的 JSONL；每个 `rg` probe 限制为 4 个线程，避免短时搜索占满整机 CPU。
 - 粗筛限定 `rollout-*.jsonl` / `*.jsonl`，使用 `--hidden --no-ignore --ignore-case --fixed-strings` 覆盖完整语料，同时尝试普通文本和 JSON 转义文本；不会把用户输入当作正则或命令参数。
-- 文件名映射回已知 session ID 后，才进入原有 SDK 精读；精读仍由 `codexText` / `claudeText` 排除 tool call、tool result、reasoning 等非对话内容。
-- OpenCode 保持原有 API 路径，不强行把 SQLite 纳入 `rg` 粗筛。
-- 粗筛失败、目录布局变化、没有可识别文件或命中路径无法映射时返回 `undefined`，worker 自动回退到原有全量扫描；明确的 `rg` 无命中则返回空集合。
+- 文件名映射回已知 session ID 后，才进入原有 SDK 精读；对能识别 JSONL record 结构的命中，会再要求关键词与 conversation marker 位于同一行，跳过只命中 tool call / reasoning 的文件；精读仍由 `codexText` / `claudeText` 排除非对话内容。
+- OpenCode 保持原有 API 路径，不强行把 SQLite 纳入 `rg` 粗筛；独立的 `opencode export` 读取会并行启动，避免每个会话串行承担 CLI 启动开销。
+- 粗筛失败、目录布局变化、没有可识别文件、没有任何命中能映射到 API 返回的 session，或运行出错时返回 `undefined`，worker 自动回退到原有全量扫描；目录和已知 session 映射健康时，命中结果中 API session 列表之外的额外文件会被忽略；明确的 `rg` 无命中则返回空集合。
 - `progress.total` 使用粗筛后的候选数，避免 UI 显示全量会话数造成错误的等待预期。
 
 ### 改动点
@@ -152,6 +154,10 @@ Claude 同理，排除含 `"tool_result"` / `"tool_use"` 的行。
 | `rg` 不存在 | 该 provider 走全量扫描（现有行为） |
 | 语料目录不存在 / 其中 0 个 jsonl | 走全量扫描（判定为路径假设失效） |
 | 语料目录存在且有文件，但 0 命中 | 判定为**真实无结果**，直接返回空 |
+| 命中包含已知 session 和 API 列表之外的额外文件 | 只返回已知 session 的映射，忽略额外文件 |
+| 命中只有 API 列表之外的未知文件 | 走全量扫描（没有可用的已知映射） |
+| 已知文件的 record 结构可识别 | 进一步只保留同一行包含 conversation marker 和关键词的文件 |
+| record 结构无法确认 / 二次 probe 失败 | 保留文件级候选，继续由 SDK 精读 |
 
 关键是区分「路径错了」和「真的没搜到」——前者必须 fallback，后者必须相信粗筛，否则要么静默丢结果，要么失去全部性能收益。
 
