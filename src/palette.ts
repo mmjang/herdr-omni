@@ -355,7 +355,8 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
             ? ` ${[item.agentStatus ? `[${item.agentStatus}]` : item.savedSession ? `Saved · ${item.session!.provider}` : "",
               activityAge(agentActivity(item)), item.currentWorkspace ? "current" : ""].filter(Boolean).join(" · ")}`
             : item.shortcuts.join(" / "),
-          fg: item.agentStatus === "unknown" ? theme.muted : index === selected || item.agentStatus ? theme.accent : theme.shortcut,
+          fg: item.agentStatus === "blocked" ? theme.error : item.agentStatus === "unknown" ? theme.muted : index === selected || item.agentStatus ? theme.accent : theme.shortcut,
+          attributes: item.agentStatus === "blocked" ? 1 : 0,
           flexShrink: 0,
         }));
         list.add(row);

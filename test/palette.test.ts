@@ -10,7 +10,7 @@ import { defaultItems } from "../src/catalog";
  * A palette deliberately unlike both the built-in fallback and anything a real Herdr config
  * would resolve to, so the assertions below can only pass when the mounted theme is honored.
  */
-const theme = { background: "#29284f", panel: "#3c3b68", text: "#e9e8ff", muted: "#a7a4df", accent: "#ffe11a", shortcut: "#8be9fd", footer: "#1d1c3a", footerText: "#8f8cd0" };
+const theme = { background: "#29284f", panel: "#3c3b68", text: "#e9e8ff", muted: "#a7a4df", accent: "#ffe11a", error: "#ff5555", shortcut: "#8be9fd", footer: "#1d1c3a", footerText: "#8f8cd0" };
 
 const item = (id: string, title: string, invocation: PaletteItem["invocation"], prompt?: PaletteItem["prompt"]): PaletteItem =>
   ({ id, title, category: "Panes", description: "Does the thing", icon: "▯", aliases: [], shortcuts: ["ctrl+a+z"], invocation, ...(prompt ? { prompt } : {}) });
@@ -289,6 +289,20 @@ test("history never creates an extra section", async () => {
   expect(frame.indexOf("Second")).toBeLessThan(frame.indexOf("First"));
   expect(frame.indexOf("First")).toBeLessThan(frame.indexOf("Third"));
   expect(frame).not.toContain("Recent");
+  harness.renderer.destroy();
+});
+
+test("emphasizes blocked agents with the theme error color", async () => {
+  const harness = await createTestRenderer({ width: 90, height: 14 });
+  const blocked = { ...item("live:agent:blocked", "Blocked task - project", { kind: "herdr", argv: [] }), category: "Agents" as const, agentStatus: "blocked" as const, shortcuts: [] };
+  const idle = { ...item("live:agent:idle", "Idle task - project", { kind: "herdr", argv: [] }), category: "Agents" as const, agentStatus: "idle" as const, shortcuts: [] };
+  mountPalette(harness.renderer, [blocked, idle], { theme, run: async () => ({ ok: true, message: "" }), close: () => {} });
+  await harness.renderOnce();
+  const lines = harness.captureSpans().lines;
+  const blockedLine = lines.find(line => line.spans.some(span => span.text.includes("[blocked]")));
+  const idleLine = lines.find(line => line.spans.some(span => span.text.includes("[idle]")));
+  expect(blockedLine?.spans.some(span => span.text.includes("[blocked]") && hex(span.fg) === theme.error)).toBe(true);
+  expect(idleLine?.spans.some(span => span.text.includes("[idle]") && hex(span.fg) === theme.accent)).toBe(true);
   harness.renderer.destroy();
 });
 

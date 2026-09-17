@@ -8,6 +8,8 @@ export interface PaletteTheme {
   text: string;
   muted: string;
   accent: string;
+  /** Error/danger emphasis, resolved from Herdr's `red` token. */
+  error: string;
   shortcut: string;
   footer: string;
   footerText: string;
@@ -19,7 +21,7 @@ export interface PaletteTheme {
  */
 export const fallbackTheme: PaletteTheme = {
   background: "#181825", panel: "#313244", text: "#cdd6f4", muted: "#a6adc8",
-  accent: "#89b4fa", shortcut: "#94e2d5", footer: "#1e1e2e", footerText: "#6c7086",
+  accent: "#89b4fa", error: "#f38ba8", shortcut: "#94e2d5", footer: "#1e1e2e", footerText: "#6c7086",
 };
 
 // The base for theme resolution and unknown-name fallback, read straight off the vendored palettes.
@@ -177,8 +179,8 @@ export function isHostLight(env: NodeJS.ProcessEnv = process.env, hostName = env
 /** Neutral colors for `reset` tokens, whose real value is the host terminal's own color. */
 export function hostTheme(light: boolean): PaletteTheme {
   return light
-    ? { background: "#ffffff", panel: "#e4e4e4", text: "#1a1a1a", muted: "#6f6f6f", accent: "#0000ee", shortcut: "#008080", footer: "#f2f2f2", footerText: "#6f6f6f" }
-    : { background: "#000000", panel: "#262626", text: "#e5e5e5", muted: "#9e9e9e", accent: "#5c5cff", shortcut: "#00cdcd", footer: "#121212", footerText: "#7f7f7f" };
+    ? { background: "#ffffff", panel: "#e4e4e4", text: "#1a1a1a", muted: "#6f6f6f", accent: "#0000ee", error: "#cd0000", shortcut: "#008080", footer: "#f2f2f2", footerText: "#6f6f6f" }
+    : { background: "#000000", panel: "#262626", text: "#e5e5e5", muted: "#9e9e9e", accent: "#5c5cff", error: "#ff5555", shortcut: "#00cdcd", footer: "#121212", footerText: "#7f7f7f" };
 }
 
 /** Map resolved Herdr tokens onto the popup's color slots, mirroring Herdr's own surfaces. */
@@ -190,6 +192,7 @@ export function composeTheme(tokens: Record<string, string>, neutral: PaletteThe
     text: color("text", "text"),
     muted: color("subtext0", "muted"),
     accent: color("accent", "accent"),
+    error: color("red", "error"),
     shortcut: color("teal", "shortcut"),
     // Herdr keeps the sidebar on the terminal background unless `sidebar_bg` names it; the
     // popup floats over a pane, so a reset sidebar falls back to the dim surface instead.

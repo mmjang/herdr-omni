@@ -148,6 +148,11 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
 
+### 0.11.0
+
+- Highlight blocked agents with bold error-color status indicators.
+- Resolve the blocked-state color from Herdr's theme, including custom and light/dark themes.
+
 ### 0.10.0
 
 - Speed up transcript search by skipping provider-invisible rollouts and tool-only matches before exact SDK reads.

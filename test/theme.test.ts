@@ -116,7 +116,7 @@ test("maps Herdr surfaces onto the popup slots", () => {
   const theme = composeTheme(tokens);
   expect(theme).toEqual({
     background: tokens.panel_bg, panel: tokens.surface0, text: tokens.text, muted: tokens.subtext0,
-    accent: tokens.accent, shortcut: tokens.teal, footer: tokens.sidebar_bg, footerText: tokens.overlay0,
+    accent: tokens.accent, error: tokens.red, shortcut: tokens.teal, footer: tokens.sidebar_bg, footerText: tokens.overlay0,
   });
   // An unset or reset sidebar background takes the dim surface instead of the popup background.
   const { sidebar_bg, ...withoutSidebar } = tokens;
