@@ -149,6 +149,10 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
 
+### 0.12.1
+
+- Put **Agents** immediately after **All** in the result tab bar for faster session navigation.
+
 ### 0.12.0
 
 - Order workspace browsing by real Herdr workspace switches, keep the current workspace below other destinations, and ignore Omni selection history for workspace recency.

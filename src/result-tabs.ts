@@ -16,7 +16,9 @@ export function tabMatchCounts(results: ResultRow[]): Map<string, string> {
 
 export function resultTabs(results: ResultRow[], items: PaletteItem[]): string[] {
   const sections = new Set(["Workspace", "Tabs", "Agents", "Actions", ...items.map(item => item.category === "Worktrees" ? "Workspace" : item.category), ...results.map(row => row.section)]);
-  return ["All", ...CATEGORY_ORDER.filter(section => sections.has(section)), ...[...sections].filter(section => !(CATEGORY_ORDER as readonly string[]).includes(section))];
+  // Agents are the most frequently used destination after the aggregate view.
+  // Keep the remaining sections in the established category order.
+  return ["All", "Agents", ...CATEGORY_ORDER.filter(section => section !== "Agents" && sections.has(section)), ...[...sections].filter(section => !(CATEGORY_ORDER as readonly string[]).includes(section))];
 }
 
 /** Navigation rows never leave the UI or enter execution/history. */

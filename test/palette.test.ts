@@ -79,7 +79,11 @@ test("Tab and Shift+Tab switch categories; View all opens the full list without 
     expect(h.captureCharFrame()).toContain("Project 7");
     h.mockInput.pressTab({ shift: true });
     await h.renderOnce();
+    expect(h.captureCharFrame()).toContain("[Agents]");
+    h.mockInput.pressTab({ shift: true });
+    await h.renderOnce();
     expect(h.captureCharFrame()).toContain("[All]");
+    h.mockInput.pressTab();
     h.mockInput.pressTab();
     await h.mockInput.typeText("Project 7");
     controller.updateItems([...workspaces]);

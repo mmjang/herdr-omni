@@ -18,7 +18,7 @@ test("All caps each section at five and appends View all; detail tabs are uncapp
 });
 
 test("core tabs remain stable with no results and extra sections get their own tab", () => {
-  expect(resultTabs([], [])).toEqual(["All", "Workspace", "Tabs", "Agents", "Actions"]);
+  expect(resultTabs([], [])).toEqual(["All", "Agents", "Workspace", "Tabs", "Actions"]);
   expect(resultTabs([{ ...rows("Agents", 1)[0]!, section: "Transcript matches" }], []).at(-1)).toBe("Transcript matches");
 });
 
