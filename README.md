@@ -5,7 +5,7 @@
 Your [Herdr](https://herdr.dev) workspaces, tabs, worktrees, agent sessions, and
 actions—one search away.
 
-![Search workspaces, tabs, worktrees, and live or saved agent sessions in one palette](docs/omni-search-everything-redacted.png)
+<img width="2402" height="1876" alt="image" src="https://github.com/user-attachments/assets/f6681a02-32e3-4c93-954d-0cce5d178286" />
 
 - **VS Code's actual fuzzy-matching core.** A few letters find the right result.
 - **Find the conversation you remember.** Search live and saved Codex, Claude Code, and OpenCode sessions—or press `Ctrl+F` to search their transcripts.
@@ -17,11 +17,11 @@ Type, then press Enter or click a result.
 
 Find actions with a few letters.
 
-![Fuzzy search highlights matching words in Herdr actions](docs/omni-fuzzy-search.png)
+<img width="2632" height="1876" alt="image" src="https://github.com/user-attachments/assets/ebb0f122-4c20-4a0d-a1ac-6cc7651939e4" />
 
 Remember the conversation, not its name? Press **Ctrl+F** to search session content.
 
-![Search saved session content with highlighted matches and surrounding context](docs/omni-session-content-search.png)
+<img width="2632" height="1876" alt="image" src="https://github.com/user-attachments/assets/550ce0e4-7512-45d0-861c-b686c599ee2b" />
 
 Built with Bun and OpenTUI. Forked from
 [Herdr Palette](https://github.com/cesarferreira/herdr-palette) by
