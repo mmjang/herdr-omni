@@ -1,6 +1,6 @@
 id = "herdr-omni"
 name = "Herdr Omni"
-version = "0.12.1"
+version = "0.12.2"
 min_herdr_version = "0.7.0"
 description = "Fuzzy search for Herdr actions, workspaces, tabs, worktrees, and agent sessions"
 platforms = ["linux", "macos"]
