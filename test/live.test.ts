@@ -32,6 +32,8 @@ test("maps workspaces and tabs to exact focus commands", () => {
 
   const workspace = items.find(item => herdrArgv(item)?.join(" ") === "workspace focus w2");
   expect(workspace).toMatchObject({ title: "beta", category: "Workspace" });
+  expect(items.find(item => item.title === "alpha")?.currentWorkspace).toBe(true);
+  expect(workspace?.currentWorkspace).toBe(false);
 
   const tab = items.find(item => herdrArgv(item)?.join(" ") === "tab focus w2:t1");
   expect(tab).toMatchObject({ title: "beta → shell", category: "Tabs" });
@@ -105,4 +107,16 @@ test("does not fabricate visit timestamps from focus or workspace order", () => 
 
   expect(items.find(item => item.title === "alpha")?.lastVisitedAt).toBeUndefined();
   expect(items.find(item => item.title === "beta")?.lastVisitedAt).toBeUndefined();
+});
+
+test("applies only Herdr workspace visit timestamps supplied by the log reader", () => {
+  const items = itemsFromSnapshot({
+    workspaces: [
+      { workspace_id: "w1", label: "alpha", focused: true },
+      { workspace_id: "w2", label: "beta", focused: false },
+    ],
+  }, "w1", new Map([["w2", 42]]));
+
+  expect(items.find(item => item.title === "alpha")?.lastVisitedAt).toBeUndefined();
+  expect(items.find(item => item.title === "beta")?.lastVisitedAt).toBe(42);
 });

@@ -48,7 +48,7 @@ test("empty workspace searches order destinations by last visit", () => {
   expect(searchResults(items, "Destination 0", history)).toEqual([{ item: items[0]!, section: "Workspace" }]);
 });
 
-test("empty workspace and tab browsing uses Omni selection history when Herdr has no visit timestamp", () => {
+test("empty workspace browsing ignores Omni selection history when Herdr has no visit timestamp", () => {
   const workspaces = ["alpha", "beta", "gamma"].map((title, i) => ({ ...item(`workspace${i}`, title), category: "Workspace" as const }));
   const tabs = ["one", "two", "three"].map((title, i) => ({ ...item(`tab${i}`, `Project → ${title}`), category: "Tabs" as const }));
   const history = {
@@ -56,8 +56,28 @@ test("empty workspace and tab browsing uses Omni selection history when Herdr ha
     [historyKey(workspaces[0]!.id)]: 10,
     [historyKey(tabs[1]!.id)]: 20,
   };
-  expect(searchResults(workspaces, "", history).map(result => result.item.title)).toEqual(["gamma", "alpha", "beta"]);
+  expect(searchResults(workspaces, "", history).map(result => result.item.title)).toEqual(["alpha", "beta", "gamma"]);
   expect(searchResults(tabs, "", history).map(result => result.item.title)).toEqual(["Project → two", "Project → one", "Project → three"]);
+});
+
+test("real workspace visits beat Omni selection history", () => {
+  const olderVisit = { ...item("workspace:older", "older"), category: "Workspace" as const, lastVisitedAt: 100 };
+  const newerVisit = { ...item("workspace:newer", "newer"), category: "Workspace" as const, lastVisitedAt: 200 };
+  const history = {
+    [historyKey(olderVisit.id)]: 900,
+    [historyKey(newerVisit.id)]: 1,
+  };
+
+  expect(searchResults([olderVisit, newerVisit], "", history).map(result => result.item.title)).toEqual(["newer", "older"]);
+  expect(searchResults([olderVisit, newerVisit], "er", history).map(result => result.item.title)).toEqual(["newer", "older"]);
+});
+
+test("empty workspace browsing keeps the current workspace after other destinations", () => {
+  const current = { ...item("workspace:current", "current"), category: "Workspace" as const, currentWorkspace: true, lastVisitedAt: 300 };
+  const other = { ...item("workspace:other", "other"), category: "Workspace" as const, currentWorkspace: false, lastVisitedAt: 100 };
+
+  expect(searchResults([current, other], "", {}).map(result => result.item.title)).toEqual(["other", "current"]);
+  expect(searchResults([current, other], "@", {}).map(result => result.item.title)).toEqual(["other", "current"]);
 });
 
 test("prefixes scope results without adding a presentation section", () => {
@@ -78,7 +98,7 @@ test("at-sign scopes fuzzy search to workspace and worktree categories", () => {
   const others = [item("live:tab:w1:t1", "ordering-service"), worktree, item("live:agent:w1:p1", "ordering-service"), ...defaultItems()];
   const items = [workspace, recent, ...others];
   const history = { [historyKey(recent.id)]: 10 };
-  expect(filterPaletteItems(items, "@", history)).toEqual([recent, workspace, worktree]);
+  expect(filterPaletteItems(items, "@", history)).toEqual([workspace, recent, worktree]);
   for (const query of ["@ordsvc", "@ ordsvc"]) {
     expect(filterPaletteItems(items, query, history)).toEqual([workspace, worktree]);
   }

@@ -66,7 +66,7 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
       score += match;
     }
     const recordedAt = history[historyKey(item.id)];
-    const recent = item.category === "Actions" || typeof recordedAt !== "number" || !Number.isFinite(recordedAt)
+    const recent = isWorkspaceDestination(item) || item.category === "Actions" || typeof recordedAt !== "number" || !Number.isFinite(recordedAt)
       ? 0
       : Math.max(0, recordedAt);
     return [{ item, index, score, recent }];
@@ -89,14 +89,27 @@ export function searchResults(items: PaletteItem[], query: string, history: Reco
     }
     if (browsing && presentationSection(a.item) === presentationSection(b.item)
       && (a.item.category === "Workspace" || a.item.category === "Worktrees" || a.item.category === "Tabs")) {
+      if (isWorkspaceDestination(a.item) && isWorkspaceDestination(b.item)) {
+        // The current workspace is already visible; keep it available without
+        // letting its latest focus event hide the destinations behind it.
+        const currentDifference = Number(isCurrentWorkspace(a.item)) - Number(isCurrentWorkspace(b.item));
+        if (currentDifference) return currentDifference;
+      }
       const visitedDifference = lastVisitedAt(b.item) - lastVisitedAt(a.item);
       if (visitedDifference) return visitedDifference;
-      const recentDifference = b.recent - a.recent;
-      if (recentDifference) return recentDifference;
+      if (a.item.category === "Tabs" && b.item.category === "Tabs") {
+        const recentDifference = b.recent - a.recent;
+        if (recentDifference) return recentDifference;
+      }
     }
     if (!browsing && sectionA === sectionB && sectionA !== "Agents") {
-      const recentDifference = b.recent - a.recent;
-      if (recentDifference) return recentDifference;
+      if (isWorkspaceDestination(a.item) && isWorkspaceDestination(b.item)) {
+        const visitedDifference = lastVisitedAt(b.item) - lastVisitedAt(a.item);
+        if (visitedDifference) return visitedDifference;
+      } else {
+        const recentDifference = b.recent - a.recent;
+        if (recentDifference) return recentDifference;
+      }
     }
     return a.index - b.index;
   };
@@ -117,12 +130,20 @@ function presentationSection(item: PaletteItem): string {
   return item.category === "Worktrees" ? "Workspace" : item.category;
 }
 
+function isWorkspaceDestination(item: PaletteItem): boolean {
+  return item.category === "Workspace" || item.category === "Worktrees";
+}
+
+function isCurrentWorkspace(item: PaletteItem): boolean {
+  return isWorkspaceDestination(item) && item.currentWorkspace === true;
+}
+
 function sectionOrder(section: string): number {
   const index = CATEGORY_ORDER.indexOf(section as typeof CATEGORY_ORDER[number]);
   return index >= 0 ? index : CATEGORY_ORDER.length;
 }
 
-/** Invalid/missing visit times keep source order and allow history to decide. */
+/** Invalid/missing visit times keep Herdr's source order. */
 function lastVisitedAt(item: PaletteItem): number {
   const value = item.lastVisitedAt;
   return typeof value === "number" && Number.isFinite(value) && value > 0 ? value : 0;

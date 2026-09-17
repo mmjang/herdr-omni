@@ -18,7 +18,10 @@ const items = loadPaletteItems();
 const renderer = await createCliRenderer({ exitOnCtrlC: true, useMouse: true, backgroundColor: theme.background });
 const palette = mountPalette(renderer, items, { theme, history: loadHistory(), currentWorkspaceId: parseLaunchContext()?.workspaceId, run: async (item, input) => {
   const result = await execute(item, input);
-  if (result.ok && item.category !== "Actions") recordSelection(item.id);
+  // Workspace recency comes from Herdr's own workspace.focus events. Keep
+  // Omni's lightweight selection history for other navigable results, but
+  // never use it as a substitute for a real workspace visit.
+  if (result.ok && item.category !== "Actions" && item.category !== "Workspace" && item.category !== "Worktrees") recordSelection(item.id);
   return result;
 }, close: () => renderer.destroy(), update: installUpdate, dismissUpdate, sessionJob: runSessionJob });
 palette.setLoading(true);

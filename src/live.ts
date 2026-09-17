@@ -1,6 +1,7 @@
 import { basename } from "node:path";
 import { runHerdr, parseLaunchContext } from "./herdr";
 import type { PaletteItem } from "./types";
+import { loadWorkspaceVisitTimes } from "./workspace-history";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -14,7 +15,7 @@ function liveItem(id: string, title: string, category: PaletteItem["category"], 
   return { id: `live:${id}`, title, category, description, icon, aliases: [...new Set(aliases.filter(Boolean))], searchTitle, searchPaths: [...new Set(searchPaths.filter(Boolean))], shortcuts: [], invocation };
 }
 
-export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: string): PaletteItem[] {
+export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: string, workspaceVisits: ReadonlyMap<string, number> = new Map()): PaletteItem[] {
   const workspaces = records(snapshot.workspaces);
   const tabs = records(snapshot.tabs);
   const agents = records(snapshot.agents);
@@ -29,9 +30,11 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     const details = `${count(workspace.tab_count)} tabs · ${count(workspace.pane_count)} panes`;
     const item = liveItem(`workspace:${workspaceId}`, label, "Workspace", checkoutPath ? `${details} · ${checkoutPath}` : details, "◇",
       [text(worktree?.repo_name)], { kind: "herdr", argv: ["workspace", "focus", workspaceId] }, text(workspace.label), [checkoutPath]);
-    // Herdr currently exposes no visit history. Keep the source order as the
-    // stable fallback; searchResults may overlay Omni's persisted selection
-    // history when the user is browsing without a query.
+    item.currentWorkspace = workspaceId === currentWorkspaceId;
+    const lastVisitedAt = workspaceVisits.get(workspaceId);
+    if (typeof lastVisitedAt === "number" && Number.isFinite(lastVisitedAt) && lastVisitedAt > 0) item.lastVisitedAt = lastVisitedAt;
+    // Herdr's successful workspace.focus events provide the recency signal.
+    // Keep Herdr's snapshot order as the stable fallback for unknown workspaces.
     return item;
   });
 
@@ -97,7 +100,7 @@ export async function loadLiveItems(onSnapshot?: (items: PaletteItem[]) => void)
   }
   catch { throw new Error("Herdr returned an unreadable session snapshot."); }
   const currentWorkspaceId = parseLaunchContext()?.workspaceId || text(snapshot.focused_workspace_id);
-  const items = itemsFromSnapshot(snapshot, currentWorkspaceId);
+  const items = itemsFromSnapshot(snapshot, currentWorkspaceId, loadWorkspaceVisitTimes());
   onSnapshot?.(items);
   if (!currentWorkspaceId) return items;
 

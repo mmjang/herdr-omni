@@ -53,10 +53,10 @@ export interface PaletteItem {
   priority?: number;
   /** Session activity as Unix milliseconds; absent means unknown, not recently selected. */
   lastActiveAt?: number;
-  /** Herdr workspace visit time as Unix milliseconds; absent when Herdr does not report it. */
+  /** Herdr workspace.focus time as Unix milliseconds; absent when no log event is available. */
   lastVisitedAt?: number;
   agentStatus?: "blocked" | "done" | "working" | "idle" | "unknown";
-  /** Live agent is hosted by the workspace that opened Omni. */
+  /** Live result belongs to the workspace that opened Omni. */
   currentWorkspace?: boolean;
   session?: SavedSession;
   savedSession?: boolean;

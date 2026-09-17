@@ -111,8 +111,9 @@ UI-only actions show their keyboard binding.
 Use **Tab / Shift+Tab** or click a category label to switch lists. **All** previews
 up to five results per category; **View all** opens the complete list. Worktrees
 live under **Workspaces**.
-Workspace browsing uses Herdr's visit time when available, then Omni's persisted selection
-history, with Herdr's order as the final fallback.
+Workspace browsing follows real Herdr workspace switches when available. Omni's own
+selection history is not used for workspace recency; Herdr's order is the fallback.
+The current workspace remains available but is placed after other destinations while browsing.
 
 Normal search includes saved session titles, projects, and IDs—no prefix needed.
 OpenCode searches local history across projects (top-level sessions, not child-agent sessions).
@@ -148,6 +149,10 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
 ## Release notes
 
+### 0.12.0
+
+- Order workspace browsing by real Herdr workspace switches, keep the current workspace below other destinations, and ignore Omni selection history for workspace recency.
+
 ### 0.11.0
 
 - Highlight blocked agents with bold error-color status indicators.
@@ -161,7 +166,7 @@ Keep the checkout in place: Herdr runs the linked plugin from this directory.
 ### 0.9.0
 
 - Speed up Codex and Claude transcript search with a safe `rg` prefilter while preserving exact conversation-only results.
-- Order empty Workspace, Worktree, and Tab browsing by visit or selection history, with graceful fallbacks.
+- Order empty Workspace and Worktree browsing by real Herdr workspace visits, with graceful fallbacks.
 
 ### 0.8.1
 
