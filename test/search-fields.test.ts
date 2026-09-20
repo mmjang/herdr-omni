@@ -59,5 +59,8 @@ test("actions use titles and curated synonyms, not prose or shortcut modifiers",
   expect(filterPaletteItems([metadataOnly], "metadata-only-token")).toEqual([]);
   expect(filterPaletteItems([metadataOnly], "shortcut-only-token")).toEqual([]);
   expect(filterPaletteItems(actions, ":terminal history").map(item => item.id)).toEqual(["edit_scrollback"]);
-  expect(filterPaletteItems(actions, ":copy").some(item => item.id === "copy_mode")).toBe(true);
+  for (const id of ["copy_mode", "help", "settings", "detach", "cycle_pane_next", "cycle_pane_previous", "last_pane"]) {
+    expect(actions.some(item => item.id === id)).toBe(false);
+  }
+  expect(filterPaletteItems(actions, ":copy")).toEqual([]);
 });

@@ -61,6 +61,28 @@ const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 const settleEscape = () => new Promise(resolve => setTimeout(resolve, 30));
 const rowsOf = (frame: string) => frame.split("\n").filter((row, index, all) => index < all.length - 1 || row !== "");
 
+test("All searches surface the strongest category and clearing restores browsing order", async () => {
+  const h = await createTestRenderer({ width: 110, height: 25 });
+  const workspace = { ...item("project", "production deploy project", { kind: "shortcut" }), category: "Workspace" as const };
+  const action = { ...item("deploy", "deploy", { kind: "shortcut" }), category: "Actions" as const };
+  const ran: string[] = [];
+  mountPalette(h.renderer, [workspace, action], { run: async selected => { ran.push(selected.id); return { ok: false, message: "" }; }, close: () => {} });
+  const sections = () => h.captureCharFrame().split("\n").map(row => row.trim()).filter(row => ["Workspaces", "Actions"].includes(row));
+  try {
+    await h.renderOnce();
+    expect(sections()).toEqual(["Workspaces", "Actions"]);
+    await h.mockInput.typeText("deploy"); await h.renderOnce();
+    expect(sections()).toEqual(["Actions", "Workspaces"]);
+    h.mockInput.pressEnter(); await settle();
+    expect(ran).toEqual(["deploy"]);
+    for (let index = 0; index < 6; index++) h.mockInput.pressBackspace();
+    await h.renderOnce();
+    expect(sections()).toEqual(["Workspaces", "Actions"]);
+    await h.mockInput.typeText("   "); await h.renderOnce();
+    expect(sections()).toEqual(["Workspaces", "Actions"]);
+  } finally { h.renderer.destroy(); }
+});
+
 test("Tab and Shift+Tab switch categories; View all opens the full list without executing", async () => {
   const h = await createTestRenderer({ width: 100, height: 30 });
   const ran: string[] = [];

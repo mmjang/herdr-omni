@@ -9,13 +9,12 @@ const action = (id: string, title: string, category: PaletteItem["category"], de
 const resolve = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, shortcut: string, actionName: ResolveAction, step?: -1 | 1, prompt?: PromptSpec): PaletteItem =>
   entry(id, title, category, description, icon, shortcut, { kind: "resolve", action: actionName, ...(step !== undefined ? { step } : {}) }, prompt);
 
-const shortcut = (id: string, title: string, category: PaletteItem["category"], description: string, icon: string, key: string): PaletteItem =>
-  entry(id, title, category, description, icon, key, { kind: "shortcut" });
-
 const name = { placeholder: "New name" };
-const branchOrPath = { placeholder: "Branch or path" };
+const branchOrPath = { placeholder: "Branch or path (use ./ for relative paths)" };
 const confirmRemove = { placeholder: 'Type "yes" to confirm' };
 
+// Search results promise execution, not a keybinding hint. Client-only commands
+// (help, settings, copy mode, detach, pane cycling/history) stay out of this list.
 export const defaultItems = (): PaletteItem[] => [
   action("new_workspace", "New workspace", "Workspace", "Create and focus a workspace", "◇", "prefix+shift+n", ["workspace", "create", "--focus"]),
   resolve("rename_workspace", "Rename workspace", "Workspace", "Rename the current workspace", "◇", "prefix+shift+w", "rename-workspace", undefined, name),
@@ -23,7 +22,7 @@ export const defaultItems = (): PaletteItem[] => [
   resolve("previous_workspace", "Previous workspace", "Workspace", "Focus the previous workspace", "←", "", "focus-workspace", -1),
   resolve("next_workspace", "Next workspace", "Workspace", "Focus the next workspace", "→", "", "focus-workspace", 1),
 
-  action("new_tab", "New tab", "Tabs", "Create and focus a tab", "▣", "prefix+c", ["tab", "create", "--focus"]),
+  resolve("new_tab", "New tab", "Tabs", "Create and focus a tab in the current workspace", "▣", "prefix+c", "create-tab"),
   resolve("rename_tab", "Rename tab", "Tabs", "Rename the current tab", "▣", "prefix+shift+t", "rename-tab", undefined, name),
   resolve("previous_tab", "Previous tab", "Tabs", "Focus the previous tab", "←", "prefix+p", "focus-tab", -1),
   resolve("next_tab", "Next tab", "Tabs", "Focus the next tab", "→", "prefix+n", "focus-tab", 1),
@@ -33,9 +32,6 @@ export const defaultItems = (): PaletteItem[] => [
   action("focus_pane_down", "Focus pane down", "Panes", "Focus the pane below", "↓", "prefix+j", ["pane", "focus", "--direction", "down", "--current"]),
   action("focus_pane_up", "Focus pane up", "Panes", "Focus the pane above", "↑", "prefix+k", ["pane", "focus", "--direction", "up", "--current"]),
   action("focus_pane_right", "Focus pane right", "Panes", "Focus the pane to the right", "→", "prefix+l", ["pane", "focus", "--direction", "right", "--current"]),
-  shortcut("cycle_pane_next", "Cycle pane next", "Panes", "Focus the next pane in the tab", "→", "prefix+tab"),
-  shortcut("cycle_pane_previous", "Cycle pane previous", "Panes", "Focus the previous pane in the tab", "←", "prefix+shift+tab"),
-  shortcut("last_pane", "Last pane", "Panes", "Focus the previously focused pane", "«", ""),
   action("split_vertical", "Split pane right", "Panes", "Split the current pane side by side", "▯", "prefix+v", ["pane", "split", "--current", "--direction", "right", "--focus"]),
   action("split_horizontal", "Split pane down", "Panes", "Split the current pane stacked", "▤", "prefix+minus", ["pane", "split", "--current", "--direction", "down", "--focus"]),
   action("zoom", "Zoom pane", "Panes", "Toggle focused pane zoom", "◲", "prefix+z", ["pane", "zoom", "--current"]),
@@ -60,9 +56,5 @@ export const defaultItems = (): PaletteItem[] => [
   resolve("previous_agent", "Previous agent", "Agents", "Focus the previous agent", "←", "", "focus-agent", -1),
   resolve("next_agent", "Next agent", "Agents", "Focus the next agent", "→", "", "focus-agent", 1),
 
-  shortcut("help", "Keyboard shortcuts", "Herdr", "Show Herdr's shortcut guide", "?", "prefix+?"),
-  shortcut("settings", "Settings", "Herdr", "Open Herdr settings", "≡", "prefix+s"),
-  shortcut("copy_mode", "Copy mode", "Herdr", "Enter copy mode", "▧", "prefix+["),
   { ...entry("edit_scrollback", "Edit scrollback", "Herdr", "Open pane terminal history in your editor", "▤", "prefix+e", { kind: "pane-api", method: "pane.edit_scrollback" }), aliases: ["terminal history", "editor"] },
-  shortcut("detach", "Detach", "Herdr", "Leave the current Herdr session", "»", "prefix+q"),
 ];

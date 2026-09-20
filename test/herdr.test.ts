@@ -1,5 +1,5 @@
 import { mkdtempSync, writeFileSync } from "node:fs";
-import { tmpdir } from "node:os";
+import { homedir, tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "bun:test";
 import { loadPaletteItems, parseKeyRemaps, unescapeToml } from "../src/config";
@@ -48,6 +48,10 @@ test("steps between agents from the calling pane, else the focused agent", () =>
   expect(stepAgent(agents, "missing", 1)).toEqual({ paneId: "wM:p1" });
   expect(stepAgent(agents.slice(0, 1), "w2:p1", 1)).toEqual({ message: "Only one agent is running." });
   expect(stepAgent([], "w2:p1", 1)).toEqual({ message: "No agents are running." });
+  expect(stepAgent(agents.slice(0, 1), "shell", 1)).toEqual({ paneId: "w2:p1" });
+  const unfocused = agents.map(agent => ({ ...agent, focused: false }));
+  expect(stepAgent(unfocused, "shell", 1)).toEqual({ paneId: "w2:p1" });
+  expect(stepAgent(unfocused, "shell", -1)).toEqual({ paneId: "wM:p1" });
 });
 
 test("creates a named worktree or leaves naming to Herdr for blank input", () => {
@@ -59,7 +63,8 @@ test("creates a named worktree or leaves naming to Herdr for blank input", () =>
 
 test("opens a worktree by path or branch depending on the input shape", () => {
   expect(worktreeOpenArgv("wM", "feature/x")).toEqual(["worktree", "open", "--workspace", "wM", "--branch", "feature/x", "--focus"]);
-  expect(worktreeOpenArgv("wM", "~/code/app")).toEqual(["worktree", "open", "--workspace", "wM", "--path", "~/code/app", "--focus"]);
+  expect(worktreeOpenArgv("wM", "~/code/app")).toEqual(["worktree", "open", "--workspace", "wM", "--path", join(homedir(), "code/app"), "--focus"]);
+  expect(worktreeOpenArgv("wM", "~")).toEqual(["worktree", "open", "--workspace", "wM", "--path", homedir(), "--focus"]);
   expect(worktreeOpenArgv("wM", "./wt")).toEqual(["worktree", "open", "--workspace", "wM", "--path", "./wt", "--focus"]);
   expect(worktreeOpenArgv("wM", "main")).toEqual(["worktree", "open", "--workspace", "wM", "--branch", "main", "--focus"]);
 });
@@ -131,7 +136,7 @@ test("runs every catalog entry Herdr's CLI can perform", () => {
   expect(runnable).toContain("open_worktree");
   expect(runnable).toContain("remove_worktree");
   expect(runnable).toContain("edit_scrollback");
-  expect(shortcuts).toEqual(["cycle_pane_next", "cycle_pane_previous", "last_pane", "help", "settings", "copy_mode", "detach"]);
+  expect(shortcuts).toEqual([]);
 });
 
 test("Edit scrollback displays its default shortcut and respects remaps", () => {

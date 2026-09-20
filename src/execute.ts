@@ -11,6 +11,8 @@ function needInput(input: string, label: string): Resolution | undefined {
 
 async function resolveAction(action: ResolveAction, target: SessionTarget, step: -1 | 1 | undefined, input: string): Promise<Resolution> {
   switch (action) {
+    case "create-tab":
+      return { argv: ["tab", "create", "--workspace", target.workspaceId, "--focus"] };
     case "close-pane":
       return { argv: ["pane", "close", target.paneId] };
     case "close-tab":
@@ -61,7 +63,14 @@ async function resolveAction(action: ResolveAction, target: SessionTarget, step:
 
 /** Some Herdr commands take an explicit target, so they need the pane the palette was summoned from. */
 export async function resolve(invocation: Exclude<Invocation, { kind: "shortcut" } | { kind: "pane-api" } | { kind: "resume-session" }>, input = ""): Promise<Resolution> {
-  if (invocation.kind === "herdr") return { argv: invocation.argv };
+  if (invocation.kind === "herdr") {
+    // Popup plugins do not receive HERDR_PANE_ID, which pane mutations require
+    // for --current. Resolve the host from the injected launch context instead.
+    if (invocation.argv[0] !== "pane" || !invocation.argv.includes("--current")) return { argv: invocation.argv };
+    const target = await sessionTarget();
+    if (!target) return { message: "Herdr did not report the pane that opened the palette." };
+    return { argv: invocation.argv.flatMap(arg => arg === "--current" ? ["--pane", target.paneId] : [arg]) };
+  }
   const target = await sessionTarget();
   if (!target) return { message: "Herdr did not report the pane that opened the palette." };
   return resolveAction(invocation.action, target, invocation.step, input);

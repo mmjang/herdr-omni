@@ -82,8 +82,8 @@ test("selecting an agent focuses its pane through the API that moves the visible
   }
 });
 
-test("Copy mode explains the client-only limitation and requires closing Omni first", async () => {
-  const action = defaultItems().find(item => item.id === "copy_mode")!;
+test("legacy shortcut-only invocations fail explicitly instead of claiming execution", async () => {
+  const action = { ...defaultItems()[0]!, invocation: { kind: "shortcut" as const } };
   const result = await execute({ ...action, shortcuts: ["ctrl+alt+c"] });
   expect(result.ok).toBe(false);
   expect(result.message).toContain("Close Omni (Esc), then press ctrl+alt+c");

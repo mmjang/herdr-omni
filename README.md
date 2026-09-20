@@ -106,7 +106,11 @@ herdr server reload-config
 
 Type to search, then **Enter** or click to jump. Use `@` for workspaces,
 `>` for agents, or `:` for actions. Omni follows your Herdr theme and shortcuts;
-UI-only actions show their keyboard binding.
+The Actions list only includes commands Omni can execute; client-only commands
+remain available through Herdr's own keyboard bindings. Actions target the pane
+or workspace that opened Omni. Operations still require the appropriate state
+(for example, a neighboring pane or a Git worktree); Herdr errors stay visible
+in Omni instead of being reported as success.
 
 Use **Tab / Shift+Tab** or click a category label to switch lists. **All** previews
 up to five results per category; **View all** opens the complete list. Worktrees

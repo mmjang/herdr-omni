@@ -20,8 +20,8 @@ export function resultTabs(results: ResultRow[], items: PaletteItem[]): string[]
   return ["All", ...tabOrder.filter(section => sections.has(section)), ...[...sections].filter(section => !tabOrder.includes(section))];
 }
 
-/** Navigation rows never leave the UI or enter execution/history. */
-export function tabResults(results: ResultRow[], tab: string): ResultRow[] {
+/** Query excludes the category prefix. Navigation rows never enter execution/history. */
+export function tabResults(results: ResultRow[], tab: string, query = ""): ResultRow[] {
   if (tab !== "All") return results.filter(row => row.section === tab);
   const groups = new Map<string, ResultRow[]>();
   for (const row of results) {
@@ -30,7 +30,9 @@ export function tabResults(results: ResultRow[], tab: string): ResultRow[] {
     groups.set(row.section, group);
   }
   const tabOrder = ["Workspace", "Agents", "Tabs", "Actions", ...CATEGORY_ORDER.filter(section => !["Workspace", "Agents", "Tabs", "Actions"].includes(section))];
-  const orderedGroups = [...groups].sort(([left], [right]) => {
+  // Search already ranks groups by their strongest match. Only browsing uses
+  // the fixed category order; sorting again would bury more relevant groups.
+  const orderedGroups = query.trim() ? [...groups] : [...groups].sort(([left], [right]) => {
     const leftOrder = tabOrder.indexOf(left);
     const rightOrder = tabOrder.indexOf(right);
     return (leftOrder < 0 ? tabOrder.length : leftOrder) - (rightOrder < 0 ? tabOrder.length : rightOrder);

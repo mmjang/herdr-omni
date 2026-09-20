@@ -183,7 +183,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     })];
   }
   const tabs = () => [...new Set([...resultTabs(allResults(), [...allItems, ...(sessions.length ? [savedSessionItem(sessions[0]!)] : [])]), activeTab])];
-  const visibleResults = () => tabResults(allResults(), activeTab);
+  const visibleResults = () => tabResults(allResults(), activeTab, transcriptQuery());
   const visibleItems = () => visibleResults().map(result => result.item);
   const prompting = () => promptItem !== undefined;
 

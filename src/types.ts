@@ -1,6 +1,7 @@
 export type Category = "Actions" | "Workspace" | "Tabs" | "Panes" | "Worktrees" | "Agents" | "Herdr" | "Custom";
 
 export type ResolveAction =
+  | "create-tab"
   | "close-pane"
   | "close-tab"
   | "close-workspace"

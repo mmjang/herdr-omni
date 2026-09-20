@@ -1,4 +1,6 @@
 import type { SessionTarget } from "./types";
+import { homedir } from "node:os";
+import { join } from "node:path";
 
 const binary = () => process.env.HERDR_BIN_PATH ?? "herdr";
 
@@ -29,8 +31,9 @@ export function parseLaunchContext(json = process.env.HERDR_PLUGIN_CONTEXT_JSON)
 }
 
 /**
- * The pane the palette acts on. A popup pane has no caller context of its own, so `--current`
- * resolves to the host pane Herdr still considers focused — the fallback when no launch context exists.
+ * Prefer the popup's original host. The read-only pane.current command can fall
+ * back to server focus when launch context is absent; pane mutations cannot use
+ * --current without HERDR_PANE_ID, so callers must pass this target explicitly.
  */
 export async function sessionTarget(): Promise<SessionTarget | undefined> {
   const launched = parseLaunchContext();
@@ -89,10 +92,12 @@ export type AgentStep = { paneId: string } | { message: string };
 
 export function stepAgent(agents: { pane_id: string; focused?: boolean }[], currentPaneId: string, step: number): AgentStep {
   if (agents.length === 0) return { message: "No agents are running." };
-  if (agents.length < 2) return { message: "Only one agent is running." };
+  if (agents.length === 1) return agents[0]!.pane_id === currentPaneId
+    ? { message: "Only one agent is running." }
+    : { paneId: agents[0]!.pane_id };
   let index = agents.findIndex(agent => agent.pane_id === currentPaneId);
   if (index < 0) index = agents.findIndex(agent => agent.focused);
-  if (index < 0) index = 0;
+  if (index < 0) return { paneId: agents[step < 0 ? agents.length - 1 : 0]!.pane_id };
   return { paneId: agents[(index + step + agents.length) % agents.length]!.pane_id };
 }
 
@@ -114,5 +119,7 @@ export function worktreeCreateArgv(workspaceId: string, input: string): string[]
 export function worktreeOpenArgv(workspaceId: string, input: string): string[] {
   const value = input.trim();
   const flag = value.startsWith("/") || value.startsWith("~") || value.startsWith(".") ? "--path" : "--branch";
-  return ["worktree", "open", "--workspace", workspaceId, flag, value, "--focus"];
+  // Bun.spawn bypasses the shell, so a user's ~/path needs explicit expansion.
+  const expanded = value === "~" ? homedir() : value.startsWith("~/") ? join(homedir(), value.slice(2)) : value;
+  return ["worktree", "open", "--workspace", workspaceId, flag, expanded, "--focus"];
 }
