@@ -2,6 +2,7 @@ import { createCliRenderer } from "@opentui/core";
 import { mountPalette } from "../src/palette";
 import { savedSessionItem, transcriptExcerpt } from "../src/sessions";
 import type { SavedSession } from "../src/types";
+import { itemsFromSnapshot } from "../src/live";
 
 // Self-contained sample data: no provider processes, history reads, or resume actions.
 const examples = [
@@ -14,11 +15,20 @@ const sessions: SavedSession[] = examples.map((example, index) => ({ provider: e
 const renderer = await createCliRenderer({ exitOnCtrlC: true, useMouse: true });
 const items = sessions.map(savedSessionItem);
 items[0] = { ...items[0]!, id: "demo:live", savedSession: false, livePaneId: "demo:p1", agentStatus: "blocked", priority: 0 };
+items.unshift(...itemsFromSnapshot({
+  workspaces: [{ workspace_id: "demo", label: "Shop", tab_count: 1, pane_count: 2, worktree: { checkout_path: "/projects/shop" } }],
+  tabs: [{ workspace_id: "demo", tab_id: "demo:t1", label: "Development", pane_count: 2 }],
+  panes: [
+    { workspace_id: "demo", tab_id: "demo:t1", pane_id: "demo:p1", label: "Payment agent", agent: "claude", agent_status: "blocked", cwd: "/projects/shop", focused: true },
+    { workspace_id: "demo", tab_id: "demo:t1", pane_id: "demo:p2", label: "Build terminal", cwd: "/projects/shop" },
+  ],
+}, "demo"));
 let frame = 0;
 mountPalette(renderer, items, {
   close: () => renderer.destroy(),
   run: async () => ({ ok: false, message: "Demo only — no session was opened." }),
-  panePreview: async () => [
+  resourceDetails: async target => target.kind === "workspace" ? "feature/payments" : target.paneId === "demo:p2" ? "bun" : "claude",
+  panePreview: async paneId => paneId === "demo:p2" ? `Build terminal\n\n$ bun run dev\nServer running at localhost:3000\n\nGET /checkout 200\nRefresh ${++frame}` : [
     "Claude Code · shop", "", "● Checking payment callback idempotency", "",
     "  bun test payment.test.ts", "  12 pass · 0 fail", "",
     `  Preview refresh ${++frame} (sample pane)`, "",

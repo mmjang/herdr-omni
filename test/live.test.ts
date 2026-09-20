@@ -120,3 +120,72 @@ test("applies only Herdr workspace visit timestamps supplied by the log reader",
   expect(items.find(item => item.title === "alpha")?.lastVisitedAt).toBeUndefined();
   expect(items.find(item => item.title === "beta")?.lastVisitedAt).toBe(42);
 });
+
+test("joins exact workspace and tab panes, preserving remembered focus and overview-only tabs", () => {
+  const items = itemsFromSnapshot({
+    workspaces: [
+      { workspace_id: "w1", label: "Shop", pane_count: 2, worktree: { checkout_path: "/repo/shop" } },
+      { workspace_id: "w2", label: "Other", pane_count: 1 },
+    ],
+    tabs: [
+      { tab_id: "w1:t1", workspace_id: "w1", label: "dev" },
+      { tab_id: "w1:t2", workspace_id: "w1", label: "1" },
+      { tab_id: "w2:t1", workspace_id: "w2", label: "shell" },
+    ],
+    panes: [
+      { pane_id: "w1:p1", workspace_id: "w1", tab_id: "w1:t1", terminal_title_stripped: "Terminal", cwd: "/repo/shop", foreground_cwd: "/repo/shop/src" },
+      { pane_id: "w1:p2", workspace_id: "w1", tab_id: "w1:t1", label: "Agent pane", cwd: "/repo/shop" },
+      // Same tab ID text in another workspace must not leak into w1.
+      { pane_id: "w2:p1", workspace_id: "w2", tab_id: "w2:t1", label: "Other pane", cwd: "/repo/other" },
+    ],
+    agents: [{ pane_id: "w1:p2", workspace_id: "w1", tab_id: "w1:t1", agent: "codex", agent_status: "working" }],
+    layouts: [{ tab_id: "w1:t1", focused_pane_id: "w1:p2" }],
+  }, "w1");
+
+  const workspace = items.find(item => item.title === "Shop")?.resourcePreview;
+  expect(workspace).toEqual({
+    kind: "workspace", workspaceId: "w1", paths: ["/repo/shop"], paneCount: 2,
+    tabs: [
+      { id: "w1:t1", label: "dev", panes: [
+        { id: "w1:p1", label: "Terminal", cwd: "/repo/shop/src", focused: false },
+        { id: "w1:p2", label: "Agent pane", cwd: "/repo/shop", agent: "codex", status: "working", focused: true },
+      ] },
+      { id: "w1:t2", label: "1", panes: [] },
+    ],
+  });
+  const tab = items.find(item => herdrArgv(item)?.join(" ") === "tab focus w1:t1");
+  expect(tab?.resourcePreview).toMatchObject({ kind: "tab", workspaceId: "w1", panes: [{ id: "w1:p1" }, { id: "w1:p2", focused: true }] });
+  expect(items.find(item => herdrArgv(item)?.join(" ") === "tab focus w1:t2")).toBeUndefined();
+});
+
+test("falls back to distinct agent panes without fabricating unavailable panes", () => {
+  const items = itemsFromSnapshot({
+    workspaces: [{ workspace_id: "w1", label: "Shop" }, { workspace_id: "w2", label: "Empty" }],
+    tabs: [{ tab_id: "w1:t1", workspace_id: "w1", label: "dev" }, { tab_id: "w2:t1", workspace_id: "w2", label: "shell" }],
+    agents: [
+      { pane_id: "w1:p1", workspace_id: "w1", tab_id: "w1:t1", agent: "claude", cwd: "/repo", terminal_title_stripped: "Review" },
+      { pane_id: "w1:p1", workspace_id: "w1", tab_id: "w1:t1", agent: "claude", cwd: "/repo" },
+    ],
+  }, "w1");
+
+  const shop = items.find(item => item.title === "Shop")?.resourcePreview;
+  expect(shop?.kind).toBe("workspace");
+  if (shop?.kind === "workspace") {
+    expect(shop.paths).toEqual(["/repo"]);
+    expect(shop.tabs[0]?.panes).toEqual([{ id: "w1:p1", label: "Review", cwd: "/repo", agent: "claude", focused: false }]);
+    expect(shop.paneCount).toBe(1);
+  }
+  const empty = items.find(item => item.title === "Empty")?.resourcePreview;
+  expect(empty).toMatchObject({ kind: "workspace", paths: [], tabs: [{ id: "w2:t1", panes: [] }], paneCount: 0 });
+});
+
+test("attaches worktree previews without inventing a branch", () => {
+  const items = itemsFromWorktrees([
+    { path: "/repo/feature", label: "feature", branch: "feature/ui" },
+    { path: "/repo/detached", label: "detached" },
+  ], "w1");
+  expect(items.map(item => item.resourcePreview)).toEqual([
+    { kind: "worktree", path: "/repo/feature", branch: "feature/ui" },
+    { kind: "worktree", path: "/repo/detached" },
+  ]);
+});

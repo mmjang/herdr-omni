@@ -11,9 +11,11 @@ import { version } from "../package.json";
 import type { UpdateOffer } from "./update";
 import type { PanePreviewReader } from "./pane-preview";
 import { paneScreen } from "./pane-screen";
+import { paneLabel, resourceOverview } from "./resource-overview";
+import type { ResourceDetailsReader, ResourceDetailTarget } from "./resource-details";
 export { filterPaletteItems } from "./search";
 
-export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; currentWorkspaceId?: string; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob; panePreview?: PanePreviewReader }
+export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; currentWorkspaceId?: string; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob; panePreview?: PanePreviewReader; resourceDetails?: ResourceDetailsReader }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
 const CHROME_ROWS = 5;
@@ -63,13 +65,57 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   let previewKey = "", previewText = "", previewState = "";
   let previewController: AbortController | undefined;
   let previewTimer: ReturnType<typeof setTimeout> | undefined;
+  const tabPaneSelection = new Map<string, string>();
+  let detailKey = "", detailText = "", detailState = "";
+  let detailController: AbortController | undefined;
+  let detailTimer: ReturnType<typeof setTimeout> | undefined;
+  const previewAllowed = () => previewEnabled && !transcripts && !prompting() && !running && !workspacePicker && !updateDialog;
+  function selectedTabPane(item?: PaletteItem) {
+    const resource = item?.resourcePreview;
+    if (!item || resource?.kind !== "tab") return;
+    const pane = resource.panes.find(pane => pane.id === tabPaneSelection.get(item.id))
+      ?? resource.panes.find(pane => pane.focused) ?? resource.panes[0];
+    if (pane) tabPaneSelection.set(item.id, pane.id);
+    return pane;
+  }
+  const targetPaneId = (item?: PaletteItem) => item?.savedSession ? undefined : selectedTabPane(item)?.id ?? item?.livePaneId;
+  const hasPreview = (item?: PaletteItem) => Boolean(item?.session || item?.livePaneId || item?.resourcePreview);
+  function stopDetails() { clearTimeout(detailTimer); detailController?.abort(); detailController = undefined; }
+  function loadDetails(item?: PaletteItem) {
+    const resource = item?.resourcePreview;
+    const pane = selectedTabPane(item);
+    const target: ResourceDetailTarget | undefined = resource?.kind === "workspace" && !resource.branch
+      ? { kind: "workspace", workspaceId: resource.workspaceId, path: resource.paths[0] }
+      : pane ? { kind: "pane", paneId: pane.id } : undefined;
+    const key = previewAllowed() && target && deps.resourceDetails ? JSON.stringify(target) : "";
+    if (key === detailKey) return;
+    stopDetails(); detailKey = key; detailText = ""; detailState = "";
+    if (!key || !target) return;
+    detailState = "loading…";
+    const controller = new AbortController(); detailController = controller;
+    const poll = async () => {
+      let value = "", state = "";
+      try { value = await deps.resourceDetails!(target, controller.signal) ?? ""; }
+      catch { state = "unavailable"; }
+      if (destroyed || controller.signal.aborted) return;
+      const changed = value !== detailText || state !== detailState;
+      detailText = value; detailState = state;
+      if (changed) redraw(true);
+      if (!controller.signal.aborted) detailTimer = setTimeout(poll, target.kind === "pane" ? 2000 : 5000);
+    };
+    detailTimer = setTimeout(poll, TRANSCRIPT_DEBOUNCE_MS);
+  }
+  function choosePreviewPane(item: PaletteItem, paneId: string) {
+    if (item.resourcePreview?.kind !== "tab" || !item.resourcePreview.panes.some(pane => pane.id === paneId)) return;
+    interacted = true; tabPaneSelection.set(item.id, paneId); previewOffset = 0; redraw(true);
+  }
   const previewCache = new Map<string, { text: string; time: number }>();
   function stopPreview() { clearTimeout(previewTimer); previewController?.abort(); previewController = undefined; }
   function loadPreview(item?: PaletteItem) {
     const session = item?.session;
-    const paneId = item?.savedSession ? undefined : item?.livePaneId;
+    const paneId = targetPaneId(item);
     const identity = paneId ? `pane:${paneId}:${session ? sessionKey(session) : ""}` : session && deps.sessionJob ? `${sessionKey(session)}:${session.updatedAt}` : "";
-    const key = previewEnabled && !transcripts && !prompting() && !running && !workspacePicker && !updateDialog ? identity : "";
+    const key = previewAllowed() ? identity : "";
     if (key === previewKey) return;
     stopPreview(); previewKey = key; previewText = ""; previewState = "";
     if (!key) return;
@@ -121,7 +167,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
   const transcriptQuery = () => (">@:".includes(query[0] ?? " ") ? query.slice(1) : query).trim();
   const sessionMetadataVisible = () => query.startsWith(">") || (!query.startsWith("@") && !query.startsWith(":"));
   const sessionSearchVisible = () => sessionMetadataVisible() || transcripts;
-  renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); stopPreview(); });
+  renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); stopPreview(); stopDetails(); });
 
   function allResults(): ResultRow[] {
     const combined = sessionMetadataVisible() ? mergeSessions(allItems, sessions) : allItems;
@@ -251,17 +297,27 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     selected = Math.max(0, Math.min(selected, items.length - 1));
     const selectedItem = items[selected];
     const selectedSession = selectedItem?.session;
-    const livePreview = !transcripts && !selectedItem?.savedSession && Boolean(selectedItem?.livePaneId);
-    const selection = `${selectedItem?.id ?? ""}:${transcripts}`;
+    const resource = !transcripts ? selectedItem?.resourcePreview : undefined;
+    const tabPane = resource?.kind === "tab" ? selectedTabPane(selectedItem) : undefined;
+    const paneId = targetPaneId(selectedItem);
+    const livePreview = !transcripts && Boolean(paneId);
+    const selection = `${selectedItem?.id ?? ""}:${transcripts}:${paneId ?? ""}`;
     if (previewSelection !== selection) { previewSelection = selection; previewOffset = 0; }
     loadPreview(selectedItem);
-    const showPreview = previewEnabled && !prompting() && Boolean(selectedSession || livePreview);
+    loadDetails(selectedItem);
+    const showPreview = previewEnabled && !prompting() && Boolean(selectedSession || livePreview || resource);
     const sidePreview = showPreview && !previewExpanded && renderer.width >= 120;
     const previewWidth = sidePreview ? Math.floor((renderer.width - 4) * 0.42) : renderer.width - 4;
-    const previewHeight = Math.max(3, Math.min(previewExpanded ? renderer.height - 9 : TRANSCRIPT_PREVIEW_ROWS + 3, Math.floor(renderer.height * (previewExpanded ? 0.65 : 0.45))));
-    const excerpt = transcripts && selectedSession ? transcriptHits.find(hit => sessionKey(hit.session) === sessionKey(selectedSession))?.excerpt : previewText;
+    const previewHeight = Math.max(3, Math.min(previewExpanded ? renderer.height - 9 : TRANSCRIPT_PREVIEW_ROWS + (resource?.kind === "tab" ? 7 : 3), Math.floor(renderer.height * (previewExpanded ? 0.65 : 0.45))));
+    const overview = resource && resource.kind !== "tab" ? resourceOverview(resource, detailText || detailState || undefined) : undefined;
+    const excerpt = overview ?? (transcripts && selectedSession ? transcriptHits.find(hit => sessionKey(hit.session) === sessionKey(selectedSession))?.excerpt : previewText);
     const contentWidth = Math.max(1, previewWidth - 2);
-    const contentRows = Math.max(1, sidePreview ? renderer.height - 10 : previewHeight - 3);
+    const availableRows = Math.max(1, sidePreview ? renderer.height - 10 : previewHeight - 3);
+    const paneListRows = resource?.kind === "tab" ? Math.min(resource.panes.length, Math.max(0, Math.min(3, availableRows - 5))) : 0;
+    const showProgram = Boolean(tabPane && availableRows > 1);
+    const showPanePath = Boolean(tabPane && availableRows > 3);
+    const tabMetaRows = tabPane ? paneListRows + Number(showProgram) + Number(showPanePath) : 0;
+    const contentRows = Math.max(1, availableRows - tabMetaRows);
     const screen = livePreview ? paneScreen(previewText, contentWidth, contentRows, previewOffset) : undefined;
     if (screen) previewOffset = screen.offset;
     const preview = screen?.lines ?? (excerpt ? transcriptPreview(excerpt, transcripts ? transcriptQuery() : "", contentWidth, contentRows, previewOffset) : []);
@@ -436,7 +492,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           attributes: item.agentStatus === "blocked" ? 1 : 0,
           flexShrink: 0,
         }));
-        if (item.session || item.livePaneId) {
+        if (hasPreview(item)) {
           const peek = new TextRenderable(renderer, { id: `peek-${index}`, content: " ◧", fg: theme.accent, flexShrink: 0 });
           peek.onMouseDown = event => { event.preventDefault(); event.stopPropagation(); };
           peek.onMouseUp = event => {
@@ -456,17 +512,33 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       const previewBox = new BoxRenderable(renderer, { id: "session-preview", flexDirection: "column", flexShrink: 0,
         ...(sidePreview ? { width: previewWidth, paddingLeft: 2 } : { height: previewHeight }), backgroundColor: theme.panel, overflow: "hidden" });
       resultsBody.add(previewBox);
-      const previewTitle = livePreview ? `Live pane · ${screen?.offset ? "scrolled" : "following"}` : transcripts ? "Transcript context" : "Recent conversation";
+      const previewTitle = resource?.kind === "workspace" ? "Workspace overview" : resource?.kind === "worktree" ? "Worktree overview"
+        : resource?.kind === "tab" ? "Tab preview · live panes" : livePreview ? `Live pane · ${screen?.offset ? "scrolled" : "following"}` : transcripts ? "Transcript context" : "Recent conversation";
       const previewHeader = new TextRenderable(renderer, { id: "preview-heading", content: previewTitle, fg: theme.accent, height: 1, flexShrink: 0 });
       previewBox.add(previewHeader);
-      const previewDetail = livePreview
-        ? `${selectedItem.livePaneId} · ${selectedItem.agentStatus ?? "unknown"} · ${screen?.totalRows ? `rows ${screen.start + 1}–${screen.end}/${screen.totalRows}` : "visible screen"}`
+      const previewDetail = resource?.kind === "workspace" ? `${resource.tabs.length} tabs · ${resource.paneCount} panes`
+        : resource?.kind === "worktree" ? "Unopened worktree"
+        : resource?.kind === "tab" ? `${resource.panes.length} panes · F6 / Shift+F6 switch`
+        : livePreview ? `${paneId} · ${selectedItem.agentStatus ?? "unknown"} · ${screen?.totalRows ? `rows ${screen.start + 1}–${screen.end}/${screen.totalRows}` : "visible screen"}`
         : `${selectedSession!.provider} · ${selectedItem.savedSession ? "Saved" : selectedItem.agentStatus ?? "Live"} · ${cleanText(selectedSession!.cwd)}`;
       previewBox.add(new TextRenderable(renderer, { id: "session-detail", content: previewDetail, fg: selectedItem.agentStatus === "blocked" ? theme.error : theme.muted, height: 1, flexShrink: 0 }));
       const expand = new TextRenderable(renderer, { id: "preview-expand", content: `${previewExpanded ? "Collapse" : "Expand"} · Ctrl+O  PgUp/Dn scroll`, fg: theme.muted, height: 1, flexShrink: 0 });
       expand.onMouseUp = event => { if (event.button === 0) { interacted = true; previewExpanded = !previewExpanded; redraw(true); } };
       previewBox.add(expand);
-      if (!preview.length) previewBox.add(new TextRenderable(renderer, { id: "preview-state", content: transcripts ? "No matching context for this session" : previewState || (livePreview ? "Pane screen is empty" : "No conversation text available"), fg: theme.muted, height: 1 }));
+      if (resource?.kind === "tab" && tabPane) {
+        const index = resource.panes.findIndex(pane => pane.id === tabPane.id);
+        const window = paneListRows ? viewport(resource.panes.length, index, paneListRows) : { start: 0, end: 0 };
+        for (let n = window.start; n < window.end; n++) {
+          const pane = resource.panes[n]!;
+          const row = new TextRenderable(renderer, { id: `preview-pane-${n}`, content: `${pane.id === tabPane.id ? "›" : " "} ${n + 1}. ${paneLabel(pane)}`,
+            fg: pane.status === "blocked" ? theme.error : pane.id === tabPane.id ? theme.accent : theme.muted, height: 1, flexShrink: 0 });
+          row.onMouseUp = event => { if (event.button === 0) { event.preventDefault(); event.stopPropagation(); choosePreviewPane(selectedItem, pane.id); } };
+          previewBox.add(row);
+        }
+        if (showProgram) previewBox.add(new TextRenderable(renderer, { id: "preview-program", content: `Program: ${cleanText(detailText || detailState || "unavailable")}`, fg: theme.text, height: 1, flexShrink: 0 }));
+        if (showPanePath) previewBox.add(new TextRenderable(renderer, { id: "preview-pane-path", content: `${tabPane.id} · ${cleanText(tabPane.cwd) || "Path unavailable"}`, fg: theme.muted, height: 1, flexShrink: 0 }));
+      }
+      if (!preview.length) previewBox.add(new TextRenderable(renderer, { id: "preview-state", content: resource?.kind === "tab" && !tabPane ? "No pane details available" : transcripts ? "No matching context for this session" : previewState || (livePreview ? "Pane screen is empty" : "No conversation text available"), fg: theme.muted, height: 1 }));
       preview.forEach((line, index) => previewBox.add(new TextRenderable(renderer, {
         id: `transcript-excerpt-${index}`,
         content: new StyledText(line.map(part => part.match ? bold(fg(theme.accent)(part.text)) : fg(theme.text)(part.text))),
@@ -632,10 +704,17 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       return redraw(true);
     }
     const previewItem = visibleItems()[selected];
-    if (!prompting() && previewEnabled && ["pageup", "pagedown"].includes(key.name) && (previewItem?.session || previewItem?.livePaneId)) {
+    if (!prompting() && previewEnabled && !transcripts && key.name === "f6" && previewItem?.resourcePreview?.kind === "tab") {
+      key.preventDefault();
+      const panes = previewItem.resourcePreview.panes;
+      const index = panes.findIndex(pane => pane.id === selectedTabPane(previewItem)?.id);
+      if (panes.length) choosePreviewPane(previewItem, panes[(index + (key.shift ? -1 : 1) + panes.length) % panes.length]!.id);
+      return;
+    }
+    if (!prompting() && previewEnabled && ["pageup", "pagedown"].includes(key.name) && hasPreview(previewItem)) {
       key.preventDefault();
       interacted = true;
-      const fromBottom = !transcripts && !previewItem.savedSession && Boolean(previewItem.livePaneId);
+      const fromBottom = !transcripts && Boolean(targetPaneId(previewItem));
       previewOffset = Math.max(0, previewOffset + (key.name === "pageup" ? -5 : 5) * (fromBottom ? -1 : 1));
       return redraw(true);
     }

@@ -36,6 +36,27 @@ export interface SavedSession {
   updatedAt: number;
 }
 
+export interface PreviewPane {
+  id: string;
+  label: string;
+  cwd: string;
+  /** Provider/agent identity when Herdr reports it; never inferred from terminal titles. */
+  agent?: string;
+  status?: PaletteItem["agentStatus"];
+  focused: boolean;
+}
+
+export interface PreviewTab {
+  id: string;
+  label: string;
+  panes: PreviewPane[];
+}
+
+export type ResourcePreview =
+  | { kind: "workspace"; workspaceId: string; paths: string[]; branch?: string; tabs: PreviewTab[]; paneCount: number }
+  | { kind: "tab"; workspaceId: string; workspaceLabel: string; panes: PreviewPane[] }
+  | { kind: "worktree"; path: string; branch?: string };
+
 export interface PaletteItem {
   id: string;
   title: string;
@@ -62,6 +83,7 @@ export interface PaletteItem {
   savedSession?: boolean;
   /** Explicit live terminal target; available even when no provider session ID exists. */
   livePaneId?: string;
+  resourcePreview?: ResourcePreview;
 }
 
 export interface ResumeWorkspaceChoice { id: string; label: string; cwd: string; reason: string }

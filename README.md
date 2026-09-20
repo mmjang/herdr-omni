@@ -136,6 +136,12 @@ terminal columns and shows the bottom of the visible screen; long lines are
 clipped with an ellipsis. Expand it for more space, or scroll up to inspect earlier
 rows in the current screen. Reads do not focus the pane or send it any input.
 
+Workspaces preview their paths, Git branch (when available), tabs, and agent
+states. Tabs preview their panes and the selected pane's foreground program and
+live screen. Use **F6 / Shift+F6** or click a pane row to choose which pane to
+preview; this does not change Herdr's focus. Unopened worktrees show their path
+and branch. Workspace and tab metadata follows the normal live refresh.
+
 Saved sessions preview their recent conversation before opening them.
 Wide popups show a right-hand preview; narrower popups show it below the results.
 Content search previews the matching context instead. Use **Ctrl+O** to expand or
@@ -170,6 +176,13 @@ bun scripts/preview-demo.ts
 ```
 
 ## Release notes
+
+### 0.14.0
+
+- Preview workspace paths, Git branches, tabs, and agent states, including numeric and unnamed tabs in workspace overviews.
+- Preview a tab's panes, the selected pane's foreground program, and its live screen; use F6 / Shift+F6 or click a pane row to switch preview targets without changing Herdr's focus.
+- Keep the chosen preview pane across refreshes and recover when it closes; cancel stale pane and detail reads when switching or hiding previews.
+- Show path and branch details for unopened worktrees, and extend the standalone demo with workspace and tab previews.
 
 ### 0.13.0
 
