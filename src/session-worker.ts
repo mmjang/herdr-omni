@@ -3,7 +3,7 @@ import { homedir } from "node:os";
 import { basename, join } from "node:path";
 import type { SavedSession } from "./types";
 import { OpenCodeHistory } from "./opencode-history";
-import { SESSION_REQUEST_TIMEOUT_MS, TRANSCRIPT_RESULT_LIMIT, sessionKey, transcriptExcerpt, transcriptTerms, type SessionEvent, type SessionRequest } from "./sessions";
+import { boundedConversationPreview, SESSION_REQUEST_TIMEOUT_MS, TRANSCRIPT_RESULT_LIMIT, sessionKey, transcriptExcerpt, transcriptTerms, type PreviewMessage, type SessionEvent, type SessionRequest } from "./sessions";
 
 type RgResult = { code: number; stdout: string };
 
@@ -251,21 +251,37 @@ export class CodexHistory {
 }
 
 /** Search conversation text only, excluding tool calls/results, system data and reasoning. */
-export function claudeText(messages: any[]): string[] {
+export function claudeMessages(messages: any[]): PreviewMessage[] {
   const content = (value: any): string[] => {
     if (typeof value === "string") return [value];
     if (!Array.isArray(value)) return [];
     return value.flatMap(block => block?.type === "text" && typeof block.text === "string" ? [block.text] : []);
   };
-  return messages.flatMap(message => ["user", "assistant"].includes(message.type) ? content(message.message?.content) : []);
+  return messages.flatMap(message => ["user", "assistant"].includes(message.type)
+    ? content(message.message?.content).map(text => ({ role: message.type as "user" | "assistant", text }))
+    : []);
+}
+
+export function claudeText(messages: any[]): string[] {
+  return claudeMessages(messages).map(message => message.text);
+}
+
+export function codexMessages(thread: any): PreviewMessage[] {
+  return (thread?.turns ?? []).flatMap((turn: any) => (turn.items ?? []).flatMap((item: any) => {
+    if (item.type === "agentMessage" && typeof item.text === "string") return [{ role: "assistant" as const, text: item.text }];
+    if (item.type === "userMessage") return (item.content ?? []).filter((part: any) => part.type === "text" && typeof part.text === "string")
+      .map((part: any) => ({ role: "user" as const, text: part.text }));
+    return [];
+  }));
 }
 
 export function codexText(thread: any): string[] {
-  return (thread?.turns ?? []).flatMap((turn: any) => (turn.items ?? []).flatMap((item: any) => {
-    if (item.type === "agentMessage" && typeof item.text === "string") return [item.text];
-    if (item.type === "userMessage") return (item.content ?? []).filter((part: any) => part.type === "text" && typeof part.text === "string").map((part: any) => part.text);
-    return [];
-  }));
+  return codexMessages(thread).map(message => message.text);
+}
+
+/** Format the bounded preview from a provider's already-filtered conversation records. */
+export function sessionPreview(messages: readonly PreviewMessage[]): string {
+  return boundedConversationPreview(messages);
 }
 
 async function work(request: SessionRequest, publish: (event: SessionEvent) => void) {
@@ -311,6 +327,26 @@ async function work(request: SessionRequest, publish: (event: SessionEvent) => v
           } catch { publish({ type: "error", message: "Claude history unavailable." }); }
         })(),
       ]);
+    } else if (request.type === "preview") {
+      try {
+        let messages: PreviewMessage[];
+        if (request.session.provider === "codex") {
+          if (!Bun.which("codex")) throw new Error("Codex history unavailable");
+          await codex.start();
+          messages = codexMessages((await codex.call("thread/read", { threadId: request.session.id, includeTurns: true })).thread);
+        } else if (request.session.provider === "opencode") {
+          if (!Bun.which("opencode")) throw new Error("OpenCode history unavailable");
+          messages = (await opencode.read(request.session.id)).map(text => ({ role: "message" as const, text }));
+        } else {
+          if (!Bun.which("claude")) throw new Error("Claude history unavailable");
+          const { getSessionMessages } = await import("@anthropic-ai/claude-agent-sdk");
+          messages = claudeMessages(await getSessionMessages(request.session.id, { dir: request.session.cwd || undefined }));
+        }
+        const excerpt = sessionPreview(messages);
+        if (excerpt) publish({ type: "preview", session: request.session, excerpt });
+      } catch {
+        publish({ type: "error", message: `${request.session.provider} session preview unavailable.` });
+      }
     } else {
       // Keep OpenCode on its existing provider path. Its SQLite corpus is
       // small, while Codex/Claude JSONL files benefit substantially from a

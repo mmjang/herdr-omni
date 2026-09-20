@@ -11,6 +11,7 @@ import { checkForUpdate, dismissUpdate, installUpdate } from "./update";
 import { version } from "../package.json";
 import { runSessionJob } from "./sessions";
 import { parseLaunchContext } from "./herdr";
+import { readPanePreview } from "./pane-preview";
 
 // Read Herdr's config before drawing so the popup uses the theme Herdr itself is rendering with.
 const theme = loadTheme();
@@ -23,7 +24,7 @@ const palette = mountPalette(renderer, items, { theme, history: loadHistory(), c
   // never use it as a substitute for a real workspace visit.
   if (result.ok && item.category !== "Actions" && item.category !== "Workspace" && item.category !== "Worktrees") recordSelection(item.id);
   return result;
-}, close: () => renderer.destroy(), update: installUpdate, dismissUpdate, sessionJob: runSessionJob });
+}, close: () => renderer.destroy(), update: installUpdate, dismissUpdate, sessionJob: runSessionJob, panePreview: readPanePreview });
 palette.setLoading(true);
 let firstLoad = true;
 const stopRefresh = startLiveRefresh(async publish => {

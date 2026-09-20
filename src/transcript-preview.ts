@@ -4,7 +4,7 @@ export const TRANSCRIPT_PREVIEW_ROWS = 6;
 export interface PreviewPart { text: string; match: boolean }
 
 /** Wrap by terminal cells, then center the visible window on a literal match. */
-export function transcriptPreview(excerpt: string, query: string, width: number, rows: number): PreviewPart[][] {
+export function transcriptPreview(excerpt: string, query: string, width: number, rows: number, offset = 0): PreviewPart[][] {
   const text = excerpt.replace(/[\x00-\x09\x0b-\x1f\x7f-\x9f]/g, " ");
   const lower = text.toLowerCase();
   const matches = new Set<number>();
@@ -34,6 +34,6 @@ export function transcriptPreview(excerpt: string, query: string, width: number,
     lines.at(-1)!.push({ text: part.segment, match: matches.has(part.index) });
     cells += size;
   }
-  const start = Math.max(0, focusLine - Math.floor(rows / 3));
+  const start = Math.min(Math.max(0, lines.length - rows), Math.max(0, focusLine - Math.floor(rows / 3)) + Math.max(0, offset));
   return lines.slice(start, start + rows);
 }

@@ -199,7 +199,7 @@ for (const query of ["payment", ">payment", "@payment", ":payment", "支付回�
     let closes = 0;
     mountPalette(h.renderer, [], { sessionJob: async (request, _signal, publish) => {
       if (request.type === "list") publish({ type: "sessions", sessions: [session] });
-      else { requests.push(request.query); publish({ type: "hit", session, excerpt: "matching excerpt" }); }
+      else if (request.type === "search") { requests.push(request.query); publish({ type: "hit", session, excerpt: "matching excerpt" }); }
     }, run: async () => ({ ok: true, message: "" }), close: () => { closes++; } });
     try {
       await h.mockInput.pasteBracketedText(query); await wait();

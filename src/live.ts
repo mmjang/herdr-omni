@@ -65,6 +65,7 @@ export function itemsFromSnapshot(snapshot: JsonRecord, currentWorkspaceId: stri
     item.priority = ["blocked", "done", "working", "idle", "unknown"].indexOf(text(agent.agent_status));
     if (item.priority < 0) item.priority = 4;
     item.agentStatus = (["blocked", "done", "working", "idle", "unknown"] as const)[item.priority];
+    if (paneId) item.livePaneId = paneId;
     item.currentWorkspace = workspaceId === currentWorkspaceId;
     const session = agent.agent_session as JsonRecord | undefined;
     const provider = text(session?.agent) || text(agent.agent);

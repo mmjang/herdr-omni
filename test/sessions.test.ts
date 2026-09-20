@@ -1,6 +1,6 @@
 import { expect, test } from "bun:test";
-import { transcriptExcerpt, transcriptTerms, savedSessionItem, mergeSessions, runSessionJob } from "../src/sessions";
-import { CodexHistory, codexText, claudeText, prefilterTranscriptSessions, type TranscriptPrefilterRunner } from "../src/session-worker";
+import { boundedConversationPreview, SESSION_PREVIEW_MAX_CHARS, transcriptExcerpt, transcriptTerms, savedSessionItem, mergeSessions, runSessionJob } from "../src/sessions";
+import { CodexHistory, codexMessages, codexText, claudeMessages, claudeText, prefilterTranscriptSessions, sessionPreview, type TranscriptPrefilterRunner } from "../src/session-worker";
 import { filterPaletteItems } from "../src/search";
 import { itemsFromSnapshot } from "../src/live";
 import { resumeSavedSession, findSessionWorkspace, resumeWorkspaceChoices } from "../src/resume-session";
@@ -98,6 +98,36 @@ test("provider extraction keeps conversation text but excludes all tool content"
   ]);
   expect(messages).toEqual(["question", "answer"]);
   expect(transcriptExcerpt(messages, "tool output")).toBeUndefined();
+});
+
+test("provider preview extraction labels roles and excludes reasoning and tool records", () => {
+  const codex = codexMessages({ turns: [{ items: [
+    { type: "userMessage", content: [{ type: "text", text: "question" }] },
+    { type: "agentMessage", text: "answer" },
+    { type: "reasoning", text: "private" },
+    { type: "commandExecution", aggregatedOutput: "tool output" },
+  ] }] });
+  expect(codex).toEqual([{ role: "user", text: "question" }, { role: "assistant", text: "answer" }]);
+  const claude = claudeMessages([
+    { type: "user", message: { content: [{ type: "text", text: "question" }, { type: "tool_result", content: "tool output" }] } },
+    { type: "assistant", message: { content: [{ type: "text", text: "answer" }, { type: "thinking", thinking: "private" }] } },
+  ]);
+  expect(claude).toEqual([{ role: "user", text: "question" }, { role: "assistant", text: "answer" }]);
+  expect(sessionPreview([...codex, ...claude])).toContain("user: question");
+  expect(sessionPreview([...codex, ...claude])).not.toContain("tool output");
+});
+
+test("session previews contain only the latest bounded exchange", () => {
+  const preview = boundedConversationPreview([
+    { role: "user", text: "old question" },
+    { role: "assistant", text: "old answer" },
+    { role: "user", text: "latest question" },
+    { role: "assistant", text: "latest answer" },
+  ]);
+  expect(preview).toBe("user: latest question\n\nassistant: latest answer");
+  expect(preview).not.toContain("old question");
+  expect(preview.length).toBeLessThanOrEqual(SESSION_PREVIEW_MAX_CHARS);
+  expect(boundedConversationPreview([{ role: "assistant", text: "x".repeat(20) }], 12).length).toBeLessThanOrEqual(12);
 });
 
 test("transcript prefilter maps Codex JSONL hits and keeps literal escaped queries safe", async () => {

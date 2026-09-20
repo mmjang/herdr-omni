@@ -129,6 +129,22 @@ Saved sessions resume in a new tab. If the original directory is gone, Omni
 suggests a workspace for you to confirm. Conversation history is restored—not
 deleted files or Git changes.
 
+Select a running agent to preview its current Herdr pane, including tool output,
+approval prompts, and input areas. The selected pane refreshes about once per
+second, even when no provider session ID is available. The preview preserves
+terminal columns and shows the bottom of the visible screen; long lines are
+clipped with an ellipsis. Expand it for more space, or scroll up to inspect earlier
+rows in the current screen. Reads do not focus the pane or send it any input.
+
+Saved sessions preview their recent conversation before opening them.
+Wide popups show a right-hand preview; narrower popups show it below the results.
+Content search previews the matching context instead. Use **Ctrl+O** to expand or
+collapse, **PageUp / PageDown** to scroll, and **Ctrl+Y** to hide or show the preview.
+Click the **◧** beside a session to preview it without opening it. Previews read
+only the selected pane or conversation and never resume a session. If a live pane
+cannot be read, Omni shows an unavailable message and retries instead of showing
+old conversation history as a live screen.
+
 Official installs offer updates in-app; press **Ctrl+U** when a notice appears.
 Reopen Omni after updating. Local checkouts and pinned installs are left alone.
 
@@ -147,7 +163,21 @@ herdr plugin list
 If you already have a checkout, run the last three commands from its root.
 Keep the checkout in place: Herdr runs the linked plugin from this directory.
 
+Try the preview UI with sample conversations (no agent or Herdr session needed):
+
+```sh
+bun scripts/preview-demo.ts
+```
+
 ## Release notes
+
+### 0.13.0
+
+- Preview running agents' current Herdr pane, including tool output, approval prompts, and input areas, with automatic refresh and no session ID required.
+- Preview recent conversations for saved Codex, Claude, and OpenCode sessions, and matching context during content search.
+- Show previews beside results in wide popups or below them in narrow popups; expand with Ctrl+O, scroll with PageUp/PageDown, and toggle with Ctrl+Y.
+- Click a session's preview button without opening it; cancel stale reads when switching results and retry unavailable live panes.
+- Add a standalone preview demo with sample live and saved sessions.
 
 ### 0.12.2
 

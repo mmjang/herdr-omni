@@ -60,6 +60,8 @@ export interface PaletteItem {
   currentWorkspace?: boolean;
   session?: SavedSession;
   savedSession?: boolean;
+  /** Explicit live terminal target; available even when no provider session ID exists. */
+  livePaneId?: string;
 }
 
 export interface ResumeWorkspaceChoice { id: string; label: string; cwd: string; reason: string }

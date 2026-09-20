@@ -6,14 +6,24 @@ export const TRANSCRIPT_RESULT_LIMIT = 100;
 export const SESSION_REQUEST_TIMEOUT_MS = 20_000;
 export const TRANSCRIPT_CONTEXT_BEFORE = 300;
 export const TRANSCRIPT_CONTEXT_AFTER = 900;
+/** Keep session previews useful in a terminal without allowing a full transcript through the worker. */
+export const SESSION_PREVIEW_MAX_CHARS = 8_000;
+/** A preview is the latest exchange, not a transcript dump. */
+export const SESSION_PREVIEW_MAX_MESSAGES = 2;
+
+export type PreviewMessage = { role: "user" | "assistant" | "message"; text: string };
 
 export type SessionEvent =
   | { type: "sessions"; sessions: SavedSession[] }
   | { type: "hit"; session: SavedSession; excerpt: string }
+  | { type: "preview"; session: SavedSession; excerpt: string }
   | { type: "progress"; scanned: number; total: number }
   | { type: "error"; message: string }
   | { type: "done"; limited?: boolean };
-export type SessionRequest = { type: "list" } | { type: "search"; sessions: SavedSession[]; query: string };
+export type SessionRequest =
+  | { type: "list" }
+  | { type: "search"; sessions: SavedSession[]; query: string }
+  | { type: "preview"; session: SavedSession };
 export type SessionJob = (request: SessionRequest, signal: AbortSignal, publish: (event: SessionEvent) => void) => Promise<void>;
 
 export const sessionKey = (session: Pick<SavedSession, "provider" | "id">) => `${session.provider}:${session.id}`;
@@ -22,6 +32,43 @@ export const cleanText = (value: string) => value.replace(/[\x00-\x1f\x7f-\x9f]/
 /** Transcript bodies keep paragraphs and indentation, unlike single-line labels. */
 export const cleanTranscript = (value: string) => value.replace(/\r\n?/g, "\n")
   .replace(/[\x00-\x08\x0b-\x1f\x7f-\x9f]/g, " ").replace(/\t/g, "    ").trim();
+
+/**
+ * Render only the most recent conversation messages, keeping role labels and
+ * enforcing both message and character bounds before data reaches the UI.
+ */
+export function boundedConversationPreview(messages: readonly PreviewMessage[], maxChars = SESSION_PREVIEW_MAX_CHARS): string {
+  if (!Number.isFinite(maxChars) || maxChars <= 0) return "";
+  const limit = Math.floor(maxChars);
+  const rendered = messages
+    .flatMap(message => {
+      const text = typeof message.text === "string" ? cleanTranscript(message.text) : "";
+      if (!text) return [];
+      const role = message.role === "user" || message.role === "assistant" ? message.role : "message";
+      return [`${role}: ${text}`];
+    })
+    .slice(-SESSION_PREVIEW_MAX_MESSAGES);
+  const selected: string[] = [];
+  let length = 0;
+  for (let index = rendered.length - 1; index >= 0; index--) {
+    const message = rendered[index]!;
+    const separator = selected.length ? 2 : 0;
+    if (message.length + length + separator <= limit) {
+      selected.unshift(message);
+      length += message.length + separator;
+      continue;
+    }
+    // Always show the latest message, even when it alone exceeds the bound.
+    if (!selected.length) {
+      const colon = message.indexOf(": ");
+      const label = colon >= 0 ? message.slice(0, colon + 2) : "message: ";
+      const available = Math.max(0, limit - label.length - 1);
+      return `${label}${message.slice(label.length, label.length + available)}${available < message.length - label.length ? "…" : ""}`.slice(0, limit);
+    }
+    break;
+  }
+  return selected.join("\n\n");
+}
 
 function formatTranscript(value: string): string {
   const text = cleanTranscript(value);

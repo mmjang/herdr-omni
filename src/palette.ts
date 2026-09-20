@@ -9,12 +9,15 @@ import { searchResults, matchingPositions } from "./search";
 import { resultTabs, tabResults, tabMatchCounts, sectionLabel, type ResultRow } from "./result-tabs";
 import { version } from "../package.json";
 import type { UpdateOffer } from "./update";
+import type { PanePreviewReader } from "./pane-preview";
+import { paneScreen } from "./pane-screen";
 export { filterPaletteItems } from "./search";
 
-export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; currentWorkspaceId?: string; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob }
+export interface PaletteDeps { /** Herdr's live palette; omit for the built-in catppuccin fallback. */ theme?: PaletteTheme; history?: Record<string, number>; currentWorkspaceId?: string; run: (item: PaletteItem, input?: string) => Promise<CommandResult>; close: () => void; update?: (offer: UpdateOffer) => Promise<CommandResult>; dismissUpdate?: (offer: UpdateOffer) => void; sessionJob?: SessionJob; panePreview?: PanePreviewReader }
 
 /** Rows the chrome always owns: heading, input, the blank line below it, the footer bar. */
 const CHROME_ROWS = 5;
+export const PANE_PREVIEW_REFRESH_MS = 1000;
 
 export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], deps: PaletteDeps) {
   const theme = deps.theme ?? fallbackTheme;
@@ -55,11 +58,70 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     if (loadingIndicator) loadingIndicator.content = "";
   };
   let transcriptHits: Array<{ session: SavedSession; excerpt: string }> = [];
+  let previewEnabled = true, previewExpanded = false;
+  let previewOffset = 0, previewSelection = "";
+  let previewKey = "", previewText = "", previewState = "";
+  let previewController: AbortController | undefined;
+  let previewTimer: ReturnType<typeof setTimeout> | undefined;
+  const previewCache = new Map<string, { text: string; time: number }>();
+  function stopPreview() { clearTimeout(previewTimer); previewController?.abort(); previewController = undefined; }
+  function loadPreview(item?: PaletteItem) {
+    const session = item?.session;
+    const paneId = item?.savedSession ? undefined : item?.livePaneId;
+    const identity = paneId ? `pane:${paneId}:${session ? sessionKey(session) : ""}` : session && deps.sessionJob ? `${sessionKey(session)}:${session.updatedAt}` : "";
+    const key = previewEnabled && !transcripts && !prompting() && !running && !workspacePicker && !updateDialog ? identity : "";
+    if (key === previewKey) return;
+    stopPreview(); previewKey = key; previewText = ""; previewState = "";
+    if (!key) return;
+    if (paneId) {
+      if (!deps.panePreview) { previewState = "Live pane preview unavailable"; return; }
+      previewState = "Reading live pane…";
+      const controller = new AbortController();
+      previewController = controller;
+      const poll = async () => {
+        if (destroyed || controller.signal.aborted) return;
+        let text = "", state = "";
+        try { text = await deps.panePreview!(paneId, controller.signal); }
+        catch { state = "Live pane unavailable · retrying…"; }
+        if (destroyed || controller.signal.aborted || key !== previewKey) return;
+        const changed = text !== previewText || state !== previewState;
+        previewText = text; previewState = state;
+        // Sequential reads never overlap. Hide/switch/close aborts the reader and timer.
+        if (changed) redraw(true);
+        if (!destroyed && !controller.signal.aborted) previewTimer = setTimeout(poll, PANE_PREVIEW_REFRESH_MS);
+      };
+      previewTimer = setTimeout(poll, TRANSCRIPT_DEBOUNCE_MS);
+      return;
+    }
+    if (!session) return;
+    const cached = previewCache.get(key);
+    if (cached && Date.now() - cached.time < 30_000) { previewText = cached.text; return; }
+    previewState = "Loading recent conversation…";
+    const controller = new AbortController();
+    previewController = controller;
+    previewTimer = setTimeout(() => {
+      void deps.sessionJob!({ type: "preview", session }, controller.signal, event => {
+        if (destroyed || controller.signal.aborted || key !== previewKey) return;
+        if (event.type === "preview" && sessionKey(event.session) === sessionKey(session)) {
+          previewText = event.excerpt; previewState = "";
+          if (previewCache.size >= 30) previewCache.delete(previewCache.keys().next().value!);
+          previewCache.set(key, { text: event.excerpt, time: Date.now() });
+        }
+        if (event.type === "error") previewState = "Conversation unavailable";
+        redraw(true);
+      }).catch(() => { if (!controller.signal.aborted) previewState = "Conversation unavailable"; })
+        .finally(() => {
+          if (destroyed || controller.signal.aborted) return;
+          if (!previewText && previewState === "Loading recent conversation…") previewState = "No conversation text available";
+          redraw(true);
+        });
+    }, TRANSCRIPT_DEBOUNCE_MS);
+  }
   const stopScan = () => { stopLoading(); clearTimeout(scanTimer); scanController?.abort(); scanController = undefined; };
   const transcriptQuery = () => (">@:".includes(query[0] ?? " ") ? query.slice(1) : query).trim();
   const sessionMetadataVisible = () => query.startsWith(">") || (!query.startsWith("@") && !query.startsWith(":"));
   const sessionSearchVisible = () => sessionMetadataVisible() || transcripts;
-  renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); });
+  renderer.on("destroy", () => { destroyed = true; clearInterval(runningTimer); sessionController.abort(); stopScan(); stopPreview(); });
 
   function allResults(): ResultRow[] {
     const combined = sessionMetadataVisible() ? mergeSessions(allItems, sessions) : allItems;
@@ -187,10 +249,23 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     const results = visibleResults();
     const items = results.map(result => result.item);
     selected = Math.max(0, Math.min(selected, items.length - 1));
-    const selectedSession = items[selected]?.session;
-    const excerpt = transcripts && selectedSession ? transcriptHits.find(hit => sessionKey(hit.session) === sessionKey(selectedSession))?.excerpt : undefined;
-    const preview = excerpt ? transcriptPreview(excerpt, transcriptQuery(), Math.max(1, renderer.width - 4), Math.max(1, Math.min(TRANSCRIPT_PREVIEW_ROWS, Math.floor(renderer.height / 3)))) : [];
-    const previewRows = preview.length ? preview.length + 1 : 0;
+    const selectedItem = items[selected];
+    const selectedSession = selectedItem?.session;
+    const livePreview = !transcripts && !selectedItem?.savedSession && Boolean(selectedItem?.livePaneId);
+    const selection = `${selectedItem?.id ?? ""}:${transcripts}`;
+    if (previewSelection !== selection) { previewSelection = selection; previewOffset = 0; }
+    loadPreview(selectedItem);
+    const showPreview = previewEnabled && !prompting() && Boolean(selectedSession || livePreview);
+    const sidePreview = showPreview && !previewExpanded && renderer.width >= 120;
+    const previewWidth = sidePreview ? Math.floor((renderer.width - 4) * 0.42) : renderer.width - 4;
+    const previewHeight = Math.max(3, Math.min(previewExpanded ? renderer.height - 9 : TRANSCRIPT_PREVIEW_ROWS + 3, Math.floor(renderer.height * (previewExpanded ? 0.65 : 0.45))));
+    const excerpt = transcripts && selectedSession ? transcriptHits.find(hit => sessionKey(hit.session) === sessionKey(selectedSession))?.excerpt : previewText;
+    const contentWidth = Math.max(1, previewWidth - 2);
+    const contentRows = Math.max(1, sidePreview ? renderer.height - 10 : previewHeight - 3);
+    const screen = livePreview ? paneScreen(previewText, contentWidth, contentRows, previewOffset) : undefined;
+    if (screen) previewOffset = screen.offset;
+    const preview = screen?.lines ?? (excerpt ? transcriptPreview(excerpt, transcripts ? transcriptQuery() : "", contentWidth, contentRows, previewOffset) : []);
+    const previewRows = showPreview && !sidePreview ? previewHeight : 0;
     panel = new BoxRenderable(renderer, { id: "palette", flexDirection: "column", width: "100%", height: "100%", backgroundColor: theme.background });
     const body = new BoxRenderable(renderer, { id: "body", flexDirection: "column", flexGrow: 1, paddingLeft: 2, paddingRight: 2 });
     panel.add(body);
@@ -201,7 +276,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       loadingIndicator = new TextRenderable(renderer, { id: "transcript-loading", content: loadingText(), fg: theme.accent, height: 1 });
       heading.add(loadingIndicator);
     }
-    heading.add(new TextRenderable(renderer, { id: "escape", content: updating || running ? "" : prompting() || updateDialog || workspacePicker ? "esc" : "tab switch · esc", fg: theme.muted }));
+    heading.add(new TextRenderable(renderer, { id: "escape", content: updating || running ? "" : prompting() || updateDialog || workspacePicker ? "esc" : "Ctrl+Y preview · tab switch · esc", fg: theme.muted }));
     body.add(heading);
     if (running) {
       activeInput = undefined;
@@ -301,8 +376,10 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       }
       body.add(labels);
     }
-    const list = new BoxRenderable(renderer, { id: "list", flexDirection: "column", flexGrow: 1, marginTop: 1 });
-    body.add(list);
+    const resultsBody = new BoxRenderable(renderer, { id: "results-body", flexDirection: sidePreview ? "row" : "column", flexGrow: 1, marginTop: 1 });
+    body.add(resultsBody);
+    const list = new BoxRenderable(renderer, { id: "list", flexDirection: "column", flexGrow: 1, minWidth: 0, overflow: "hidden" });
+    resultsBody.add(list);
     if (prompting()) {
       list.add(new TextRenderable(renderer, { id: "prompt-hint", content: promptItem!.description, fg: theme.muted }));
     } else if (items.length === 0) {
@@ -311,7 +388,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
         list.add(transcriptSearchLink("empty-transcripts", "Search session content · Ctrl+F or click"));
       }
     } else {
-      const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0) - (updateOffer ? 1 : 0) - (selectedSession ? 1 : 0) - previewRows - (sessionSearchVisible() && (sessionsLoading || scanStatus || sessionError) ? 1 : 0)), result => result.section);
+      const window = viewport(results, selected, Math.max(1, renderer.height - CHROME_ROWS - (status ? 1 : 0) - (updateOffer ? 1 : 0) - previewRows - (sessionSearchVisible() && (sessionsLoading || scanStatus || sessionError) ? 1 : 0)), result => result.section);
       let category = "";
       items.slice(window.start, window.end).forEach((item, offset) => {
         const index = window.start + offset;
@@ -359,14 +436,38 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
           attributes: item.agentStatus === "blocked" ? 1 : 0,
           flexShrink: 0,
         }));
+        if (item.session || item.livePaneId) {
+          const peek = new TextRenderable(renderer, { id: `peek-${index}`, content: " ◧", fg: theme.accent, flexShrink: 0 });
+          peek.onMouseDown = event => { event.preventDefault(); event.stopPropagation(); };
+          peek.onMouseUp = event => {
+            event.preventDefault(); event.stopPropagation();
+            if (event.button !== 0) return;
+            const next = visibleItems().findIndex(candidate => candidate.id === item.id);
+            if (next < 0) return;
+            selected = next; interacted = true; previewEnabled = true; redraw(true);
+          };
+          row.add(peek);
+        }
         list.add(row);
       });
     }
     const detail = (id: string, text: string) => body.add(new TextRenderable(renderer, { id, content: cleanText(text).slice(0, Math.max(10, renderer.width - 4)), fg: theme.muted, height: 1, flexShrink: 0 }));
-    if (!prompting() && selectedSession) detail("session-detail", `${selectedSession.provider} · ${selectedSession.id} · ${selectedSession.cwd}`);
-    if (!prompting() && preview.length) {
-      detail("transcript-preview-title", "Transcript context");
-      preview.forEach((line, index) => body.add(new TextRenderable(renderer, {
+    if (showPreview && selectedItem) {
+      const previewBox = new BoxRenderable(renderer, { id: "session-preview", flexDirection: "column", flexShrink: 0,
+        ...(sidePreview ? { width: previewWidth, paddingLeft: 2 } : { height: previewHeight }), backgroundColor: theme.panel, overflow: "hidden" });
+      resultsBody.add(previewBox);
+      const previewTitle = livePreview ? `Live pane · ${screen?.offset ? "scrolled" : "following"}` : transcripts ? "Transcript context" : "Recent conversation";
+      const previewHeader = new TextRenderable(renderer, { id: "preview-heading", content: previewTitle, fg: theme.accent, height: 1, flexShrink: 0 });
+      previewBox.add(previewHeader);
+      const previewDetail = livePreview
+        ? `${selectedItem.livePaneId} · ${selectedItem.agentStatus ?? "unknown"} · ${screen?.totalRows ? `rows ${screen.start + 1}–${screen.end}/${screen.totalRows}` : "visible screen"}`
+        : `${selectedSession!.provider} · ${selectedItem.savedSession ? "Saved" : selectedItem.agentStatus ?? "Live"} · ${cleanText(selectedSession!.cwd)}`;
+      previewBox.add(new TextRenderable(renderer, { id: "session-detail", content: previewDetail, fg: selectedItem.agentStatus === "blocked" ? theme.error : theme.muted, height: 1, flexShrink: 0 }));
+      const expand = new TextRenderable(renderer, { id: "preview-expand", content: `${previewExpanded ? "Collapse" : "Expand"} · Ctrl+O  PgUp/Dn scroll`, fg: theme.muted, height: 1, flexShrink: 0 });
+      expand.onMouseUp = event => { if (event.button === 0) { interacted = true; previewExpanded = !previewExpanded; redraw(true); } };
+      previewBox.add(expand);
+      if (!preview.length) previewBox.add(new TextRenderable(renderer, { id: "preview-state", content: transcripts ? "No matching context for this session" : previewState || (livePreview ? "Pane screen is empty" : "No conversation text available"), fg: theme.muted, height: 1 }));
+      preview.forEach((line, index) => previewBox.add(new TextRenderable(renderer, {
         id: `transcript-excerpt-${index}`,
         content: new StyledText(line.map(part => part.match ? bold(fg(theme.accent)(part.text)) : fg(theme.text)(part.text))),
         height: 1, flexShrink: 0,
@@ -523,6 +624,21 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
       key.preventDefault();
       return startTranscriptSearch();
     }
+    if (!prompting() && key.ctrl && ["o", "y"].includes(key.name)) {
+      key.preventDefault();
+      interacted = true;
+      if (key.name === "y") previewEnabled = !previewEnabled;
+      else { previewEnabled = true; previewExpanded = !previewExpanded; }
+      return redraw(true);
+    }
+    const previewItem = visibleItems()[selected];
+    if (!prompting() && previewEnabled && ["pageup", "pagedown"].includes(key.name) && (previewItem?.session || previewItem?.livePaneId)) {
+      key.preventDefault();
+      interacted = true;
+      const fromBottom = !transcripts && !previewItem.savedSession && Boolean(previewItem.livePaneId);
+      previewOffset = Math.max(0, previewOffset + (key.name === "pageup" ? -5 : 5) * (fromBottom ? -1 : 1));
+      return redraw(true);
+    }
     if (["up", "down", "left", "right", "home", "end"].includes(key.name) || (key.ctrl && ["p", "n"].includes(key.name))) interacted = true;
     if (key.name === "escape") {
       if (prompting()) return cancelPrompt();
@@ -548,6 +664,7 @@ export function mountPalette(renderer: CliRenderer, allItems: PaletteItem[], dep
     if (key.name === "return" && !running) return select();
   });
 
+  renderer.on("resize", () => redraw(true));
   redraw();
   discoverSessions();
   return {
