@@ -237,7 +237,7 @@ bun scripts/preview-demo.ts
 - Search and resume saved OpenCode sessions, including opt-in transcript search.
 - Agent results use last activity for ordering and show relative activity times.
 - Agents in the workspace that opened Omni are marked with a blue dot and `current`.
-- Category labels show match counts (capped at 99+); the popup adapts to 80% of terminal height.
+- Category labels show match counts (capped at 99+); the popup uses 90% of the terminal size.
 
 ### 0.7.0
 
