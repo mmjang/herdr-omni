@@ -1,0 +1,442 @@
+{
+  "saved": [
+    {
+      "input": {
+        "provider": "codex",
+        "id": "019abc-def",
+        "title": "  Investigate\ncheckout  ",
+        "cwd": "/repo/shop",
+        "updatedAt": 1
+      },
+      "output": {
+        "id": "saved:agent:codex:019abc-def",
+        "title": "Investigate checkout - shop",
+        "category": "Agents",
+        "icon": "◈",
+        "description": "/repo/shop",
+        "aliases": [
+          "codex"
+        ],
+        "searchPaths": [
+          "/repo/shop"
+        ],
+        "shortcuts": [],
+        "priority": 5,
+        "session": {
+          "provider": "codex",
+          "id": "019abc-def",
+          "title": "  Investigate\ncheckout  ",
+          "cwd": "/repo/shop",
+          "updatedAt": 1
+        },
+        "savedSession": true,
+        "invocation": {
+          "kind": "resume-session",
+          "session": {
+            "provider": "codex",
+            "id": "019abc-def",
+            "title": "  Investigate\ncheckout  ",
+            "cwd": "/repo/shop",
+            "updatedAt": 1
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "provider": "claude",
+        "id": "same",
+        "title": "Checkout",
+        "cwd": "/repo/shop/",
+        "updatedAt": 0
+      },
+      "output": {
+        "id": "saved:agent:claude:same",
+        "title": "Checkout - shop",
+        "category": "Agents",
+        "icon": "◈",
+        "description": "/repo/shop/",
+        "aliases": [
+          "claude"
+        ],
+        "searchPaths": [
+          "/repo/shop/"
+        ],
+        "shortcuts": [],
+        "priority": 5,
+        "session": {
+          "provider": "claude",
+          "id": "same",
+          "title": "Checkout",
+          "cwd": "/repo/shop/",
+          "updatedAt": 0
+        },
+        "savedSession": true,
+        "invocation": {
+          "kind": "resume-session",
+          "session": {
+            "provider": "claude",
+            "id": "same",
+            "title": "Checkout",
+            "cwd": "/repo/shop/",
+            "updatedAt": 0
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "provider": "opencode",
+        "id": "windows",
+        "title": "A\tB",
+        "cwd": "C:\\repo\\shop",
+        "updatedAt": -3
+      },
+      "output": {
+        "id": "saved:agent:opencode:windows",
+        "title": "A B - C:\\repo\\shop",
+        "category": "Agents",
+        "icon": "◈",
+        "description": "C:\\repo\\shop",
+        "aliases": [
+          "opencode"
+        ],
+        "searchPaths": [
+          "C:\\repo\\shop"
+        ],
+        "shortcuts": [],
+        "priority": 5,
+        "session": {
+          "provider": "opencode",
+          "id": "windows",
+          "title": "A\tB",
+          "cwd": "C:\\repo\\shop",
+          "updatedAt": -3
+        },
+        "savedSession": true,
+        "invocation": {
+          "kind": "resume-session",
+          "session": {
+            "provider": "opencode",
+            "id": "windows",
+            "title": "A\tB",
+            "cwd": "C:\\repo\\shop",
+            "updatedAt": -3
+          }
+        }
+      }
+    },
+    {
+      "input": {
+        "provider": "claude",
+        "id": "missing",
+        "title": "Missing fields",
+        "cwd": "/",
+        "updatedAt": null
+      },
+      "output": {
+        "id": "saved:agent:claude:missing",
+        "title": "Missing fields - Unknown project",
+        "category": "Agents",
+        "icon": "◈",
+        "description": "/",
+        "aliases": [
+          "claude"
+        ],
+        "searchPaths": [
+          "/"
+        ],
+        "shortcuts": [],
+        "priority": 5,
+        "session": {
+          "provider": "claude",
+          "id": "missing",
+          "title": "Missing fields",
+          "cwd": "/",
+          "updatedAt": null
+        },
+        "savedSession": true,
+        "invocation": {
+          "kind": "resume-session",
+          "session": {
+            "provider": "claude",
+            "id": "missing",
+            "title": "Missing fields",
+            "cwd": "/",
+            "updatedAt": null
+          }
+        }
+      }
+    }
+  ],
+  "merge": [
+    {
+      "input": {
+        "live": [
+          {
+            "id": "live-one",
+            "title": "Live",
+            "lastActiveAt": null,
+            "session": {
+              "provider": "codex",
+              "id": "019abc-def",
+              "updatedAt": 1
+            }
+          },
+          {
+            "id": "live-two",
+            "title": "No session",
+            "lastActiveAt": 42
+          },
+          {
+            "id": "live-three",
+            "title": "Zero",
+            "session": {
+              "provider": "claude",
+              "id": "same",
+              "updatedAt": 0
+            }
+          },
+          {
+            "id": "live-four",
+            "title": "Existing",
+            "lastActiveAt": 500,
+            "session": {
+              "provider": "claude",
+              "id": "other",
+              "updatedAt": 2
+            }
+          }
+        ],
+        "sessions": [
+          {
+            "provider": "codex",
+            "id": "019abc-def",
+            "title": "  Investigate\ncheckout  ",
+            "cwd": "/repo/shop",
+            "updatedAt": 1
+          },
+          {
+            "provider": "claude",
+            "id": "same",
+            "title": "Checkout",
+            "cwd": "/repo/shop/",
+            "updatedAt": 0
+          },
+          {
+            "provider": "claude",
+            "id": "same",
+            "title": "Checkout duplicate",
+            "cwd": "/repo/shop/",
+            "updatedAt": 9
+          },
+          {
+            "provider": "opencode",
+            "id": "new",
+            "title": "New",
+            "cwd": "/repo/new",
+            "updatedAt": 4
+          }
+        ]
+      },
+      "output": [
+        {
+          "id": "live-one",
+          "title": "Live",
+          "lastActiveAt": 1,
+          "session": {
+            "provider": "codex",
+            "id": "019abc-def",
+            "updatedAt": 1
+          }
+        },
+        {
+          "id": "live-two",
+          "title": "No session",
+          "lastActiveAt": 42
+        },
+        {
+          "id": "live-three",
+          "title": "Zero",
+          "session": {
+            "provider": "claude",
+            "id": "same",
+            "updatedAt": 0
+          },
+          "lastActiveAt": 9
+        },
+        {
+          "id": "live-four",
+          "title": "Existing",
+          "lastActiveAt": 500,
+          "session": {
+            "provider": "claude",
+            "id": "other",
+            "updatedAt": 2
+          }
+        },
+        {
+          "id": "saved:agent:opencode:new",
+          "title": "New - new",
+          "category": "Agents",
+          "icon": "◈",
+          "description": "/repo/new",
+          "aliases": [
+            "opencode"
+          ],
+          "searchPaths": [
+            "/repo/new"
+          ],
+          "shortcuts": [],
+          "priority": 5,
+          "session": {
+            "provider": "opencode",
+            "id": "new",
+            "title": "New",
+            "cwd": "/repo/new",
+            "updatedAt": 4
+          },
+          "savedSession": true,
+          "invocation": {
+            "kind": "resume-session",
+            "session": {
+              "provider": "opencode",
+              "id": "new",
+              "title": "New",
+              "cwd": "/repo/new",
+              "updatedAt": 4
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "terms": [
+    {
+      "query": "payment \"callback timeout\"",
+      "output": [
+        "payment \"callback timeout\""
+      ]
+    },
+    {
+      "query": "",
+      "output": []
+    },
+    {
+      "query": "  Fix\tit\nNow  ",
+      "output": [
+        "fix it now"
+      ]
+    },
+    {
+      "query": "支付回调",
+      "output": [
+        "支付回调"
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "input": {
+        "messages": [
+          "Payment CALLBACK timeout in /api/v2"
+        ],
+        "query": "payment callback timeout"
+      },
+      "output": "Payment CALLBACK timeout in /api/v2"
+    },
+    {
+      "input": {
+        "messages": [
+          "callback eventually hit timeout"
+        ],
+        "query": "callback timeout"
+      },
+      "output": null
+    },
+    {
+      "input": {
+        "messages": [
+          "say \\\"fix it now\\\""
+        ],
+        "query": "\\\"fix it now\\\""
+      },
+      "output": "say \\\"fix it now\\\""
+    },
+    {
+      "input": {
+        "messages": [
+          "say fix it now"
+        ],
+        "query": "\\\"fix it now\\\""
+      },
+      "output": null
+    },
+    {
+      "input": {
+        "messages": [
+          "Previous discussion.",
+          "The needle happened.",
+          "Following explanation."
+        ],
+        "query": "needle"
+      },
+      "output": "Previous discussion.\n\nThe needle happened.\n\nFollowing explanation."
+    },
+    {
+      "input": {
+        "messages": [
+          "Heading\\r\\n\\r\\n```ts\\r\\n\\tconst needle = 1;\\r\\n```"
+        ],
+        "query": "needle"
+      },
+      "output": "Heading\\r\\n\\r\\n```ts\\r\\n\\tconst needle = 1;\\r\\n```"
+    },
+    {
+      "input": {
+        "messages": [
+          "{\"first\":\"hello\",\"second\":\"needle\",\"third\":\"world\"}"
+        ],
+        "query": "needle"
+      },
+      "output": "{\n  \"first\": \"hello\",\n  \"second\": \"needle\",\n  \"third\": \"world\"\n}"
+    },
+    {
+      "input": {
+        "messages": [
+          "我们处理支付回调失败"
+        ],
+        "query": "支付回调"
+      },
+      "output": "我们处理支付回调失败"
+    },
+    {
+      "input": {
+        "messages": [
+          "payment",
+          "timeout"
+        ],
+        "query": "payment timeout"
+      },
+      "output": null
+    },
+    {
+      "input": {
+        "messages": [
+          "hello\\u001b world"
+        ],
+        "query": "world"
+      },
+      "output": "hello\\u001b world"
+    },
+    {
+      "input": {
+        "messages": [
+          "前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 支付回调🙂 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 "
+        ],
+        "query": "支付回调"
+      },
+      "output": "…前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 前文 支付回调🙂 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文 后文"
+    }
+  ]
+}

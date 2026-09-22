@@ -1,0 +1,237 @@
+{
+  "items": [
+    {
+      "id": "live:workspace:demo",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "1 tabs · 2 panes · /projects/shop",
+      "icon": "◇",
+      "aliases": [],
+      "searchTitle": "Shop",
+      "searchPaths": [
+        "/projects/shop"
+      ],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "workspace",
+          "focus",
+          "demo"
+        ]
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "demo",
+        "paths": [
+          "/projects/shop"
+        ],
+        "tabs": [
+          {
+            "id": "demo:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "demo:p1",
+                "label": "Payment agent",
+                "cwd": "/projects/shop",
+                "agent": "claude",
+                "status": "blocked",
+                "focused": true
+              },
+              {
+                "id": "demo:p2",
+                "label": "Build terminal",
+                "cwd": "/projects/shop",
+                "focused": false
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      },
+      "currentWorkspace": true
+    },
+    {
+      "id": "live:tab:demo:t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "2 panes · ",
+      "icon": "▣",
+      "aliases": [],
+      "searchTitle": "Shop → Development",
+      "searchPaths": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "tab",
+          "focus",
+          "demo:t1"
+        ]
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "demo",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "demo:p1",
+            "label": "Payment agent",
+            "cwd": "/projects/shop",
+            "agent": "claude",
+            "status": "blocked",
+            "focused": true
+          },
+          {
+            "id": "demo:p2",
+            "label": "Build terminal",
+            "cwd": "/projects/shop",
+            "focused": false
+          }
+        ]
+      }
+    },
+    {
+      "id": "demo:live",
+      "title": "修复支付回调重复处理 - shop",
+      "category": "Agents",
+      "icon": "◈",
+      "description": "/projects/shop",
+      "aliases": [
+        "claude"
+      ],
+      "searchPaths": [
+        "/projects/shop"
+      ],
+      "shortcuts": [],
+      "priority": 0,
+      "session": {
+        "provider": "claude",
+        "id": "demo-0",
+        "title": "修复支付回调重复处理",
+        "cwd": "/projects/shop",
+        "updatedAt": 1790088470431
+      },
+      "savedSession": false,
+      "invocation": {
+        "kind": "resume-session",
+        "session": {
+          "provider": "claude",
+          "id": "demo-0",
+          "title": "修复支付回调重复处理",
+          "cwd": "/projects/shop",
+          "updatedAt": 1790088470431
+        }
+      },
+      "livePaneId": "demo:p1",
+      "agentStatus": "blocked"
+    },
+    {
+      "id": "saved:agent:codex:demo-1",
+      "title": "设计会话搜索预览 - herdr-omni",
+      "category": "Agents",
+      "icon": "◈",
+      "description": "/projects/herdr-omni",
+      "aliases": [
+        "codex"
+      ],
+      "searchPaths": [
+        "/projects/herdr-omni"
+      ],
+      "shortcuts": [],
+      "priority": 5,
+      "session": {
+        "provider": "codex",
+        "id": "demo-1",
+        "title": "设计会话搜索预览",
+        "cwd": "/projects/herdr-omni",
+        "updatedAt": 1790088410431
+      },
+      "savedSession": true,
+      "invocation": {
+        "kind": "resume-session",
+        "session": {
+          "provider": "codex",
+          "id": "demo-1",
+          "title": "设计会话搜索预览",
+          "cwd": "/projects/herdr-omni",
+          "updatedAt": 1790088410431
+        }
+      }
+    },
+    {
+      "id": "saved:agent:opencode:demo-2",
+      "title": "排查构建失败 - herdr-omni",
+      "category": "Agents",
+      "icon": "◈",
+      "description": "/projects/herdr-omni",
+      "aliases": [
+        "opencode"
+      ],
+      "searchPaths": [
+        "/projects/herdr-omni"
+      ],
+      "shortcuts": [],
+      "priority": 5,
+      "session": {
+        "provider": "opencode",
+        "id": "demo-2",
+        "title": "排查构建失败",
+        "cwd": "/projects/herdr-omni",
+        "updatedAt": 1790088350431
+      },
+      "savedSession": true,
+      "invocation": {
+        "kind": "resume-session",
+        "session": {
+          "provider": "opencode",
+          "id": "demo-2",
+          "title": "排查构建失败",
+          "cwd": "/projects/herdr-omni",
+          "updatedAt": 1790088350431
+        }
+      }
+    }
+  ],
+  "sessions": [
+    {
+      "provider": "claude",
+      "id": "demo-0",
+      "title": "修复支付回调重复处理",
+      "cwd": "/projects/shop",
+      "updatedAt": 1790088470431
+    },
+    {
+      "provider": "codex",
+      "id": "demo-1",
+      "title": "设计会话搜索预览",
+      "cwd": "/projects/herdr-omni",
+      "updatedAt": 1790088410431
+    },
+    {
+      "provider": "opencode",
+      "id": "demo-2",
+      "title": "排查构建失败",
+      "cwd": "/projects/herdr-omni",
+      "updatedAt": 1790088350431
+    }
+  ],
+  "examples": [
+    {
+      "title": "修复支付回调重复处理",
+      "provider": "claude",
+      "text": "user: 支付成功后，偶尔会生成两条订单。帮我查一下回调的幂等处理。\n\nassistant: 已定位到并发回调先查询、后写入造成的竞争条件。\n\n修改方案：\n  1. 使用支付流水号作为唯一键。\n  2. 在同一个事务中创建订单和记录回调。\n  3. 重复回调直接返回已有订单。\n\n验证结果：重复请求与并发请求均只生成一条订单。"
+    },
+    {
+      "title": "设计会话搜索预览",
+      "provider": "codex",
+      "text": "user: 选中搜索结果时，能不能先看看最近聊了什么？\n\nassistant: 可以。宽窗口使用右侧详情，窄窗口使用底部预览。\n\n普通搜索展示最近对话，内容搜索展示命中位置。选中停留后才加载内容，快速移动时取消旧请求。\n\nCtrl+O 展开，PageUp / PageDown 滚动，Ctrl+Y 隐藏。"
+    },
+    {
+      "title": "排查构建失败",
+      "provider": "opencode",
+      "text": "message: CI 在类型检查阶段失败，本地构建正常。\n\nmessage: 原因是锁文件与依赖声明不同步。更新依赖后，类型检查与测试已通过，等待检查变更。"
+    }
+  ]
+}

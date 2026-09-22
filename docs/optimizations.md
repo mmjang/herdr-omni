@@ -1,3 +1,5 @@
+> Historical notes for the TypeScript implementation. The Rust implementation lives in `src/sessions.rs`, `src/search.rs`, `src/backend.rs`, and `src/ui.rs`.
+
 # 优化方案记录
 
 本文记录经过验证的优化方案。每条包含：问题、实测数据、方案、改动点、风险。

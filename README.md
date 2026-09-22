@@ -23,7 +23,10 @@ Remember the conversation, not its name? Press **Ctrl+F** to search session cont
 
 <img width="2632" height="1876" alt="image" src="https://github.com/user-attachments/assets/550ce0e4-7512-45d0-861c-b686c599ee2b" />
 
-Built with Bun and OpenTUI. Forked from
+Rewritten in Rust with Ratatui, preserving the familiar search, sorting, grouping,
+and terminal UI. Installs as a native binary—no Rust or Bun required. Optional [ripgrep](https://github.com/BurntSushi/ripgrep)
+accelerates transcript searches; searches fall back to provider reads when it is unavailable.
+Forked from
 [Herdr Palette](https://github.com/cesarferreira/herdr-palette) by
 [César Ferreira](https://github.com/cesarferreira).
 
@@ -40,9 +43,8 @@ Please install and configure Herdr Omni for me:
 
 1. Check the OS: Herdr Omni supports macOS and Linux only. If this is
    Windows or another unsupported OS, stop and explain that limitation.
-   Check that Herdr and Bun are available. If Bun is missing, install it
-   using the official instructions at https://bun.sh and make sure it is
-   on the PATH available to Herdr.
+   Check that Herdr is available, along with curl or wget and sha256sum
+   or shasum. Rust, Cargo, and Bun are not required.
 2. Run `herdr plugin install mmjang/herdr-omni`.
 3. Add the following binding to ~/.config/herdr/config.toml (the default).
    If HERDR_CONFIG_PATH is set, use that path instead; `herdr --help`
@@ -66,14 +68,20 @@ Please execute these steps, troubleshoot any errors, and report the result.
 
 ### Manual install
 
-Install [Herdr](https://herdr.dev) and [Bun](https://bun.sh), then run:
+Install [Herdr](https://herdr.dev), then run:
 
 ```sh
 herdr plugin install mmjang/herdr-omni
 ```
 
-Herdr downloads the plugin and runs its dependency installation. Follow the
-prompts, then configure the shortcut under **Open the palette** below.
+Herdr downloads the plugin and its matching prebuilt executable from GitHub
+Releases, verifies its SHA-256 checksum, and installs it locally. **No Rust
+toolchain or Bun runtime is needed.** macOS and Linux binaries are provided for
+Intel/AMD x86-64 and ARM64; Linux binaries use static musl linking. The installer
+needs `curl` or `wget` and `sha256sum` or `shasum`.
+
+If an asset is unavailable or fails verification, installation stops without
+compiling from source. Configure the shortcut under **Open the palette** below.
 Use `herdr plugin list` to confirm that `herdr-omni` is installed and enabled.
 
 #### Open the palette
@@ -160,26 +168,35 @@ Reopen Omni after updating. Local checkouts and pinned installs are left alone.
 
 ## Local development
 
-To work on the plugin source, clone the repository and link your checkout:
+Source development requires [Rust](https://rustup.rs). Clone the repository,
+build locally, and link your checkout:
 
 ```sh
 git clone https://github.com/mmjang/herdr-omni.git
 cd herdr-omni
-bun install
-herdr plugin link .
+make build
+HERDR_OMNI_BUILD_FROM_SOURCE=1 herdr plugin link .
 herdr plugin list
 ```
 
 If you already have a checkout, run the last three commands from its root.
-Keep the checkout in place: Herdr runs the linked plugin from this directory.
+Keep the checkout in place: Herdr runs `bin/herdr-omni` from this directory.
+After source changes, run `make build` again. The environment flag explicitly
+selects a source build; normal plugin installs always use release binaries.
 
 Try the preview UI with sample conversations (no agent or Herdr session needed):
 
 ```sh
-bun scripts/preview-demo.ts
+cargo run -- --demo
 ```
 
 ## Release notes
+
+### 0.16.0
+
+- Rewritten in Rust and Ratatui, with search results, ordering, grouping, and UI checked against the TypeScript version.
+- Prebuilt macOS and Linux binaries for x86-64 and ARM64; installation verifies SHA-256 and requires no Rust or Bun.
+- More robust provider cancellation, bounded transcript reads, and terminal resize handling.
 
 ### 0.14.0
 
@@ -249,13 +266,21 @@ bun scripts/preview-demo.ts
 ## Releasing
 
 Add a short entry under **Release notes** first, then commit your changes.
-Validate the project, bump the minor version, commit, tag, and push:
+Validate the project, bump the minor version in both manifests, commit, tag, and push:
 
 ```sh
 make release
 ```
 
 Use `make release LEVEL=patch` or `LEVEL=major` for a different bump.
+For a local version bump without publishing, run
+`cargo run --bin release-tool -- bump minor`.
+
+Tag CI validates the source, builds all four platform binaries, and publishes
+them with SHA-256 checksum files. It creates the release only after every build
+succeeds. A checkout using a new version cannot use the default binary installer
+until that version’s release assets have been published; use the explicit source
+build for unreleased development.
 
 ## Credits
 

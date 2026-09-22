@@ -1,0 +1,4362 @@
+{
+  "items": [
+    {
+      "id": "ws-current",
+      "title": "Current checkout",
+      "category": "Workspace",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "currentWorkspace": true,
+      "lastVisitedAt": 900
+    },
+    {
+      "id": "ws-old",
+      "title": "Older checkout",
+      "category": "Workspace",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "currentWorkspace": false,
+      "lastVisitedAt": 100
+    },
+    {
+      "id": "wt-feature",
+      "title": "payment-fix",
+      "category": "Worktrees",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "searchPaths": [
+        "/repo/feature-payments"
+      ],
+      "lastVisitedAt": 500
+    },
+    {
+      "id": "tab-one",
+      "title": "Project → one",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "tab-two",
+      "title": "Project → two",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "tab-three",
+      "title": "Project → three",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "live:agent:old",
+      "title": "Review checkout",
+      "category": "Agents",
+      "description": "",
+      "icon": "•",
+      "aliases": [
+        "codex"
+      ],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "lastActiveAt": 100,
+      "priority": 0,
+      "agentStatus": "blocked",
+      "searchPaths": [
+        "/repo/shop"
+      ]
+    },
+    {
+      "id": "live:agent:new",
+      "title": "Review checkout",
+      "category": "Agents",
+      "description": "",
+      "icon": "•",
+      "aliases": [
+        "claude"
+      ],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "lastActiveAt": 500,
+      "priority": 4,
+      "agentStatus": "idle",
+      "searchPaths": [
+        "/repo/shop"
+      ]
+    },
+    {
+      "id": "saved-agent",
+      "title": "Saved conversation",
+      "category": "Agents",
+      "description": "",
+      "icon": "•",
+      "aliases": [
+        "opencode"
+      ],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "savedSession": true,
+      "session": {
+        "provider": "opencode",
+        "id": "ses_abc123",
+        "updatedAt": 300
+      },
+      "searchPaths": [
+        "/repo/archive"
+      ]
+    },
+    {
+      "id": "action-deploy",
+      "title": "Deploy service",
+      "category": "Actions",
+      "description": "",
+      "icon": "•",
+      "aliases": [
+        "ship",
+        "release"
+      ],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "action-hidden",
+      "title": "Visible action",
+      "category": "Actions",
+      "description": "deploy prose only",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [
+        "ctrl+shift+x"
+      ],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "pane-deploy",
+      "title": "Deploy pane",
+      "category": "Panes",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "herdr-deploy",
+      "title": "Deploy Herdr",
+      "category": "Herdr",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "custom-deploy",
+      "title": "Deploy custom",
+      "category": "Custom",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "unicode-rocket",
+      "title": "🚀 Review",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "unicode-cafe",
+      "title": "café",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "search-title-empty",
+      "title": "Visible Title",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "searchTitle": ""
+    },
+    {
+      "id": "search-title-semantic",
+      "title": "fallback-123",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "searchTitle": "Semantic name"
+    },
+    {
+      "id": "description-only",
+      "title": "Plain item",
+      "category": "Tabs",
+      "description": "needle-description",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [
+        "needle-shortcut"
+      ],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "tie-first",
+      "title": "Same title",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    },
+    {
+      "id": "tie-second",
+      "title": "Same title",
+      "category": "Tabs",
+      "description": "",
+      "icon": "•",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      }
+    }
+  ],
+  "history": {
+    "tab-one": 20,
+    "tab-two": 80,
+    "tab-three": 10,
+    "action-deploy": 9999,
+    "tie-second": 50
+  },
+  "cases": [
+    {
+      "query": "",
+      "category": "All",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        },
+        {
+          "id": "tab-two",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-second",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-one",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-three",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-cafe",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-empty",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-semantic",
+          "section": "Tabs"
+        },
+        {
+          "id": "description-only",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-first",
+          "section": "Tabs"
+        },
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        },
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        },
+        {
+          "id": "pane-deploy",
+          "section": "Panes"
+        },
+        {
+          "id": "herdr-deploy",
+          "section": "Herdr"
+        },
+        {
+          "id": "custom-deploy",
+          "section": "Custom"
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "category": "All",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        },
+        {
+          "id": "tab-two",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-second",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-one",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-three",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-cafe",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-empty",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-semantic",
+          "section": "Tabs"
+        },
+        {
+          "id": "description-only",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-first",
+          "section": "Tabs"
+        },
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        },
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        },
+        {
+          "id": "pane-deploy",
+          "section": "Panes"
+        },
+        {
+          "id": "herdr-deploy",
+          "section": "Herdr"
+        },
+        {
+          "id": "custom-deploy",
+          "section": "Custom"
+        }
+      ]
+    },
+    {
+      "query": "@",
+      "category": "All",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": "@  ",
+      "category": "All",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": ">",
+      "category": "All",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": ">  ",
+      "category": "All",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": ":",
+      "category": "All",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": "review",
+      "category": "All",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        },
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": ">review",
+      "category": "All",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": "> codex",
+      "category": "All",
+      "expected": [
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": "@checkout",
+      "category": "All",
+      "expected": [
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": "@ feature",
+      "category": "All",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": ":deploy",
+      "category": "All",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": ": ship",
+      "category": "All",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "All",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "pane-deploy",
+          "section": "Panes"
+        },
+        {
+          "id": "herdr-deploy",
+          "section": "Herdr"
+        },
+        {
+          "id": "custom-deploy",
+          "section": "Custom"
+        }
+      ]
+    },
+    {
+      "query": "needle-description",
+      "category": "All",
+      "expected": []
+    },
+    {
+      "query": "needle-shortcut",
+      "category": "All",
+      "expected": []
+    },
+    {
+      "query": "visible",
+      "category": "All",
+      "expected": [
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": "semantic",
+      "category": "All",
+      "expected": [
+        {
+          "id": "search-title-semantic",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "ses_abc",
+      "category": "All",
+      "expected": [
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": "ord",
+      "category": "All",
+      "expected": [
+        {
+          "id": "herdr-deploy",
+          "section": "Herdr"
+        }
+      ]
+    },
+    {
+      "query": "cafe",
+      "category": "All",
+      "expected": []
+    },
+    {
+      "query": "🚀 r",
+      "category": "All",
+      "expected": [
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "same",
+      "category": "All",
+      "expected": [
+        {
+          "id": "tie-second",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-first",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-semantic",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "review",
+      "category": "Agents",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": "review",
+      "category": "Workspace",
+      "expected": []
+    },
+    {
+      "query": "review",
+      "category": "Tabs",
+      "expected": [
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "review",
+      "category": "Actions",
+      "expected": []
+    },
+    {
+      "query": "",
+      "category": "Workspace",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": "",
+      "category": "Agents",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": "",
+      "category": "Tabs",
+      "expected": [
+        {
+          "id": "tab-two",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-second",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-one",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-three",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-rocket",
+          "section": "Tabs"
+        },
+        {
+          "id": "unicode-cafe",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-empty",
+          "section": "Tabs"
+        },
+        {
+          "id": "search-title-semantic",
+          "section": "Tabs"
+        },
+        {
+          "id": "description-only",
+          "section": "Tabs"
+        },
+        {
+          "id": "tie-first",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "",
+      "category": "Actions",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": "@",
+      "category": "Workspace",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-old",
+          "section": "Workspace"
+        },
+        {
+          "id": "ws-current",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": ">",
+      "category": "Agents",
+      "expected": [
+        {
+          "id": "live:agent:new",
+          "section": "Agents"
+        },
+        {
+          "id": "saved-agent",
+          "section": "Agents"
+        },
+        {
+          "id": "live:agent:old",
+          "section": "Agents"
+        }
+      ]
+    },
+    {
+      "query": ":",
+      "category": "Actions",
+      "expected": [
+        {
+          "id": "action-deploy",
+          "section": "Actions"
+        },
+        {
+          "id": "action-hidden",
+          "section": "Actions"
+        }
+      ]
+    },
+    {
+      "query": "project",
+      "category": "Tabs",
+      "expected": [
+        {
+          "id": "tab-two",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-one",
+          "section": "Tabs"
+        },
+        {
+          "id": "tab-three",
+          "section": "Tabs"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "Panes",
+      "expected": [
+        {
+          "id": "pane-deploy",
+          "section": "Panes"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "Herdr",
+      "expected": [
+        {
+          "id": "herdr-deploy",
+          "section": "Herdr"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "Custom",
+      "expected": [
+        {
+          "id": "custom-deploy",
+          "section": "Custom"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "Workspace",
+      "expected": []
+    },
+    {
+      "query": "",
+      "category": "Worktrees",
+      "expected": [
+        {
+          "id": "wt-feature",
+          "section": "Workspace"
+        }
+      ]
+    },
+    {
+      "query": "deploy",
+      "category": "Transcript matches",
+      "expected": []
+    }
+  ],
+  "random": {
+    "pool": [
+      {
+        "id": "r-ws-current",
+        "title": "Current 🚀 workspace",
+        "category": "Workspace",
+        "aliases": [],
+        "currentWorkspace": true,
+        "lastVisitedAt": 900
+      },
+      {
+        "id": "r-ws-old",
+        "title": "Older checkout",
+        "category": "Workspace",
+        "aliases": [],
+        "lastVisitedAt": 100
+      },
+      {
+        "id": "r-wt",
+        "title": "feature/支付",
+        "category": "Worktrees",
+        "aliases": [],
+        "searchPaths": [
+          "/repo/feature-payment"
+        ]
+      },
+      {
+        "id": "r-tab-one",
+        "title": "Project → one",
+        "category": "Tabs",
+        "aliases": []
+      },
+      {
+        "id": "r-tab-two",
+        "title": "Project → two",
+        "category": "Tabs",
+        "aliases": [],
+        "lastVisitedAt": "bad"
+      },
+      {
+        "id": "r-tab-emoji",
+        "title": "👩‍💻 Dev",
+        "category": "Tabs",
+        "aliases": [],
+        "searchTitle": "Developer"
+      },
+      {
+        "id": "r-agent-live",
+        "title": "Review checkout",
+        "category": "Agents",
+        "aliases": [
+          "codex"
+        ],
+        "lastActiveAt": 800,
+        "priority": 0
+      },
+      {
+        "id": "live:agent:r-idle",
+        "title": "Review checkout",
+        "category": "Agents",
+        "aliases": [
+          "claude"
+        ],
+        "lastActiveAt": 200,
+        "priority": 4
+      },
+      {
+        "id": "r-saved",
+        "title": "Saved Straße",
+        "category": "Agents",
+        "aliases": [
+          "opencode"
+        ],
+        "savedSession": true,
+        "session": {
+          "provider": "opencode",
+          "id": "ses_random",
+          "updatedAt": 500
+        }
+      },
+      {
+        "id": "r-action",
+        "title": "Deploy service",
+        "category": "Actions",
+        "aliases": [
+          "ship",
+          "release"
+        ]
+      },
+      {
+        "id": "r-action-empty",
+        "title": "Visible action",
+        "category": "Actions",
+        "aliases": [],
+        "description": "secret prose",
+        "shortcuts": [
+          "secret shortcut"
+        ]
+      },
+      {
+        "id": "r-pane",
+        "title": "Deploy pane",
+        "category": "Panes",
+        "aliases": []
+      },
+      {
+        "id": "r-herdr",
+        "title": "Deploy Herdr",
+        "category": "Herdr",
+        "aliases": []
+      },
+      {
+        "id": "r-custom",
+        "title": "Deploy custom",
+        "category": "Custom",
+        "aliases": []
+      },
+      {
+        "id": "r-unknown",
+        "title": "Deploy unknown",
+        "category": "Other",
+        "aliases": []
+      },
+      {
+        "id": "r-empty-search",
+        "title": "Display Only",
+        "category": "Tabs",
+        "aliases": [],
+        "searchTitle": ""
+      },
+      {
+        "id": "r-null-search",
+        "title": "Null fallback",
+        "category": "Tabs",
+        "aliases": [],
+        "searchTitle": null
+      },
+      {
+        "id": "r-path",
+        "title": "Checkout",
+        "category": "Tabs",
+        "aliases": [],
+        "searchPaths": [
+          "/Users/feature/checkout"
+        ]
+      },
+      {
+        "id": "r-accent",
+        "title": "İstanbul naïve",
+        "category": "Tabs",
+        "aliases": []
+      },
+      {
+        "id": "r-chinese",
+        "title": "中文支付",
+        "category": "Workspace",
+        "aliases": [],
+        "lastVisitedAt": 50
+      },
+      {
+        "id": "r-surrogate",
+        "title": "𐐀 Rocket",
+        "category": "Tabs",
+        "aliases": []
+      },
+      {
+        "id": "r-tie-a",
+        "title": "Repeat title",
+        "category": "Tabs",
+        "aliases": []
+      },
+      {
+        "id": "r-tie-b",
+        "title": "Repeat title",
+        "category": "Tabs",
+        "aliases": [],
+        "priority": 99
+      }
+    ],
+    "scenarios": [
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": -457,
+          "r-tab-one": 913,
+          "r-tab-emoji": 219,
+          "r-agent-live": 437,
+          "r-action": -401,
+          "r-action-empty": -359,
+          "r-pane": -61,
+          "r-custom": 685,
+          "r-unknown": -57,
+          "r-empty-search": 145,
+          "r-path": -277,
+          "r-accent": 261,
+          "r-chinese": 1375,
+          "r-tie-a": 1001,
+          "r-tie-b": 227
+        },
+        "cases": [
+          {
+            "query": "@支付",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 477,
+          "r-tab-one": 7,
+          "r-tab-two": -479,
+          "r-tab-emoji": -261,
+          "r-saved": 1269,
+          "r-action": 1407,
+          "r-pane": 1369,
+          "r-herdr": 1251,
+          "r-custom": 1469,
+          "r-empty-search": -121,
+          "r-null-search": 369,
+          "r-path": -261,
+          "r-chinese": 197,
+          "r-surrogate": 863,
+          "r-tie-a": -39
+        },
+        "cases": [
+          {
+            "query": "支付",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": "repeat",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": "ord",
+            "category": "Workspace",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 403,
+          "r-tab-one": -163,
+          "r-tab-emoji": 551,
+          "r-agent-live": 417,
+          "r-action": -197,
+          "r-action-empty": 965,
+          "r-pane": 1327,
+          "r-custom": 41,
+          "r-unknown": 771,
+          "r-empty-search": 813,
+          "r-path": 871,
+          "r-accent": 1217,
+          "r-chinese": 43,
+          "r-tie-a": -443,
+          "r-tie-b": 191
+        },
+        "cases": [
+          {
+            "query": "@saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": -151,
+          "r-tab-one": 915,
+          "r-tab-two": 1277,
+          "r-tab-emoji": 39,
+          "r-saved": 1185,
+          "r-action": 1035,
+          "r-pane": 1045,
+          "r-herdr": -497,
+          "r-custom": 1193,
+          "r-empty-search": 979,
+          "r-null-search": 461,
+          "r-path": 759,
+          "r-chinese": -495,
+          "r-surrogate": 731,
+          "r-tie-a": -203
+        },
+        "cases": [
+          {
+            "query": "ord",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "saved",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Tabs",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 399,
+          "r-tab-one": 345,
+          "r-tab-emoji": 563,
+          "r-agent-live": 157,
+          "r-action": -393,
+          "r-action-empty": 369,
+          "r-pane": 1403,
+          "r-custom": 917,
+          "r-unknown": -385,
+          "r-empty-search": 409,
+          "r-path": 723,
+          "r-accent": -179,
+          "r-chinese": -297,
+          "r-tie-a": 817,
+          "r-tie-b": 1403
+        },
+        "cases": [
+          {
+            "query": "@review",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 293,
+          "r-tab-one": 239,
+          "r-tab-two": 1241,
+          "r-tab-emoji": 851,
+          "r-saved": 397,
+          "r-action": 55,
+          "r-pane": -191,
+          "r-herdr": 1019,
+          "r-custom": 437,
+          "r-empty-search": -209,
+          "r-null-search": -119,
+          "r-path": 131,
+          "r-chinese": 669,
+          "r-surrogate": 391,
+          "r-tie-a": 1025
+        },
+        "cases": [
+          {
+            "query": "display",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-ws-current",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "支付",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 523,
+          "r-tab-one": 805,
+          "r-tab-emoji": -193,
+          "r-agent-live": -455,
+          "r-action": 163,
+          "r-action-empty": -371,
+          "r-pane": 311,
+          "r-custom": 161,
+          "r-unknown": -101,
+          "r-empty-search": 501,
+          "r-path": 959,
+          "r-accent": 409,
+          "r-chinese": 259,
+          "r-tie-a": 413,
+          "r-tie-b": -313
+        },
+        "cases": [
+          {
+            "query": "@repeat",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1393,
+          "r-tab-one": 1227,
+          "r-tab-two": 1413,
+          "r-tab-emoji": -353,
+          "r-saved": 697,
+          "r-action": -141,
+          "r-pane": 125,
+          "r-herdr": -473,
+          "r-custom": 1233,
+          "r-empty-search": 59,
+          "r-null-search": 1013,
+          "r-path": 1055,
+          "r-chinese": -39,
+          "r-surrogate": 1187,
+          "r-tie-a": 93
+        },
+        "cases": [
+          {
+            "query": "display",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "naive",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Panes",
+            "expected": [
+              {
+                "id": "r-pane",
+                "section": "Panes"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1255,
+          "r-tab-one": 609,
+          "r-tab-emoji": 747,
+          "r-agent-live": 261,
+          "r-action": 1135,
+          "r-action-empty": 1241,
+          "r-pane": 739,
+          "r-custom": -163,
+          "r-unknown": 247,
+          "r-empty-search": 1025,
+          "r-path": 795,
+          "r-accent": 997,
+          "r-chinese": 1487,
+          "r-tie-a": 1193,
+          "r-tie-b": 1299
+        },
+        "cases": [
+          {
+            "query": "@feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 461,
+          "r-tab-one": 1479,
+          "r-tab-two": 705,
+          "r-tab-emoji": 955,
+          "r-saved": 1029,
+          "r-action": 943,
+          "r-pane": 1417,
+          "r-herdr": 435,
+          "r-custom": 397,
+          "r-empty-search": 503,
+          "r-null-search": 545,
+          "r-path": 443,
+          "r-chinese": 821,
+          "r-surrogate": 527,
+          "r-tie-a": 377
+        },
+        "cases": [
+          {
+            "query": "支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1347,
+          "r-tab-one": 893,
+          "r-tab-emoji": 1367,
+          "r-agent-live": -351,
+          "r-action": 1403,
+          "r-action-empty": 677,
+          "r-pane": 431,
+          "r-custom": 1017,
+          "r-unknown": -13,
+          "r-empty-search": 493,
+          "r-path": -313,
+          "r-accent": 257,
+          "r-chinese": 699,
+          "r-tie-a": 53,
+          "r-tie-b": -225
+        },
+        "cases": [
+          {
+            "query": "@repeat",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@saved",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Tabs",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1017,
+          "r-tab-one": 1059,
+          "r-tab-two": 493,
+          "r-tab-emoji": -41,
+          "r-saved": 577,
+          "r-action": 715,
+          "r-pane": 485,
+          "r-herdr": 815,
+          "r-custom": 201,
+          "r-empty-search": 531,
+          "r-null-search": 461,
+          "r-path": -169,
+          "r-chinese": 1489,
+          "r-surrogate": 267,
+          "r-tie-a": -427
+        },
+        "cases": [
+          {
+            "query": "naive",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 127,
+          "r-tab-one": 969,
+          "r-tab-emoji": 787,
+          "r-agent-live": 573,
+          "r-action": 871,
+          "r-action-empty": 833,
+          "r-pane": -245,
+          "r-custom": 1461,
+          "r-unknown": 671,
+          "r-empty-search": 649,
+          "r-path": -125,
+          "r-accent": 141,
+          "r-chinese": 295,
+          "r-tie-a": 993,
+          "r-tie-b": 251
+        },
+        "cases": [
+          {
+            "query": "@review",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@display",
+            "category": "Workspace",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 53,
+          "r-tab-one": -257,
+          "r-tab-two": -375,
+          "r-tab-emoji": -349,
+          "r-saved": 1069,
+          "r-action": 759,
+          "r-pane": 193,
+          "r-herdr": 907,
+          "r-custom": -395,
+          "r-empty-search": 991,
+          "r-null-search": -439,
+          "r-path": 1075,
+          "r-chinese": 397,
+          "r-surrogate": 1047,
+          "r-tie-a": 353
+        },
+        "cases": [
+          {
+            "query": "naive",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Workspace",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 555,
+          "r-tab-one": -43,
+          "r-tab-emoji": -481,
+          "r-agent-live": 1289,
+          "r-action": 1363,
+          "r-action-empty": 173,
+          "r-pane": 711,
+          "r-custom": 497,
+          "r-unknown": 875,
+          "r-empty-search": 1205,
+          "r-path": 1279,
+          "r-accent": 921,
+          "r-chinese": 531,
+          "r-tie-a": 45,
+          "r-tie-b": -169
+        },
+        "cases": [
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Tabs",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": -159,
+          "r-tab-one": 299,
+          "r-tab-two": -107,
+          "r-tab-emoji": 47,
+          "r-saved": 1353,
+          "r-action": -13,
+          "r-pane": 557,
+          "r-herdr": -361,
+          "r-custom": 1281,
+          "r-empty-search": -261,
+          "r-null-search": 693,
+          "r-path": 127,
+          "r-chinese": 201,
+          "r-surrogate": 451,
+          "r-tie-a": 1005
+        },
+        "cases": [
+          {
+            "query": " ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-ws-current",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "支付",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Custom",
+            "expected": [
+              {
+                "id": "r-custom",
+                "section": "Custom"
+              }
+            ]
+          },
+          {
+            "query": "naive",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 455,
+          "r-tab-one": 849,
+          "r-tab-emoji": 555,
+          "r-agent-live": 597,
+          "r-action": -465,
+          "r-action-empty": 41,
+          "r-pane": 1331,
+          "r-custom": 301,
+          "r-unknown": 631,
+          "r-empty-search": 817,
+          "r-path": -245,
+          "r-accent": 165,
+          "r-chinese": 1311,
+          "r-tie-a": -487,
+          "r-tie-b": 947
+        },
+        "cases": [
+          {
+            "query": "@ ",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 781,
+          "r-tab-one": 183,
+          "r-tab-two": 193,
+          "r-tab-emoji": 443,
+          "r-saved": 1109,
+          "r-action": -209,
+          "r-pane": -71,
+          "r-herdr": -477,
+          "r-custom": -67,
+          "r-empty-search": -137,
+          "r-null-search": -367,
+          "r-path": -69,
+          "r-chinese": 421,
+          "r-surrogate": 735,
+          "r-tie-a": 1129
+        },
+        "cases": [
+          {
+            "query": "naive",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1203,
+          "r-tab-one": -51,
+          "r-tab-emoji": 519,
+          "r-agent-live": 833,
+          "r-action": 843,
+          "r-action-empty": 885,
+          "r-pane": 1391,
+          "r-custom": -423,
+          "r-unknown": 403,
+          "r-empty-search": 1469,
+          "r-path": 359,
+          "r-accent": 737,
+          "r-chinese": 603,
+          "r-tie-a": 485,
+          "r-tie-b": 863
+        },
+        "cases": [
+          {
+            "query": "@naive",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 25,
+          "r-tab-one": 1347,
+          "r-tab-two": -115,
+          "r-tab-emoji": 311,
+          "r-saved": 737,
+          "r-action": 1307,
+          "r-pane": 837,
+          "r-herdr": 1183,
+          "r-custom": 569,
+          "r-empty-search": -13,
+          "r-null-search": 1117,
+          "r-path": 679,
+          "r-chinese": 177,
+          "r-surrogate": 123,
+          "r-tie-a": 1349
+        },
+        "cases": [
+          {
+            "query": "feature",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": " ",
+            "category": "Custom",
+            "expected": [
+              {
+                "id": "r-custom",
+                "section": "Custom"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 95,
+          "r-tab-one": -55,
+          "r-tab-emoji": 915,
+          "r-agent-live": 1245,
+          "r-action": 1175,
+          "r-action-empty": 625,
+          "r-pane": -181,
+          "r-custom": 261,
+          "r-unknown": 47,
+          "r-empty-search": 1145,
+          "r-path": 563,
+          "r-accent": 429,
+          "r-chinese": 903,
+          "r-tie-a": 1041,
+          "r-tie-b": 1435
+        },
+        "cases": [
+          {
+            "query": "@saved",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 805,
+          "r-tab-one": -481,
+          "r-tab-two": 521,
+          "r-tab-emoji": 387,
+          "r-saved": 1261,
+          "r-action": 1367,
+          "r-pane": 897,
+          "r-herdr": 1483,
+          "r-custom": 581,
+          "r-empty-search": -417,
+          "r-null-search": -391,
+          "r-path": 563,
+          "r-chinese": 637,
+          "r-surrogate": 1319,
+          "r-tie-a": 609
+        },
+        "cases": [
+          {
+            "query": "支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-ws-current",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "repeat",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "saved",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1435,
+          "r-tab-one": 165,
+          "r-tab-emoji": 463,
+          "r-agent-live": 745,
+          "r-action": -381,
+          "r-action-empty": 1261,
+          "r-pane": 471,
+          "r-custom": -143,
+          "r-unknown": -197,
+          "r-empty-search": 1349,
+          "r-path": 799,
+          "r-accent": 297,
+          "r-chinese": 1251,
+          "r-tie-a": 61,
+          "r-tie-b": 1479
+        },
+        "cases": [
+          {
+            "query": "@review",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 65,
+          "r-tab-one": -437,
+          "r-tab-two": 693,
+          "r-tab-emoji": 1199,
+          "r-saved": -167,
+          "r-action": 419,
+          "r-pane": 1485,
+          "r-herdr": -25,
+          "r-custom": 1457,
+          "r-empty-search": -37,
+          "r-null-search": -379,
+          "r-path": 1279,
+          "r-chinese": 873,
+          "r-surrogate": 1299,
+          "r-tie-a": 1261
+        },
+        "cases": [
+          {
+            "query": "feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Custom",
+            "expected": [
+              {
+                "id": "r-custom",
+                "section": "Custom"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": -121,
+          "r-tab-one": 1441,
+          "r-tab-emoji": 459,
+          "r-agent-live": -75,
+          "r-action": 399,
+          "r-action-empty": 377,
+          "r-pane": 1235,
+          "r-custom": -355,
+          "r-unknown": 551,
+          "r-empty-search": 1409,
+          "r-path": 219,
+          "r-accent": 549,
+          "r-chinese": -17,
+          "r-tie-a": 889,
+          "r-tie-b": 1475
+        },
+        "cases": [
+          {
+            "query": "@ ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@review",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 941,
+          "r-tab-one": 1223,
+          "r-tab-two": 1409,
+          "r-tab-emoji": 11,
+          "r-saved": 725,
+          "r-action": -65,
+          "r-pane": 457,
+          "r-herdr": -381,
+          "r-custom": -259,
+          "r-empty-search": 39,
+          "r-null-search": 1041,
+          "r-path": 363,
+          "r-chinese": 1125,
+          "r-surrogate": 1007,
+          "r-tie-a": 1193
+        },
+        "cases": [
+          {
+            "query": " ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-ws-current",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "naive",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-ws-current",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "saved",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 947,
+          "r-tab-one": 1485,
+          "r-tab-emoji": 615,
+          "r-agent-live": 497,
+          "r-action": 763,
+          "r-action-empty": 325,
+          "r-pane": 1343,
+          "r-custom": 1497,
+          "r-unknown": 435,
+          "r-empty-search": 989,
+          "r-path": 839,
+          "r-accent": 113,
+          "r-chinese": -181,
+          "r-tie-a": -75,
+          "r-tie-b": 975
+        },
+        "cases": [
+          {
+            "query": "@naive",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1449,
+          "r-tab-one": 355,
+          "r-tab-two": 397,
+          "r-tab-emoji": -249,
+          "r-saved": 193,
+          "r-action": 827,
+          "r-pane": -43,
+          "r-herdr": -81,
+          "r-custom": -215,
+          "r-empty-search": -381,
+          "r-null-search": 1453,
+          "r-path": 967,
+          "r-chinese": 1041,
+          "r-surrogate": 811,
+          "r-tie-a": -75
+        },
+        "cases": [
+          {
+            "query": " ",
+            "category": "Custom",
+            "expected": [
+              {
+                "id": "r-custom",
+                "section": "Custom"
+              }
+            ]
+          },
+          {
+            "query": "repeat",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": " ",
+            "category": "Panes",
+            "expected": [
+              {
+                "id": "r-pane",
+                "section": "Panes"
+              }
+            ]
+          },
+          {
+            "query": "saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1407,
+          "r-tab-one": 1033,
+          "r-tab-emoji": -333,
+          "r-agent-live": 477,
+          "r-action": 471,
+          "r-action-empty": 577,
+          "r-pane": 939,
+          "r-custom": 1189,
+          "r-unknown": 1183,
+          "r-empty-search": 1289,
+          "r-path": -429,
+          "r-accent": -211,
+          "r-chinese": 855,
+          "r-tie-a": 49,
+          "r-tie-b": -245
+        },
+        "cases": [
+          {
+            "query": "@display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@review",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Tabs",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 677,
+          "r-tab-one": 271,
+          "r-tab-two": -119,
+          "r-tab-emoji": 1059,
+          "r-saved": 1421,
+          "r-action": -329,
+          "r-pane": 1249,
+          "r-herdr": 1147,
+          "r-custom": 37,
+          "r-empty-search": -321,
+          "r-null-search": 217,
+          "r-path": 1027,
+          "r-chinese": 765,
+          "r-surrogate": 39,
+          "r-tie-a": -15
+        },
+        "cases": [
+          {
+            "query": " ",
+            "category": "Custom",
+            "expected": [
+              {
+                "id": "r-custom",
+                "section": "Custom"
+              }
+            ]
+          },
+          {
+            "query": "支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "saved",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": "naive",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Panes",
+            "expected": [
+              {
+                "id": "r-pane",
+                "section": "Panes"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 571,
+          "r-tab-one": 533,
+          "r-tab-emoji": 1487,
+          "r-agent-live": 137,
+          "r-action": 163,
+          "r-action-empty": 973,
+          "r-pane": 951,
+          "r-custom": 257,
+          "r-unknown": 795,
+          "r-empty-search": 821,
+          "r-path": 143,
+          "r-accent": -279,
+          "r-chinese": -253,
+          "r-tie-a": 189,
+          "r-tie-b": -489
+        },
+        "cases": [
+          {
+            "query": "@saved",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1089,
+          "r-tab-one": -389,
+          "r-tab-two": -395,
+          "r-tab-emoji": -65,
+          "r-saved": -471,
+          "r-action": 755,
+          "r-pane": 1037,
+          "r-herdr": 1415,
+          "r-custom": 545,
+          "r-empty-search": 1099,
+          "r-null-search": 277,
+          "r-path": 191,
+          "r-chinese": -247,
+          "r-surrogate": 499,
+          "r-tie-a": -51
+        },
+        "cases": [
+          {
+            "query": "display",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "naive",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Workspace",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 1223,
+          "r-tab-one": -239,
+          "r-tab-emoji": 75,
+          "r-agent-live": 101,
+          "r-action": -209,
+          "r-action-empty": -407,
+          "r-pane": -445,
+          "r-custom": -467,
+          "r-unknown": 247,
+          "r-empty-search": 1361,
+          "r-path": -53,
+          "r-accent": 5,
+          "r-chinese": 191,
+          "r-tie-a": 473,
+          "r-tie-b": 339
+        },
+        "cases": [
+          {
+            "query": "@saved",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-ws-old",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@saved",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1181,
+          "r-tab-one": -169,
+          "r-tab-two": 977,
+          "r-tab-emoji": 843,
+          "r-saved": 693,
+          "r-action": 623,
+          "r-pane": 713,
+          "r-herdr": 579,
+          "r-custom": 397,
+          "r-empty-search": 695,
+          "r-null-search": 1409,
+          "r-path": 843,
+          "r-chinese": -123,
+          "r-surrogate": 655,
+          "r-tie-a": -7
+        },
+        "cases": [
+          {
+            "query": "display",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 355,
+          "r-tab-one": 125,
+          "r-tab-emoji": 375,
+          "r-agent-live": 113,
+          "r-action": -133,
+          "r-action-empty": 373,
+          "r-pane": 447,
+          "r-custom": -359,
+          "r-unknown": 643,
+          "r-empty-search": 845,
+          "r-path": -57,
+          "r-accent": 369,
+          "r-chinese": -69,
+          "r-tie-a": -107,
+          "r-tie-b": 223
+        },
+        "cases": [
+          {
+            "query": "@display",
+            "category": "Panes",
+            "expected": []
+          },
+          {
+            "query": "@naive",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@repeat",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@review",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Other",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 1481,
+          "r-tab-one": 627,
+          "r-tab-two": 157,
+          "r-tab-emoji": 919,
+          "r-saved": 1457,
+          "r-action": 635,
+          "r-pane": 1381,
+          "r-herdr": 47,
+          "r-custom": 649,
+          "r-empty-search": 1235,
+          "r-null-search": 781,
+          "r-path": 1207,
+          "r-chinese": -175,
+          "r-surrogate": -357,
+          "r-tie-a": -299
+        },
+        "cases": [
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-path",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": "repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "saved",
+            "category": "Tabs",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": 815,
+          "r-tab-one": -55,
+          "r-tab-emoji": 1011,
+          "r-agent-live": 573,
+          "r-action": 679,
+          "r-action-empty": 1025,
+          "r-pane": -325,
+          "r-custom": 1317,
+          "r-unknown": 1215,
+          "r-empty-search": -471,
+          "r-path": 387,
+          "r-accent": 1133,
+          "r-chinese": -393,
+          "r-tie-a": 305,
+          "r-tie-b": 1499
+        },
+        "cases": [
+          {
+            "query": "@review",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@saved",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "@feature",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@feature",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": -363,
+          "r-tab-one": 927,
+          "r-tab-two": 1017,
+          "r-tab-emoji": 1491,
+          "r-saved": 333,
+          "r-action": 7,
+          "r-pane": -399,
+          "r-herdr": 907,
+          "r-custom": 997,
+          "r-empty-search": 367,
+          "r-null-search": 857,
+          "r-path": 883,
+          "r-chinese": 189,
+          "r-surrogate": 743,
+          "r-tie-a": -383
+        },
+        "cases": [
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "feature",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "review",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": " ",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tab-emoji",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tab-two",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tab-one",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-path",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-null-search",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-surrogate",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-empty-search",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": " ",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tab-emoji",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tab-two",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tab-one",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-path",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-null-search",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-surrogate",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-empty-search",
+                "section": "Tabs"
+              },
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "indices": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7,
+          9,
+          10,
+          11,
+          13,
+          14,
+          15,
+          17,
+          18,
+          19,
+          21,
+          22
+        ],
+        "history": {
+          "r-wt": -309,
+          "r-tab-one": 1045,
+          "r-tab-emoji": -353,
+          "r-agent-live": 1385,
+          "r-action": 515,
+          "r-action-empty": 173,
+          "r-pane": 151,
+          "r-custom": -335,
+          "r-unknown": 1147,
+          "r-empty-search": 565,
+          "r-path": 895,
+          "r-accent": 1401,
+          "r-chinese": 611,
+          "r-tie-a": 1229,
+          "r-tie-b": 1495
+        },
+        "cases": [
+          {
+            "query": "@saved",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Workspace",
+            "expected": [
+              {
+                "id": "r-wt",
+                "section": "Workspace"
+              },
+              {
+                "id": "r-chinese",
+                "section": "Workspace"
+              }
+            ]
+          },
+          {
+            "query": "@ ",
+            "category": "Custom",
+            "expected": []
+          },
+          {
+            "query": "@ ",
+            "category": "Tabs",
+            "expected": []
+          },
+          {
+            "query": "@支付",
+            "category": "Panes",
+            "expected": []
+          }
+        ]
+      },
+      {
+        "indices": [
+          0,
+          1,
+          3,
+          4,
+          5,
+          7,
+          8,
+          9,
+          11,
+          12,
+          13,
+          15,
+          16,
+          17,
+          19,
+          20,
+          21
+        ],
+        "history": {
+          "r-ws-old": 529,
+          "r-tab-one": 43,
+          "r-tab-two": 117,
+          "r-tab-emoji": 687,
+          "r-saved": 1161,
+          "r-action": -429,
+          "r-pane": -355,
+          "r-herdr": 167,
+          "r-custom": -271,
+          "r-empty-search": 683,
+          "r-null-search": -59,
+          "r-path": 79,
+          "r-chinese": 457,
+          "r-surrogate": 1363,
+          "r-tie-a": 157
+        },
+        "cases": [
+          {
+            "query": "repeat",
+            "category": "Tabs",
+            "expected": [
+              {
+                "id": "r-tie-a",
+                "section": "Tabs"
+              }
+            ]
+          },
+          {
+            "query": "feature",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "ord",
+            "category": "Workspace",
+            "expected": []
+          },
+          {
+            "query": "支付",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "repeat",
+            "category": "Other",
+            "expected": []
+          },
+          {
+            "query": "display",
+            "category": "Custom",
+            "expected": []
+          }
+        ]
+      }
+    ],
+    "fuzzy": [
+      {
+        "query": "i",
+        "value": "İstanbul",
+        "score": 9,
+        "positions": [
+          0
+        ]
+      },
+      {
+        "query": "straße",
+        "value": "Straße",
+        "score": 200,
+        "positions": [
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      },
+      {
+        "query": "r",
+        "value": "𐐀 Rocket",
+        "score": 5,
+        "positions": [
+          2
+        ]
+      },
+      {
+        "query": "🚀r",
+        "value": "🚀 Review",
+        "score": 23,
+        "positions": [
+          0,
+          2
+        ]
+      },
+      {
+        "query": "支付",
+        "value": "中文支付",
+        "score": 10,
+        "positions": [
+          2,
+          3
+        ]
+      },
+      {
+        "query": "cafe",
+        "value": "café",
+        "score": null,
+        "positions": []
+      },
+      {
+        "query": "dev",
+        "value": "👩‍💻 Dev",
+        "score": 27,
+        "positions": [
+          4,
+          5,
+          6
+        ]
+      },
+      {
+        "query": "aa",
+        "value": "banana",
+        "score": 4,
+        "positions": [
+          3,
+          5
+        ]
+      }
+    ]
+  }
+}
