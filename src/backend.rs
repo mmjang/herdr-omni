@@ -2082,7 +2082,7 @@ pub fn preview(item: &Value, pane_index: usize) -> Result<String, String> {
                 } else {
                     &path
                 },
-                &branch
+                branch
             ));
         }
         if kind == Some("workspace") {

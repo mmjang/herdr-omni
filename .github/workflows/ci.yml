@@ -18,8 +18,9 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: dtolnay/rust-toolchain@stable
+      - uses: dtolnay/rust-toolchain@master
         with:
+          toolchain: '1.96.0'
           components: rustfmt, clippy
       - name: Install transcript search test helper
         shell: bash
