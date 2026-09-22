@@ -1,6 +1,12 @@
 name: Release
 
 on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to build and publish
+        required: true
+        type: string
   push:
     tags:
       - "v*"
@@ -14,6 +20,8 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           components: rustfmt, clippy
@@ -28,7 +36,9 @@ jobs:
       - run: cargo clippy --locked --all-targets -- -D warnings
       - run: cargo test --locked
       - run: cargo build --release --locked --bin herdr-omni
-      - run: cargo run --locked --bin release-tool -- check "$GITHUB_REF_NAME"
+      - run: cargo run --locked --bin release-tool -- check "$RELEASE_TAG"
+        env:
+          RELEASE_TAG: ${{ inputs.tag || github.ref_name }}
 
   build:
     needs: validate
@@ -52,6 +62,8 @@ jobs:
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.tag || github.ref }}
       - uses: dtolnay/rust-toolchain@stable
         with:
           targets: ${{ matrix.target }}
@@ -113,5 +125,6 @@ jobs:
           merge-multiple: true
       - uses: softprops/action-gh-release@v3
         with:
+          tag_name: ${{ inputs.tag || github.ref_name }}
           generate_release_notes: true
           files: dist/herdr-omni-*
