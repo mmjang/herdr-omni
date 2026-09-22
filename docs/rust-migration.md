@@ -1,6 +1,6 @@
 # Rust migration verification
 
-Rust rewrite introduced in v0.16.0. The production entrypoint is a native Rust/Ratatui
+Rust rewrite introduced in v0.16.1. The production entrypoint is a native Rust/Ratatui
 executable. The TypeScript application, Bun manifests, and JavaScript release
 scripts have been removed. The palette data and Microsoft scorer license remain.
 
@@ -17,7 +17,8 @@ scripts have been removed. The palette data and Microsoft scorer license remain.
   helper processes and descendants are cleaned up.
 
 CI runs the Cargo checks and release build on Linux and macOS. Local validation
-was performed on macOS; the configured CI matrix has not been run from this task.
+passed on macOS and in an isolated Linux container using Rust 1.96.0. Hosted
+platform build results are recorded in the release workflow.
 
 ## Coverage
 

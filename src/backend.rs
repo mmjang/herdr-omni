@@ -2792,7 +2792,7 @@ mod tests {
     #[test]
     fn cancellation_kills_process_group_and_reader_promptly() {
         let _guard = env_lock();
-        let (directory, command, _) = mock_herdr("cancel", "sleep 10");
+        let (directory, command) = mock_herdr_script("cancel", "sleep 10");
         std::env::set_var("HERDR_BIN_PATH", &command);
         let cancel = Arc::new(AtomicBool::new(false));
         let flag = cancel.clone();
@@ -2814,7 +2814,7 @@ mod tests {
     #[test]
     fn cancellable_live_loading_stops_snapshot_command_promptly() {
         let _guard = env_lock();
-        let (directory, command, _) = mock_herdr("live-cancel", "sleep 10");
+        let (directory, command) = mock_herdr_script("live-cancel", "sleep 10");
         std::env::set_var("HERDR_BIN_PATH", &command);
         let cancel = Arc::new(AtomicBool::new(false));
         let flag = cancel.clone();
@@ -2874,7 +2874,7 @@ mod tests {
     #[test]
     fn cancellable_resource_details_kills_metadata_command() {
         let _guard = env_lock();
-        let (directory, command, _) = mock_herdr("details-cancel", "sleep 10");
+        let (directory, command) = mock_herdr_script("details-cancel", "sleep 10");
         std::env::set_var("HERDR_BIN_PATH", &command);
         let cancel = Arc::new(AtomicBool::new(false));
         let flag = cancel.clone();

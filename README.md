@@ -192,7 +192,7 @@ cargo run -- --demo
 
 ## Release notes
 
-### 0.16.0
+### 0.16.1
 
 - Rewritten in Rust and Ratatui, with search results, ordering, grouping, and UI checked against the TypeScript version.
 - Prebuilt macOS and Linux binaries for x86-64 and ARM64; installation verifies SHA-256 and requires no Rust or Bun.
