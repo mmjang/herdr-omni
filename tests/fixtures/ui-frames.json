@@ -1,0 +1,705 @@
+{
+  "items": [
+    {
+      "id": "new_workspace",
+      "title": "New workspace",
+      "category": "Actions",
+      "description": "Create and focus a workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+n"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "workspace",
+          "create",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "rename_workspace",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "description": "Rename the current workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+w"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-workspace"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "close_workspace",
+      "title": "Close workspace",
+      "category": "Actions",
+      "description": "Close the current workspace",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+d"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-workspace"
+      }
+    },
+    {
+      "id": "previous_workspace",
+      "title": "Previous workspace",
+      "category": "Actions",
+      "description": "Focus the previous workspace",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-workspace",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_workspace",
+      "title": "Next workspace",
+      "category": "Actions",
+      "description": "Focus the next workspace",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-workspace",
+        "step": 1
+      }
+    },
+    {
+      "id": "new_tab",
+      "title": "New tab",
+      "category": "Actions",
+      "description": "Create and focus a tab in the current workspace",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+c"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "create-tab"
+      }
+    },
+    {
+      "id": "rename_tab",
+      "title": "Rename tab",
+      "category": "Actions",
+      "description": "Rename the current tab",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+t"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-tab"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "previous_tab",
+      "title": "Previous tab",
+      "category": "Actions",
+      "description": "Focus the previous tab",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+p"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-tab",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_tab",
+      "title": "Next tab",
+      "category": "Actions",
+      "description": "Focus the next tab",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+n"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-tab",
+        "step": 1
+      }
+    },
+    {
+      "id": "close_tab",
+      "title": "Close tab",
+      "category": "Actions",
+      "description": "Close the current tab",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+x"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-tab"
+      }
+    },
+    {
+      "id": "focus_pane_left",
+      "title": "Focus pane left",
+      "category": "Actions",
+      "description": "Focus the pane to the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+h"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_down",
+      "title": "Focus pane down",
+      "category": "Actions",
+      "description": "Focus the pane below",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+j"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_up",
+      "title": "Focus pane up",
+      "category": "Actions",
+      "description": "Focus the pane above",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+k"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_right",
+      "title": "Focus pane right",
+      "category": "Actions",
+      "description": "Focus the pane to the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+l"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "split_vertical",
+      "title": "Split pane right",
+      "category": "Actions",
+      "description": "Split the current pane side by side",
+      "icon": "▯",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+v"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "split",
+          "--current",
+          "--direction",
+          "right",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "split_horizontal",
+      "title": "Split pane down",
+      "category": "Actions",
+      "description": "Split the current pane stacked",
+      "icon": "▤",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+minus"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "split",
+          "--current",
+          "--direction",
+          "down",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "zoom",
+      "title": "Zoom pane",
+      "category": "Actions",
+      "description": "Toggle focused pane zoom",
+      "icon": "◲",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+z"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "zoom",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "rename_pane",
+      "title": "Rename pane",
+      "category": "Actions",
+      "description": "Rename the current pane",
+      "icon": "▭",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+p"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-pane"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "clear_pane_name",
+      "title": "Clear pane name",
+      "category": "Actions",
+      "description": "Remove the current pane's custom name",
+      "icon": "▭",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-pane-clear"
+      }
+    },
+    {
+      "id": "resize_pane_left",
+      "title": "Resize pane left",
+      "category": "Actions",
+      "description": "Grow the pane toward the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_down",
+      "title": "Resize pane down",
+      "category": "Actions",
+      "description": "Grow the pane toward the bottom",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_up",
+      "title": "Resize pane up",
+      "category": "Actions",
+      "description": "Grow the pane toward the top",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_right",
+      "title": "Resize pane right",
+      "category": "Actions",
+      "description": "Grow the pane toward the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_left",
+      "title": "Swap pane left",
+      "category": "Actions",
+      "description": "Swap with the pane to the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_down",
+      "title": "Swap pane down",
+      "category": "Actions",
+      "description": "Swap with the pane below",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_up",
+      "title": "Swap pane up",
+      "category": "Actions",
+      "description": "Swap with the pane above",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_right",
+      "title": "Swap pane right",
+      "category": "Actions",
+      "description": "Swap with the pane to the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "move_pane_new_tab",
+      "title": "Move pane to new tab",
+      "category": "Actions",
+      "description": "Move the current pane into a new tab",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "move-pane-new-tab"
+      }
+    },
+    {
+      "id": "move_pane_new_workspace",
+      "title": "Move pane to new workspace",
+      "category": "Actions",
+      "description": "Move the current pane into a new workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "move-pane-new-workspace"
+      }
+    },
+    {
+      "id": "close_pane",
+      "title": "Close pane",
+      "category": "Actions",
+      "description": "Close the focused pane",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+x"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-pane"
+      }
+    },
+    {
+      "id": "new_worktree",
+      "title": "New worktree",
+      "category": "Actions",
+      "description": "Create and open a Git worktree; leave blank for automatic naming",
+      "icon": "◈",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+g"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-create"
+      },
+      "prompt": {
+        "placeholder": "Branch name (leave blank for automatic)"
+      }
+    },
+    {
+      "id": "open_worktree",
+      "title": "Open worktree",
+      "category": "Actions",
+      "description": "Open an existing Git worktree by branch or path",
+      "icon": "◈",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-open"
+      },
+      "prompt": {
+        "placeholder": "Branch or path (use ./ for relative paths)"
+      }
+    },
+    {
+      "id": "remove_worktree",
+      "title": "Remove worktree",
+      "category": "Actions",
+      "description": "Remove the current workspace worktree checkout",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-remove"
+      },
+      "prompt": {
+        "placeholder": "Type \"yes\" to confirm"
+      }
+    },
+    {
+      "id": "previous_agent",
+      "title": "Previous agent",
+      "category": "Actions",
+      "description": "Focus the previous agent",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-agent",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_agent",
+      "title": "Next agent",
+      "category": "Actions",
+      "description": "Focus the next agent",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-agent",
+        "step": 1
+      }
+    },
+    {
+      "id": "edit_scrollback",
+      "title": "Edit scrollback",
+      "category": "Actions",
+      "description": "Open pane terminal history in your editor",
+      "icon": "▤",
+      "aliases": [
+        "terminal history",
+        "editor"
+      ],
+      "shortcuts": [
+        "prefix+e"
+      ],
+      "invocation": {
+        "kind": "pane-api",
+        "method": "pane.edit_scrollback"
+      }
+    }
+  ],
+  "cases": [
+    {
+      "width": 80,
+      "height": 24,
+      "query": "",
+      "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                  \n  [All] (36)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (36)             \n                                                                                \n  Actions                                                                       \n   ┃◇  New workspace                                          prefix+shift+n    \n    ◇  Rename workspace                                       prefix+shift+w    \n    ×  Close workspace                                        prefix+shift+d    \n    ←  Previous workspace                                                       \n    →  Next workspace                                                           \n    →  View all Actions (36)                                                    \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move    Ctrl+F · Search session content  36 results  \n"
+    },
+    {
+      "width": 80,
+      "height": 24,
+      "query": ":rename",
+      "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  :rename                                                                       \n   All (4)   Workspaces (0)   Agents (0)   Tabs (0)  [Actions] (4)              \n                                                                                \n  Actions                                                                       \n   ┃◇  Rename workspace                                       prefix+shift+w    \n    ▣  Rename tab                                             prefix+shift+t    \n    ▭  Rename pane                                            prefix+shift+p    \n    ▭  Clear pane name                                                          \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  4 results  \n"
+    },
+    {
+      "width": 80,
+      "height": 24,
+      "query": "pane",
+      "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  pane                                                                          \n  [All] (20)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (20)             \n                                                                                \n  Actions                                                                       \n   ┃←  Focus pane left                                              prefix+h    \n    ↓  Focus pane down                                              prefix+j    \n    ↑  Focus pane up                                                prefix+k    \n    →  Focus pane right                                             prefix+l    \n    ▯  Split pane right                                             prefix+v    \n    →  View all Actions (20)                                                    \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move    Ctrl+F · Search session content  20 results  \n"
+    },
+    {
+      "width": 80,
+      "height": 24,
+      "query": "zzzznomatch",
+      "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  zzzznomatch                                                                   \n  [All] (0)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (0)               \n                                                                                \n  No results match your search.                                                 \n  Search session content · Ctrl+F or click                                      \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  0 results  \n"
+    },
+    {
+      "width": 120,
+      "height": 24,
+      "query": "",
+      "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                          \n  [All] (36)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (36)                                                     \n                                                                                                                        \n  Actions                                                                                                               \n   ┃◇  New workspace                                                                                  prefix+shift+n    \n    ◇  Rename workspace                                                                               prefix+shift+w    \n    ×  Close workspace                                                                                prefix+shift+d    \n    ←  Previous workspace                                                                                               \n    →  Next workspace                                                                                                   \n    →  View all Actions (36)                                                                                            \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                            Ctrl+F · Search session content  36 results  \n"
+    },
+    {
+      "width": 120,
+      "height": 24,
+      "query": ":rename",
+      "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  :rename                                                                                                               \n   All (4)   Workspaces (0)   Agents (0)   Tabs (0)  [Actions] (4)                                                      \n                                                                                                                        \n  Actions                                                                                                               \n   ┃◇  Rename workspace                                                                               prefix+shift+w    \n    ▣  Rename tab                                                                                     prefix+shift+t    \n    ▭  Rename pane                                                                                    prefix+shift+p    \n    ▭  Clear pane name                                                                                                  \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  4 results  \n"
+    },
+    {
+      "width": 120,
+      "height": 24,
+      "query": "pane",
+      "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  pane                                                                                                                  \n  [All] (20)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (20)                                                     \n                                                                                                                        \n  Actions                                                                                                               \n   ┃←  Focus pane left                                                                                      prefix+h    \n    ↓  Focus pane down                                                                                      prefix+j    \n    ↑  Focus pane up                                                                                        prefix+k    \n    →  Focus pane right                                                                                     prefix+l    \n    ▯  Split pane right                                                                                     prefix+v    \n    →  View all Actions (20)                                                                                            \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                            Ctrl+F · Search session content  20 results  \n"
+    },
+    {
+      "width": 120,
+      "height": 24,
+      "query": "zzzznomatch",
+      "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  zzzznomatch                                                                                                           \n  [All] (0)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (0)                                                       \n                                                                                                                        \n  No results match your search.                                                                                         \n  Search session content · Ctrl+F or click                                                                              \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  0 results  \n"
+    },
+    {
+      "width": 150,
+      "height": 24,
+      "query": "",
+      "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                                                        \n  [All] (36)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (36)                                                                                   \n                                                                                                                                                      \n  Actions                                                                                                                                             \n   ┃◇  New workspace                                                                                                                prefix+shift+n    \n    ◇  Rename workspace                                                                                                             prefix+shift+w    \n    ×  Close workspace                                                                                                              prefix+shift+d    \n    ←  Previous workspace                                                                                                                             \n    →  Next workspace                                                                                                                                 \n    →  View all Actions (36)                                                                                                                          \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                          Ctrl+F · Search session content  36 results  \n"
+    },
+    {
+      "width": 150,
+      "height": 24,
+      "query": ":rename",
+      "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  :rename                                                                                                                                             \n   All (4)   Workspaces (0)   Agents (0)   Tabs (0)  [Actions] (4)                                                                                    \n                                                                                                                                                      \n  Actions                                                                                                                                             \n   ┃◇  Rename workspace                                                                                                             prefix+shift+w    \n    ▣  Rename tab                                                                                                                   prefix+shift+t    \n    ▭  Rename pane                                                                                                                  prefix+shift+p    \n    ▭  Clear pane name                                                                                                                                \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  4 results  \n"
+    },
+    {
+      "width": 150,
+      "height": 24,
+      "query": "pane",
+      "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  pane                                                                                                                                                \n  [All] (20)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (20)                                                                                   \n                                                                                                                                                      \n  Actions                                                                                                                                             \n   ┃←  Focus pane left                                                                                                                    prefix+h    \n    ↓  Focus pane down                                                                                                                    prefix+j    \n    ↑  Focus pane up                                                                                                                      prefix+k    \n    →  Focus pane right                                                                                                                   prefix+l    \n    ▯  Split pane right                                                                                                                   prefix+v    \n    →  View all Actions (20)                                                                                                                          \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                          Ctrl+F · Search session content  20 results  \n"
+    },
+    {
+      "width": 150,
+      "height": 24,
+      "query": "zzzznomatch",
+      "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  zzzznomatch                                                                                                                                         \n  [All] (0)  Workspaces (0)   Agents (0)   Tabs (0)   Actions (0)                                                                                     \n                                                                                                                                                      \n  No results match your search.                                                                                                                       \n  Search session content · Ctrl+F or click                                                                                                            \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  0 results  \n"
+    }
+  ]
+}

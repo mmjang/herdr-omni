@@ -1,0 +1,807 @@
+{
+  "snapshots": [
+    {
+      "snapshot": {
+        "workspaces": [
+          {
+            "workspace_id": "w1",
+            "label": "alpha",
+            "number": 1,
+            "focused": true,
+            "active_tab_id": "w1:t1",
+            "pane_count": 3,
+            "tab_count": 2,
+            "agent_status": "working"
+          },
+          {
+            "workspace_id": "w2",
+            "label": "beta",
+            "number": 2,
+            "focused": false,
+            "active_tab_id": "w2:t1",
+            "pane_count": 1,
+            "tab_count": 1,
+            "agent_status": "idle",
+            "worktree": {
+              "checkout_path": "/repo-beta",
+              "repo_name": "project",
+              "repo_root": "/repo"
+            }
+          }
+        ],
+        "tabs": [
+          {
+            "tab_id": "w1:t1",
+            "label": "editor",
+            "number": 1,
+            "workspace_id": "w1",
+            "focused": true,
+            "pane_count": 2,
+            "agent_status": "working"
+          },
+          {
+            "tab_id": "w2:t1",
+            "label": "shell",
+            "number": 1,
+            "workspace_id": "w2",
+            "focused": false,
+            "pane_count": 1,
+            "agent_status": "idle"
+          }
+        ],
+        "agents": [
+          {
+            "agent": "codex",
+            "agent_status": "working",
+            "cwd": "/repo",
+            "focused": true,
+            "pane_id": "w1:p1",
+            "tab_id": "w1:t1",
+            "workspace_id": "w1",
+            "terminal_title_stripped": "Implement search"
+          },
+          {
+            "agent": "codex",
+            "agent_status": "idle",
+            "cwd": "/repo",
+            "focused": false,
+            "pane_id": "w2:p1",
+            "tab_id": "w2:t1",
+            "workspace_id": "w2",
+            "terminal_title_stripped": "Review changes"
+          }
+        ],
+        "panes": [
+          {
+            "pane_id": "w1:p1",
+            "label": "logs",
+            "tab_id": "w1:t1",
+            "workspace_id": "w1",
+            "focused": false,
+            "cwd": "/repo",
+            "terminal_title_stripped": "logs"
+          },
+          {
+            "pane_id": "w1:p2",
+            "label": "1",
+            "tab_id": "w1:t1",
+            "workspace_id": "w1",
+            "focused": false,
+            "cwd": "/repo",
+            "terminal_title_stripped": "shell"
+          },
+          {
+            "pane_id": "w2:p2",
+            "label": "   ",
+            "tab_id": "w2:t1",
+            "workspace_id": "w2",
+            "focused": false,
+            "cwd": "/repo",
+            "terminal_title_stripped": "shell"
+          },
+          {
+            "pane_id": "w2:p3",
+            "tab_id": "w2:t1",
+            "workspace_id": "w2",
+            "focused": false,
+            "cwd": "/repo",
+            "terminal_title_stripped": "shell"
+          }
+        ]
+      },
+      "current": "w1",
+      "expected": [
+        {
+          "id": "live:workspace:w1",
+          "title": "alpha",
+          "category": "Workspace",
+          "description": "2 tabs · 3 panes",
+          "icon": "◇",
+          "aliases": [],
+          "searchTitle": "alpha",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "workspace",
+              "focus",
+              "w1"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "workspace",
+            "workspaceId": "w1",
+            "paths": [
+              "/repo"
+            ],
+            "tabs": [
+              {
+                "id": "w1:t1",
+                "label": "editor",
+                "panes": [
+                  {
+                    "id": "w1:p1",
+                    "label": "logs",
+                    "cwd": "/repo",
+                    "agent": "codex",
+                    "status": "working",
+                    "focused": true
+                  },
+                  {
+                    "id": "w1:p2",
+                    "label": "1",
+                    "cwd": "/repo",
+                    "focused": false
+                  }
+                ]
+              }
+            ],
+            "paneCount": 3
+          },
+          "currentWorkspace": true
+        },
+        {
+          "id": "live:workspace:w2",
+          "title": "beta",
+          "category": "Workspace",
+          "description": "1 tabs · 1 panes · /repo-beta",
+          "icon": "◇",
+          "aliases": [
+            "project"
+          ],
+          "searchTitle": "beta",
+          "searchPaths": [
+            "/repo-beta"
+          ],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "workspace",
+              "focus",
+              "w2"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "workspace",
+            "workspaceId": "w2",
+            "paths": [
+              "/repo-beta"
+            ],
+            "tabs": [
+              {
+                "id": "w2:t1",
+                "label": "shell",
+                "panes": [
+                  {
+                    "id": "w2:p2",
+                    "label": "shell",
+                    "cwd": "/repo",
+                    "focused": false
+                  },
+                  {
+                    "id": "w2:p3",
+                    "label": "shell",
+                    "cwd": "/repo",
+                    "focused": false
+                  }
+                ]
+              }
+            ],
+            "paneCount": 1
+          },
+          "currentWorkspace": false
+        },
+        {
+          "id": "live:tab:w1:t1",
+          "title": "alpha → editor",
+          "category": "Tabs",
+          "description": "2 panes · working",
+          "icon": "▣",
+          "aliases": [],
+          "searchTitle": "alpha → editor",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "tab",
+              "focus",
+              "w1:t1"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "tab",
+            "workspaceId": "w1",
+            "workspaceLabel": "alpha",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "logs",
+                "cwd": "/repo",
+                "agent": "codex",
+                "status": "working",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "1",
+                "cwd": "/repo",
+                "focused": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "live:tab:w2:t1",
+          "title": "beta → shell",
+          "category": "Tabs",
+          "description": "1 panes · idle",
+          "icon": "▣",
+          "aliases": [],
+          "searchTitle": "beta → shell",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "tab",
+              "focus",
+              "w2:t1"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "tab",
+            "workspaceId": "w2",
+            "workspaceLabel": "beta",
+            "panes": [
+              {
+                "id": "w2:p2",
+                "label": "shell",
+                "cwd": "/repo",
+                "focused": false
+              },
+              {
+                "id": "w2:p3",
+                "label": "shell",
+                "cwd": "/repo",
+                "focused": false
+              }
+            ]
+          }
+        },
+        {
+          "id": "live:agent:w1:p1",
+          "title": "Implement search - alpha",
+          "category": "Agents",
+          "description": "working · editor",
+          "icon": "◈",
+          "aliases": [
+            "codex"
+          ],
+          "searchTitle": "Implement search - alpha",
+          "searchPaths": [
+            "/repo"
+          ],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "agent",
+              "focus",
+              "w1:p1"
+            ]
+          },
+          "priority": 2,
+          "agentStatus": "working",
+          "livePaneId": "w1:p1",
+          "currentWorkspace": true
+        },
+        {
+          "id": "live:agent:w2:p1",
+          "title": "Review changes - beta",
+          "category": "Agents",
+          "description": "idle · shell",
+          "icon": "◈",
+          "aliases": [
+            "codex"
+          ],
+          "searchTitle": "Review changes - beta",
+          "searchPaths": [
+            "/repo"
+          ],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "agent",
+              "focus",
+              "w2:p1"
+            ]
+          },
+          "priority": 3,
+          "agentStatus": "idle",
+          "livePaneId": "w2:p1",
+          "currentWorkspace": false
+        }
+      ]
+    },
+    {
+      "snapshot": {
+        "workspaces": [
+          {
+            "workspace_id": "w1",
+            "label": "Coffee"
+          }
+        ],
+        "tabs": [
+          {
+            "tab_id": "w1:t0",
+            "workspace_id": "w1",
+            "label": "1"
+          },
+          {
+            "tab_id": "w1:t1",
+            "workspace_id": "w1",
+            "label": "02"
+          },
+          {
+            "tab_id": "w1:t2",
+            "workspace_id": "w1",
+            "label": " 123 "
+          },
+          {
+            "tab_id": "w1:t3",
+            "workspace_id": "w1",
+            "label": "１２"
+          },
+          {
+            "tab_id": "w1:t4",
+            "workspace_id": "w1",
+            "label": ""
+          },
+          {
+            "tab_id": "w1:t5",
+            "workspace_id": "w1",
+            "label": "   "
+          },
+          {
+            "tab_id": "w1:t6",
+            "workspace_id": "w1"
+          },
+          {
+            "tab_id": "w1:t7",
+            "workspace_id": "w1",
+            "label": "dev"
+          },
+          {
+            "tab_id": "w1:t8",
+            "workspace_id": "w1",
+            "label": "v2"
+          },
+          {
+            "tab_id": "w1:t9",
+            "workspace_id": "w1",
+            "label": "123-api"
+          }
+        ]
+      },
+      "current": "w1",
+      "expected": [
+        {
+          "id": "live:workspace:w1",
+          "title": "Coffee",
+          "category": "Workspace",
+          "description": "0 tabs · 0 panes",
+          "icon": "◇",
+          "aliases": [],
+          "searchTitle": "Coffee",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "workspace",
+              "focus",
+              "w1"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "workspace",
+            "workspaceId": "w1",
+            "paths": [],
+            "tabs": [
+              {
+                "id": "w1:t0",
+                "label": "1",
+                "panes": []
+              },
+              {
+                "id": "w1:t1",
+                "label": "02",
+                "panes": []
+              },
+              {
+                "id": "w1:t2",
+                "label": "123",
+                "panes": []
+              },
+              {
+                "id": "w1:t3",
+                "label": "１２",
+                "panes": []
+              },
+              {
+                "id": "w1:t4",
+                "label": "w1:t4",
+                "panes": []
+              },
+              {
+                "id": "w1:t5",
+                "label": "w1:t5",
+                "panes": []
+              },
+              {
+                "id": "w1:t6",
+                "label": "w1:t6",
+                "panes": []
+              },
+              {
+                "id": "w1:t7",
+                "label": "dev",
+                "panes": []
+              },
+              {
+                "id": "w1:t8",
+                "label": "v2",
+                "panes": []
+              },
+              {
+                "id": "w1:t9",
+                "label": "123-api",
+                "panes": []
+              }
+            ],
+            "paneCount": 0
+          },
+          "currentWorkspace": true
+        },
+        {
+          "id": "live:tab:w1:t7",
+          "title": "Coffee → dev",
+          "category": "Tabs",
+          "description": "0 panes · ",
+          "icon": "▣",
+          "aliases": [],
+          "searchTitle": "Coffee → dev",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "tab",
+              "focus",
+              "w1:t7"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "tab",
+            "workspaceId": "w1",
+            "workspaceLabel": "Coffee",
+            "panes": []
+          }
+        },
+        {
+          "id": "live:tab:w1:t8",
+          "title": "Coffee → v2",
+          "category": "Tabs",
+          "description": "0 panes · ",
+          "icon": "▣",
+          "aliases": [],
+          "searchTitle": "Coffee → v2",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "tab",
+              "focus",
+              "w1:t8"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "tab",
+            "workspaceId": "w1",
+            "workspaceLabel": "Coffee",
+            "panes": []
+          }
+        },
+        {
+          "id": "live:tab:w1:t9",
+          "title": "Coffee → 123-api",
+          "category": "Tabs",
+          "description": "0 panes · ",
+          "icon": "▣",
+          "aliases": [],
+          "searchTitle": "Coffee → 123-api",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "tab",
+              "focus",
+              "w1:t9"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "tab",
+            "workspaceId": "w1",
+            "workspaceLabel": "Coffee",
+            "panes": []
+          }
+        }
+      ]
+    },
+    {
+      "snapshot": {
+        "workspaces": [
+          {
+            "workspace_id": "w1"
+          }
+        ],
+        "agents": [
+          {
+            "pane_id": "p1",
+            "tab_id": "t1",
+            "workspace_id": "w1",
+            "agent": "codex",
+            "agent_status": "blocked",
+            "title": "Audit",
+            "cwd": "/repo",
+            "agent_session": {
+              "kind": "id",
+              "agent": "codex",
+              "value": "thread"
+            }
+          }
+        ]
+      },
+      "current": "w1",
+      "expected": [
+        {
+          "id": "live:workspace:w1",
+          "title": "w1",
+          "category": "Workspace",
+          "description": "0 tabs · 0 panes",
+          "icon": "◇",
+          "aliases": [],
+          "searchTitle": "",
+          "searchPaths": [],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "workspace",
+              "focus",
+              "w1"
+            ]
+          },
+          "resourcePreview": {
+            "kind": "workspace",
+            "workspaceId": "w1",
+            "paths": [
+              "/repo"
+            ],
+            "tabs": [],
+            "paneCount": 1
+          },
+          "currentWorkspace": true
+        },
+        {
+          "id": "live:agent:p1",
+          "title": "Audit - w1",
+          "category": "Agents",
+          "description": "blocked · t1",
+          "icon": "◈",
+          "aliases": [
+            "codex"
+          ],
+          "searchTitle": "Audit",
+          "searchPaths": [
+            "/repo"
+          ],
+          "shortcuts": [],
+          "invocation": {
+            "kind": "herdr",
+            "argv": [
+              "agent",
+              "focus",
+              "p1"
+            ]
+          },
+          "priority": 0,
+          "agentStatus": "blocked",
+          "livePaneId": "p1",
+          "currentWorkspace": true,
+          "session": {
+            "provider": "codex",
+            "id": "thread",
+            "title": "Audit",
+            "cwd": "/repo",
+            "updatedAt": 0
+          }
+        }
+      ]
+    }
+  ],
+  "worktrees": {
+    "rows": [
+      {
+        "path": "/repo",
+        "branch": "main",
+        "open_workspace_id": "w1"
+      },
+      {
+        "path": "/new",
+        "branch": "feature",
+        "label": "new"
+      },
+      {
+        "path": "/bare",
+        "is_bare": true
+      },
+      {
+        "path": "/detached",
+        "is_detached": true
+      },
+      {
+        "path": "/prunable",
+        "is_prunable": true
+      }
+    ],
+    "current": "w1",
+    "expected": [
+      {
+        "id": "live:workspace:worktree:/new",
+        "title": "new",
+        "category": "Workspace",
+        "description": "feature · /new",
+        "icon": "◇",
+        "aliases": [
+          "feature"
+        ],
+        "searchTitle": "new",
+        "searchPaths": [
+          "/new"
+        ],
+        "shortcuts": [],
+        "invocation": {
+          "kind": "herdr",
+          "argv": [
+            "worktree",
+            "open",
+            "--workspace",
+            "w1",
+            "--path",
+            "/new",
+            "--focus"
+          ]
+        },
+        "resourcePreview": {
+          "kind": "worktree",
+          "path": "/new",
+          "branch": "feature"
+        }
+      },
+      {
+        "id": "live:workspace:worktree:/bare",
+        "title": "bare",
+        "category": "Workspace",
+        "description": "detached · /bare",
+        "icon": "◇",
+        "aliases": [],
+        "searchTitle": "bare",
+        "searchPaths": [
+          "/bare"
+        ],
+        "shortcuts": [],
+        "invocation": {
+          "kind": "herdr",
+          "argv": [
+            "worktree",
+            "open",
+            "--workspace",
+            "w1",
+            "--path",
+            "/bare",
+            "--focus"
+          ]
+        },
+        "resourcePreview": {
+          "kind": "worktree",
+          "path": "/bare"
+        }
+      },
+      {
+        "id": "live:workspace:worktree:/detached",
+        "title": "detached",
+        "category": "Workspace",
+        "description": "detached · /detached",
+        "icon": "◇",
+        "aliases": [],
+        "searchTitle": "detached",
+        "searchPaths": [
+          "/detached"
+        ],
+        "shortcuts": [],
+        "invocation": {
+          "kind": "herdr",
+          "argv": [
+            "worktree",
+            "open",
+            "--workspace",
+            "w1",
+            "--path",
+            "/detached",
+            "--focus"
+          ]
+        },
+        "resourcePreview": {
+          "kind": "worktree",
+          "path": "/detached"
+        }
+      },
+      {
+        "id": "live:workspace:worktree:/prunable",
+        "title": "prunable",
+        "category": "Workspace",
+        "description": "detached · /prunable",
+        "icon": "◇",
+        "aliases": [],
+        "searchTitle": "prunable",
+        "searchPaths": [
+          "/prunable"
+        ],
+        "shortcuts": [],
+        "invocation": {
+          "kind": "herdr",
+          "argv": [
+            "worktree",
+            "open",
+            "--workspace",
+            "w1",
+            "--path",
+            "/prunable",
+            "--focus"
+          ]
+        },
+        "resourcePreview": {
+          "kind": "worktree",
+          "path": "/prunable"
+        }
+      }
+    ]
+  }
+}

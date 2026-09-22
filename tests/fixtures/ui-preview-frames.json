@@ -1,0 +1,536 @@
+[
+  {
+    "width": 80,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": false,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                  \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)               \n                                                                                \n  Workspaces                                                                    \n   ┃◇  Shop                                                                ◧    \n    →  View all Workspaces (1)                                                  \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  Workspace overview                                                            \n  1 tabs · 2 panes                                                              \n  Expand · Ctrl+O  PgUp/Dn scroll                                               \n  Branch: feature/payments                                                      \n  Path: /repo/shop                                                              \n                                                                                \n  ▣ Development · 2 panes                                                       \n    Payment agent · claude [blocked]                                            \n    Build terminal                                                              \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 80,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": true,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                  \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)               \n                                                                                \n  Workspaces                                                                    \n   ┃◇  Shop                                                                ◧    \n    →  View all Workspaces (1)                                                  \n                                                                                \n                                                                                \n                                                                                \n  Workspace overview                                                            \n  1 tabs · 2 panes                                                              \n  Collapse · Ctrl+O  PgUp/Dn scroll                                             \n  Branch: feature/payments                                                      \n  Path: /repo/shop                                                              \n                                                                                \n  ▣ Development · 2 panes                                                       \n    Payment agent · claude [blocked]                                            \n    Build terminal                                                              \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 80,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": false,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                  \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)               \n                                                                                \n  Tabs                                                                          \n   ┃▣  Shop → Development                                                  ◧    \n    →  View all Tabs (1)                                                        \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  Tab preview · live panes                                                      \n  2 panes · F6 / Shift+F6 switch                                                \n  Expand · Ctrl+O  PgUp/Dn scroll                                               \n  › 1. Payment agent · claude [blocked]                                         \n    2. Build terminal                                                           \n  Program: bun                                                                  \n  w1:p1 · /repo/shop                                                            \n  Line 1                                                                        \n  Line 2                                                                        \n  Line 3                                                                        \n  Line 4                                                                        \n  Line 5                                                                        \n  ❯ REAL INPUT PROMPT                                                           \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 80,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": true,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                        Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                  \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)               \n                                                                                \n  Tabs                                                                          \n   ┃▣  Shop → Development                                                  ◧    \n    →  View all Tabs (1)                                                        \n                                                                                \n                                                                                \n                                                                                \n  Tab preview · live panes                                                      \n  2 panes · F6 / Shift+F6 switch                                                \n  Collapse · Ctrl+O  PgUp/Dn scroll                                             \n  › 1. Payment agent · claude [blocked]                                         \n    2. Build terminal                                                           \n  Program: bun                                                                  \n  w1:p1 · /repo/shop                                                            \n  Line 1                                                                        \n  Line 2                                                                        \n  Line 3                                                                        \n  Line 4                                                                        \n  Line 5                                                                        \n  ❯ REAL INPUT PROMPT                                                           \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/click select   ↑/↓ move     Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 120,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": false,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                          \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)                                                       \n                                                                                                                        \n  Workspaces                                                            Workspace overview                              \n   ┃◇  Shop                                                        ◧    1 tabs · 2 panes                                \n    →  View all Workspaces (1)                                          Expand · Ctrl+O  PgUp/Dn scroll                 \n                                                                        Branch: feature/payments                        \n                                                                        Path: /repo/shop                                \n                                                                                                                        \n                                                                        ▣ Development · 2 panes                         \n                                                                          Payment agent · claude [blocked]              \n                                                                          Build terminal                                \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 120,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": true,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                          \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)                                                       \n                                                                                                                        \n  Workspaces                                                                                                            \n   ┃◇  Shop                                                                                                        ◧    \n    →  View all Workspaces (1)                                                                                          \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  Workspace overview                                                                                                    \n  1 tabs · 2 panes                                                                                                      \n  Collapse · Ctrl+O  PgUp/Dn scroll                                                                                     \n  Branch: feature/payments                                                                                              \n  Path: /repo/shop                                                                                                      \n                                                                                                                        \n  ▣ Development · 2 panes                                                                                               \n    Payment agent · claude [blocked]                                                                                    \n    Build terminal                                                                                                      \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 120,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": false,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                          \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)                                                       \n                                                                                                                        \n  Tabs                                                                  Tab preview · live panes                        \n   ┃▣  Shop → Development                                          ◧    2 panes · F6 / Shift+F6 switch                  \n    →  View all Tabs (1)                                                Expand · Ctrl+O  PgUp/Dn scroll                 \n                                                                        › 1. Payment agent · claude [blocked]           \n                                                                          2. Build terminal                             \n                                                                        Program: bun                                    \n                                                                        w1:p1 · /repo/shop                              \n                                                                        Line 1                                          \n                                                                        Line 2                                          \n                                                                        Line 3                                          \n                                                                        Line 4                                          \n                                                                        Line 5                                          \n                                                                        ❯ REAL INPUT PROMPT                             \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 120,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": true,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                                                                Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                          \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)                                                       \n                                                                                                                        \n  Tabs                                                                                                                  \n   ┃▣  Shop → Development                                                                                          ◧    \n    →  View all Tabs (1)                                                                                                \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  Tab preview · live panes                                                                                              \n  2 panes · F6 / Shift+F6 switch                                                                                        \n  Collapse · Ctrl+O  PgUp/Dn scroll                                                                                     \n  › 1. Payment agent · claude [blocked]                                                                                 \n    2. Build terminal                                                                                                   \n  Program: bun                                                                                                          \n  w1:p1 · /repo/shop                                                                                                    \n  Line 1                                                                                                                \n  Line 2                                                                                                                \n  Line 3                                                                                                                \n  Line 4                                                                                                                \n  Line 5                                                                                                                \n  ❯ REAL INPUT PROMPT                                                                                                   \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/click select   ↑/↓ move                                             Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 150,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": false,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                                                        \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)                                                                                     \n                                                                                                                                                      \n  Workspaces                                                                             Workspace overview                                           \n   ┃◇  Shop                                                                         ◧    1 tabs · 2 panes                                             \n    →  View all Workspaces (1)                                                           Expand · Ctrl+O  PgUp/Dn scroll                              \n                                                                                         Branch: feature/payments                                     \n                                                                                         Path: /repo/shop                                             \n                                                                                                                                                      \n                                                                                         ▣ Development · 2 panes                                      \n                                                                                           Payment agent · claude [blocked]                           \n                                                                                           Build terminal                                             \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 150,
+    "height": 30,
+    "item": {
+      "id": "w1",
+      "title": "Shop",
+      "category": "Workspace",
+      "description": "",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "workspace",
+        "workspaceId": "w1",
+        "paths": [
+          "/repo/shop"
+        ],
+        "tabs": [
+          {
+            "id": "w1:t1",
+            "label": "Development",
+            "panes": [
+              {
+                "id": "w1:p1",
+                "label": "Payment agent",
+                "agent": "claude",
+                "status": "blocked",
+                "cwd": "/repo/shop",
+                "focused": true
+              },
+              {
+                "id": "w1:p2",
+                "label": "Build terminal",
+                "cwd": "/repo/shop"
+              }
+            ]
+          }
+        ],
+        "paneCount": 2
+      }
+    },
+    "expanded": true,
+    "preview": "Branch: feature/payments\nPath: /repo/shop\n\n▣ Development · 2 panes\n  Payment agent · claude [blocked]\n  Build terminal",
+    "detail": "feature/payments",
+    "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                                                        \n  [All] (1)  Workspaces (1)   Agents (0)   Tabs (0)   Actions (0)                                                                                     \n                                                                                                                                                      \n  Workspaces                                                                                                                                          \n   ┃◇  Shop                                                                                                                                      ◧    \n    →  View all Workspaces (1)                                                                                                                        \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  Workspace overview                                                                                                                                  \n  1 tabs · 2 panes                                                                                                                                    \n  Collapse · Ctrl+O  PgUp/Dn scroll                                                                                                                   \n  Branch: feature/payments                                                                                                                            \n  Path: /repo/shop                                                                                                                                    \n                                                                                                                                                      \n  ▣ Development · 2 panes                                                                                                                             \n    Payment agent · claude [blocked]                                                                                                                  \n    Build terminal                                                                                                                                    \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 150,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": false,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                                                        \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)                                                                                     \n                                                                                                                                                      \n  Tabs                                                                                   Tab preview · live panes                                     \n   ┃▣  Shop → Development                                                           ◧    2 panes · F6 / Shift+F6 switch                               \n    →  View all Tabs (1)                                                                 Expand · Ctrl+O  PgUp/Dn scroll                              \n                                                                                         › 1. Payment agent · claude [blocked]                        \n                                                                                           2. Build terminal                                          \n                                                                                         Program: bun                                                 \n                                                                                         w1:p1 · /repo/shop                                           \n                                                                                         Line 1                                                       \n                                                                                         Line 2                                                       \n                                                                                         Line 3                                                       \n                                                                                         Line 4                                                       \n                                                                                         Line 5                                                       \n                                                                                         ❯ REAL INPUT PROMPT                                          \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  1 results  \n"
+  },
+  {
+    "width": 150,
+    "height": 30,
+    "item": {
+      "id": "t1",
+      "title": "Shop → Development",
+      "category": "Tabs",
+      "description": "",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "resourcePreview": {
+        "kind": "tab",
+        "workspaceId": "w1",
+        "workspaceLabel": "Shop",
+        "panes": [
+          {
+            "id": "w1:p1",
+            "label": "Payment agent",
+            "agent": "claude",
+            "status": "blocked",
+            "cwd": "/repo/shop",
+            "focused": true
+          },
+          {
+            "id": "w1:p2",
+            "label": "Build terminal",
+            "cwd": "/repo/shop"
+          }
+        ]
+      }
+    },
+    "expanded": true,
+    "preview": "Line 1\nLine 2\nLine 3\nLine 4\nLine 5\n❯ REAL INPUT PROMPT",
+    "detail": "bun",
+    "frame": "  Herdr Omni  v0.15.1                                                                                              Ctrl+Y preview · tab switch · esc  \n  Search · @ workspaces · > agents · : actions                                                                                                        \n  [All] (1)  Workspaces (0)   Agents (0)   Tabs (1)   Actions (0)                                                                                     \n                                                                                                                                                      \n  Tabs                                                                                                                                                \n   ┃▣  Shop → Development                                                                                                                        ◧    \n    →  View all Tabs (1)                                                                                                                              \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  Tab preview · live panes                                                                                                                            \n  2 panes · F6 / Shift+F6 switch                                                                                                                      \n  Collapse · Ctrl+O  PgUp/Dn scroll                                                                                                                   \n  › 1. Payment agent · claude [blocked]                                                                                                               \n    2. Build terminal                                                                                                                                 \n  Program: bun                                                                                                                                        \n  w1:p1 · /repo/shop                                                                                                                                  \n  Line 1                                                                                                                                              \n  Line 2                                                                                                                                              \n  Line 3                                                                                                                                              \n  Line 4                                                                                                                                              \n  Line 5                                                                                                                                              \n  ❯ REAL INPUT PROMPT                                                                                                                                 \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n                                                                                                                                                      \n  enter/click select   ↑/↓ move                                                                           Ctrl+F · Search session content  1 results  \n"
+  }
+]

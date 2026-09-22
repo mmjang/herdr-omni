@@ -1,0 +1,1771 @@
+{
+  "items": [
+    {
+      "id": "new_workspace",
+      "title": "New workspace",
+      "category": "Actions",
+      "description": "Create and focus a workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+n"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "workspace",
+          "create",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "rename_workspace",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "description": "Rename the current workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+w"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-workspace"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "close_workspace",
+      "title": "Close workspace",
+      "category": "Actions",
+      "description": "Close the current workspace",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+d"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-workspace"
+      }
+    },
+    {
+      "id": "previous_workspace",
+      "title": "Previous workspace",
+      "category": "Actions",
+      "description": "Focus the previous workspace",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-workspace",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_workspace",
+      "title": "Next workspace",
+      "category": "Actions",
+      "description": "Focus the next workspace",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-workspace",
+        "step": 1
+      }
+    },
+    {
+      "id": "new_tab",
+      "title": "New tab",
+      "category": "Actions",
+      "description": "Create and focus a tab in the current workspace",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+c"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "create-tab"
+      }
+    },
+    {
+      "id": "rename_tab",
+      "title": "Rename tab",
+      "category": "Actions",
+      "description": "Rename the current tab",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+t"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-tab"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "previous_tab",
+      "title": "Previous tab",
+      "category": "Actions",
+      "description": "Focus the previous tab",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+p"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-tab",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_tab",
+      "title": "Next tab",
+      "category": "Actions",
+      "description": "Focus the next tab",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+n"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-tab",
+        "step": 1
+      }
+    },
+    {
+      "id": "close_tab",
+      "title": "Close tab",
+      "category": "Actions",
+      "description": "Close the current tab",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+x"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-tab"
+      }
+    },
+    {
+      "id": "focus_pane_left",
+      "title": "Focus pane left",
+      "category": "Actions",
+      "description": "Focus the pane to the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+h"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_down",
+      "title": "Focus pane down",
+      "category": "Actions",
+      "description": "Focus the pane below",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+j"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_up",
+      "title": "Focus pane up",
+      "category": "Actions",
+      "description": "Focus the pane above",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+k"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "focus_pane_right",
+      "title": "Focus pane right",
+      "category": "Actions",
+      "description": "Focus the pane to the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+l"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "focus",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "split_vertical",
+      "title": "Split pane right",
+      "category": "Actions",
+      "description": "Split the current pane side by side",
+      "icon": "▯",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+v"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "split",
+          "--current",
+          "--direction",
+          "right",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "split_horizontal",
+      "title": "Split pane down",
+      "category": "Actions",
+      "description": "Split the current pane stacked",
+      "icon": "▤",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+minus"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "split",
+          "--current",
+          "--direction",
+          "down",
+          "--focus"
+        ]
+      }
+    },
+    {
+      "id": "zoom",
+      "title": "Zoom pane",
+      "category": "Actions",
+      "description": "Toggle focused pane zoom",
+      "icon": "◲",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+z"
+      ],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "zoom",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "rename_pane",
+      "title": "Rename pane",
+      "category": "Actions",
+      "description": "Rename the current pane",
+      "icon": "▭",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+p"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-pane"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    {
+      "id": "clear_pane_name",
+      "title": "Clear pane name",
+      "category": "Actions",
+      "description": "Remove the current pane's custom name",
+      "icon": "▭",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "rename-pane-clear"
+      }
+    },
+    {
+      "id": "resize_pane_left",
+      "title": "Resize pane left",
+      "category": "Actions",
+      "description": "Grow the pane toward the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_down",
+      "title": "Resize pane down",
+      "category": "Actions",
+      "description": "Grow the pane toward the bottom",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_up",
+      "title": "Resize pane up",
+      "category": "Actions",
+      "description": "Grow the pane toward the top",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "resize_pane_right",
+      "title": "Resize pane right",
+      "category": "Actions",
+      "description": "Grow the pane toward the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "resize",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_left",
+      "title": "Swap pane left",
+      "category": "Actions",
+      "description": "Swap with the pane to the left",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "left",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_down",
+      "title": "Swap pane down",
+      "category": "Actions",
+      "description": "Swap with the pane below",
+      "icon": "↓",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "down",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_up",
+      "title": "Swap pane up",
+      "category": "Actions",
+      "description": "Swap with the pane above",
+      "icon": "↑",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "up",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "swap_pane_right",
+      "title": "Swap pane right",
+      "category": "Actions",
+      "description": "Swap with the pane to the right",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "herdr",
+        "argv": [
+          "pane",
+          "swap",
+          "--direction",
+          "right",
+          "--current"
+        ]
+      }
+    },
+    {
+      "id": "move_pane_new_tab",
+      "title": "Move pane to new tab",
+      "category": "Actions",
+      "description": "Move the current pane into a new tab",
+      "icon": "▣",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "move-pane-new-tab"
+      }
+    },
+    {
+      "id": "move_pane_new_workspace",
+      "title": "Move pane to new workspace",
+      "category": "Actions",
+      "description": "Move the current pane into a new workspace",
+      "icon": "◇",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "move-pane-new-workspace"
+      }
+    },
+    {
+      "id": "close_pane",
+      "title": "Close pane",
+      "category": "Actions",
+      "description": "Close the focused pane",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+x"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "close-pane"
+      }
+    },
+    {
+      "id": "new_worktree",
+      "title": "New worktree",
+      "category": "Actions",
+      "description": "Create and open a Git worktree; leave blank for automatic naming",
+      "icon": "◈",
+      "aliases": [],
+      "shortcuts": [
+        "prefix+shift+g"
+      ],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-create"
+      },
+      "prompt": {
+        "placeholder": "Branch name (leave blank for automatic)"
+      }
+    },
+    {
+      "id": "open_worktree",
+      "title": "Open worktree",
+      "category": "Actions",
+      "description": "Open an existing Git worktree by branch or path",
+      "icon": "◈",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-open"
+      },
+      "prompt": {
+        "placeholder": "Branch or path (use ./ for relative paths)"
+      }
+    },
+    {
+      "id": "remove_worktree",
+      "title": "Remove worktree",
+      "category": "Actions",
+      "description": "Remove the current workspace worktree checkout",
+      "icon": "×",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "worktree-remove"
+      },
+      "prompt": {
+        "placeholder": "Type \"yes\" to confirm"
+      }
+    },
+    {
+      "id": "previous_agent",
+      "title": "Previous agent",
+      "category": "Actions",
+      "description": "Focus the previous agent",
+      "icon": "←",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-agent",
+        "step": -1
+      }
+    },
+    {
+      "id": "next_agent",
+      "title": "Next agent",
+      "category": "Actions",
+      "description": "Focus the next agent",
+      "icon": "→",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resolve",
+        "action": "focus-agent",
+        "step": 1
+      }
+    },
+    {
+      "id": "edit_scrollback",
+      "title": "Edit scrollback",
+      "category": "Actions",
+      "description": "Open pane terminal history in your editor",
+      "icon": "▤",
+      "aliases": [
+        "terminal history",
+        "editor"
+      ],
+      "shortcuts": [
+        "prefix+e"
+      ],
+      "invocation": {
+        "kind": "pane-api",
+        "method": "pane.edit_scrollback"
+      }
+    }
+  ],
+  "queries": [
+    {
+      "query": "",
+      "ids": [
+        "new_workspace",
+        "rename_workspace",
+        "close_workspace",
+        "previous_workspace",
+        "next_workspace",
+        "new_tab",
+        "rename_tab",
+        "previous_tab",
+        "next_tab",
+        "close_tab",
+        "focus_pane_left",
+        "focus_pane_down",
+        "focus_pane_up",
+        "focus_pane_right",
+        "split_vertical",
+        "split_horizontal",
+        "zoom",
+        "rename_pane",
+        "clear_pane_name",
+        "resize_pane_left",
+        "resize_pane_down",
+        "resize_pane_up",
+        "resize_pane_right",
+        "swap_pane_left",
+        "swap_pane_down",
+        "swap_pane_up",
+        "swap_pane_right",
+        "move_pane_new_tab",
+        "move_pane_new_workspace",
+        "close_pane",
+        "new_worktree",
+        "open_worktree",
+        "remove_worktree",
+        "previous_agent",
+        "next_agent",
+        "edit_scrollback"
+      ]
+    },
+    {
+      "query": "new",
+      "ids": [
+        "new_workspace",
+        "new_tab",
+        "new_worktree",
+        "move_pane_new_tab",
+        "move_pane_new_workspace",
+        "next_workspace",
+        "focus_pane_down",
+        "split_horizontal",
+        "resize_pane_down",
+        "swap_pane_down",
+        "rename_workspace"
+      ]
+    },
+    {
+      "query": "pane",
+      "ids": [
+        "focus_pane_left",
+        "focus_pane_down",
+        "focus_pane_up",
+        "focus_pane_right",
+        "split_vertical",
+        "split_horizontal",
+        "zoom",
+        "rename_pane",
+        "clear_pane_name",
+        "resize_pane_left",
+        "resize_pane_down",
+        "resize_pane_up",
+        "resize_pane_right",
+        "swap_pane_left",
+        "swap_pane_down",
+        "swap_pane_up",
+        "swap_pane_right",
+        "move_pane_new_tab",
+        "move_pane_new_workspace",
+        "close_pane"
+      ]
+    },
+    {
+      "query": "np",
+      "ids": [
+        "new_workspace",
+        "next_workspace",
+        "rename_pane",
+        "move_pane_new_workspace",
+        "rename_workspace",
+        "focus_pane_up",
+        "resize_pane_up",
+        "swap_pane_up"
+      ]
+    },
+    {
+      "query": "resize left",
+      "ids": [
+        "resize_pane_left"
+      ]
+    },
+    {
+      "query": "workspace",
+      "ids": [
+        "new_workspace",
+        "rename_workspace",
+        "close_workspace",
+        "previous_workspace",
+        "next_workspace",
+        "move_pane_new_workspace"
+      ]
+    },
+    {
+      "query": "@",
+      "ids": []
+    },
+    {
+      "query": ":",
+      "ids": [
+        "new_workspace",
+        "rename_workspace",
+        "close_workspace",
+        "previous_workspace",
+        "next_workspace",
+        "new_tab",
+        "rename_tab",
+        "previous_tab",
+        "next_tab",
+        "close_tab",
+        "focus_pane_left",
+        "focus_pane_down",
+        "focus_pane_up",
+        "focus_pane_right",
+        "split_vertical",
+        "split_horizontal",
+        "zoom",
+        "rename_pane",
+        "clear_pane_name",
+        "resize_pane_left",
+        "resize_pane_down",
+        "resize_pane_up",
+        "resize_pane_right",
+        "swap_pane_left",
+        "swap_pane_down",
+        "swap_pane_up",
+        "swap_pane_right",
+        "move_pane_new_tab",
+        "move_pane_new_workspace",
+        "close_pane",
+        "new_worktree",
+        "open_worktree",
+        "remove_worktree",
+        "previous_agent",
+        "next_agent",
+        "edit_scrollback"
+      ]
+    },
+    {
+      "query": "scroll",
+      "ids": [
+        "edit_scrollback"
+      ]
+    },
+    {
+      "query": "previous",
+      "ids": [
+        "previous_workspace",
+        "previous_tab",
+        "previous_agent"
+      ]
+    },
+    {
+      "query": "wt",
+      "ids": [
+        "new_tab",
+        "move_pane_new_tab",
+        "new_worktree",
+        "open_worktree",
+        "remove_worktree",
+        "swap_pane_left",
+        "swap_pane_right"
+      ]
+    },
+    {
+      "query": "rename",
+      "ids": [
+        "rename_workspace",
+        "rename_tab",
+        "rename_pane",
+        "clear_pane_name"
+      ]
+    },
+    {
+      "query": "down",
+      "ids": [
+        "focus_pane_down",
+        "split_horizontal",
+        "resize_pane_down",
+        "swap_pane_down"
+      ]
+    },
+    {
+      "query": "v",
+      "ids": [
+        "previous_workspace",
+        "previous_tab",
+        "move_pane_new_tab",
+        "move_pane_new_workspace",
+        "remove_worktree",
+        "previous_agent"
+      ]
+    }
+  ],
+  "fuzzy": [
+    {
+      "query": "np",
+      "value": "New pane",
+      "score": 15,
+      "positions": [
+        0,
+        4
+      ]
+    },
+    {
+      "query": "pane",
+      "value": "pane",
+      "score": 152,
+      "positions": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    {
+      "query": "ab",
+      "value": "a_b",
+      "score": 16,
+      "positions": [
+        0,
+        2
+      ]
+    },
+    {
+      "query": "fb",
+      "value": "fooBar",
+      "score": 13,
+      "positions": [
+        0,
+        3
+      ]
+    },
+    {
+      "query": "foo",
+      "value": "Foo Bar",
+      "score": 31,
+      "positions": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "query": "wp",
+      "value": "workspace",
+      "score": 12,
+      "positions": [
+        0,
+        5
+      ]
+    },
+    {
+      "query": "gs",
+      "value": "Git status",
+      "score": 15,
+      "positions": [
+        0,
+        4
+      ]
+    },
+    {
+      "query": "xyz",
+      "value": "abc",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "a",
+      "value": "🦀a",
+      "score": 2,
+      "positions": [
+        1
+      ]
+    },
+    {
+      "query": "中",
+      "value": "中文",
+      "score": 10,
+      "positions": [
+        0
+      ]
+    },
+    {
+      "query": "🚀",
+      "value": "🚀 Review",
+      "score": 18,
+      "positions": [
+        0
+      ]
+    },
+    {
+      "query": "👩‍💻",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "🚀 Review",
+      "score": 7,
+      "positions": [
+        2,
+        4
+      ]
+    },
+    {
+      "query": "ab",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "🚀 Review",
+      "score": 1,
+      "positions": [
+        5
+      ]
+    },
+    {
+      "query": "i",
+      "value": "🚀 Review",
+      "score": 2,
+      "positions": [
+        5
+      ]
+    },
+    {
+      "query": "ß",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "🚀 Review",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "👩‍💻 Rust",
+      "score": 75,
+      "positions": [
+        0,
+        1,
+        2
+      ]
+    },
+    {
+      "query": "🦀",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "👩‍💻 Rust",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "世界 hello",
+      "score": 18,
+      "positions": [
+        0,
+        1
+      ]
+    },
+    {
+      "query": "rv",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "世界 hello",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "a🦀b",
+      "score": 10,
+      "positions": [
+        1
+      ]
+    },
+    {
+      "query": "世界",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "a🦀b",
+      "score": 12,
+      "positions": [
+        0,
+        2
+      ]
+    },
+    {
+      "query": "İ",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "a🦀b",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "İstanbul",
+      "score": 2,
+      "positions": [
+        4,
+        6
+      ]
+    },
+    {
+      "query": "İ",
+      "value": "İstanbul",
+      "score": 10,
+      "positions": [
+        0
+      ]
+    },
+    {
+      "query": "i",
+      "value": "İstanbul",
+      "score": 9,
+      "positions": [
+        0
+      ]
+    },
+    {
+      "query": "ß",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "İstanbul",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "Straße",
+      "score": 2,
+      "positions": [
+        4
+      ]
+    },
+    {
+      "query": "é",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "Straße",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "Résumé",
+      "score": 2,
+      "positions": [
+        5
+      ]
+    },
+    {
+      "query": "HW",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "Résumé",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "i",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ß",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "HelLo-World",
+      "score": 16,
+      "positions": [
+        0,
+        6
+      ]
+    },
+    {
+      "query": "NPE",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "HelLo-World",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🚀",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "src/main.ts",
+      "score": 1,
+      "positions": [
+        6
+      ]
+    },
+    {
+      "query": "i",
+      "value": "src/main.ts",
+      "score": 2,
+      "positions": [
+        6
+      ]
+    },
+    {
+      "query": "ß",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "src/main.ts",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "src\\main",
+      "value": "src/main.ts",
+      "score": 166,
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ]
+    },
+    {
+      "query": "🚀",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "👩‍💻",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "🦀",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "世界",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "rv",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "ab",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "İ",
+      "value": "NullPointerException",
+      "score": 1,
+      "positions": [
+        17
+      ]
+    },
+    {
+      "query": "i",
+      "value": "NullPointerException",
+      "score": 2,
+      "positions": [
+        17
+      ]
+    },
+    {
+      "query": "ß",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "é",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "HW",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    },
+    {
+      "query": "NPE",
+      "value": "NullPointerException",
+      "score": 18,
+      "positions": [
+        0,
+        4,
+        11
+      ]
+    },
+    {
+      "query": "src\\main",
+      "value": "NullPointerException",
+      "score": null,
+      "positions": []
+    }
+  ]
+}

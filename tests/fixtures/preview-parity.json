@@ -1,0 +1,5310 @@
+{
+  "schema": 1,
+  "dimensions": {
+    "widths": [
+      5,
+      12,
+      40
+    ],
+    "capacities": [
+      3,
+      6
+    ],
+    "offsets": [
+      0,
+      5
+    ]
+  },
+  "transcriptPreview": [
+    {
+      "name": "controls-and-literal",
+      "text": "zero\u0000one\tTWO\nline\u001bred\n\nfoo.bar() and Foo.BAR()",
+      "query": "foo.bar()",
+      "cases": [
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "z",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "T",
+                "match": false
+              },
+              {
+                "text": "W",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "z",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "T",
+                "match": false
+              },
+              {
+                "text": "W",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "z",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "T",
+                "match": false
+              },
+              {
+                "text": "W",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "z",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "T",
+                "match": false
+              },
+              {
+                "text": "W",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "i",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "f",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "r",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "F",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": "o",
+                "match": true
+              },
+              {
+                "text": ".",
+                "match": true
+              },
+              {
+                "text": "B",
+                "match": true
+              },
+              {
+                "text": "A",
+                "match": true
+              },
+              {
+                "text": "R",
+                "match": true
+              },
+              {
+                "text": "(",
+                "match": true
+              },
+              {
+                "text": ")",
+                "match": true
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tabs-and-graphemes",
+      "text": "A\tB\tC\n界界👩‍💻hello\n\nmañana café\n終端",
+      "query": "界👩‍💻",
+      "cases": [
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "é",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            []
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            []
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "C",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "界",
+                "match": false
+              },
+              {
+                "text": "界",
+                "match": true
+              },
+              {
+                "text": "👩‍💻",
+                "match": true
+              },
+              {
+                "text": "h",
+                "match": false
+              },
+              {
+                "text": "e",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "l",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              }
+            ],
+            [],
+            [
+              {
+                "text": "m",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "ñ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "c",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "é",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "終",
+                "match": false
+              },
+              {
+                "text": "端",
+                "match": false
+              }
+            ]
+          ]
+        }
+      ]
+    },
+    {
+      "name": "regex-metacharacters",
+      "text": "foo.bar() [a+b] (x)?\nFOO.BAR() and [a+b]",
+      "query": "[a+b]",
+      "cases": [
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              }
+            ],
+            [
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 0,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 5,
+          "expected": [
+            [
+              {
+                "text": "f",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": "o",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "b",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "r",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": "x",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": "?",
+                "match": false
+              }
+            ],
+            [
+              {
+                "text": "F",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": "O",
+                "match": false
+              },
+              {
+                "text": ".",
+                "match": false
+              },
+              {
+                "text": "B",
+                "match": false
+              },
+              {
+                "text": "A",
+                "match": false
+              },
+              {
+                "text": "R",
+                "match": false
+              },
+              {
+                "text": "(",
+                "match": false
+              },
+              {
+                "text": ")",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "a",
+                "match": false
+              },
+              {
+                "text": "n",
+                "match": false
+              },
+              {
+                "text": "d",
+                "match": false
+              },
+              {
+                "text": " ",
+                "match": false
+              },
+              {
+                "text": "[",
+                "match": true
+              },
+              {
+                "text": "a",
+                "match": true
+              },
+              {
+                "text": "+",
+                "match": true
+              },
+              {
+                "text": "b",
+                "match": true
+              },
+              {
+                "text": "]",
+                "match": true
+              }
+            ]
+          ]
+        }
+      ]
+    }
+  ],
+  "paneScreen": [
+    {
+      "name": "controls-tabs-unicode",
+      "text": "line\twith tab\n  中界👩‍💻\nred\u001b[31m\n\ntrailing\n\nrow six\nrow seven\nrow eight\nrow nine\nrow ten\nrow eleven\nrow twelve\nrow thirteen\nrow fourteen",
+      "cases": [
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "trai…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row …",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row fourteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row ten",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eleven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row fourteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "trailing",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row six",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row fourteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row ten",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eleven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row fourteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "trailing",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row six",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "row nine",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        }
+      ]
+    },
+    {
+      "name": "long-grapheme-lines",
+      "text": "zero\n界界👩‍💻hello\nthree\nfour\nfive\nsix\nseven\neight\nnine\nten\neleven\ntwelve\nthirteen\nfourteen\nfifteen",
+      "cases": [
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "thir…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "four…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fift…",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 5,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "elev…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "twel…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "thir…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "four…",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fift…",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": true
+          }
+        },
+        {
+          "width": 5,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "five",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "six",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fourteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fifteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "eleven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fourteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fifteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 12,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "five",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "six",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fourteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fifteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 12,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 3,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 7,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 0,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "eleven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "twelve",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "thirteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fourteen",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "fifteen",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 0,
+            "start": 9,
+            "end": 15,
+            "totalRows": 15,
+            "clipped": false
+          }
+        },
+        {
+          "width": 40,
+          "rows": 6,
+          "offset": 5,
+          "expected": {
+            "lines": [
+              [
+                {
+                  "text": "five",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "six",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "seven",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "eight",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "nine",
+                  "match": false
+                }
+              ],
+              [
+                {
+                  "text": "ten",
+                  "match": false
+                }
+              ]
+            ],
+            "offset": 5,
+            "start": 4,
+            "end": 10,
+            "totalRows": 15,
+            "clipped": false
+          }
+        }
+      ]
+    }
+  ]
+}

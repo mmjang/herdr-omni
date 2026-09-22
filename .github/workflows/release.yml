@@ -9,16 +9,109 @@ permissions:
   contents: write
 
 jobs:
-  release:
+  validate:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v7
-      - uses: oven-sh/setup-bun@v2
-      - run: bun install --frozen-lockfile
-      - run: bun run typecheck
-      - run: bun test
-      - run: bun run scripts/check-release-version.ts "$GITHUB_REF_NAME"
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustfmt, clippy
+      - name: Install transcript search test helper
+        shell: bash
+        run: |
+          if ! command -v rg >/dev/null 2>&1; then
+            sudo apt-get update
+            sudo apt-get install -y ripgrep
+          fi
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked
+      - run: cargo build --release --locked --bin herdr-omni
+      - run: cargo run --locked --bin release-tool -- check "$GITHUB_REF_NAME"
+
+  build:
+    needs: validate
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-15-intel
+            target: x86_64-apple-darwin
+            musl: false
+          - runner: macos-14
+            target: aarch64-apple-darwin
+            musl: false
+          - runner: ubuntu-24.04
+            target: x86_64-unknown-linux-musl
+            musl: true
+          - runner: ubuntu-24.04-arm
+            target: aarch64-unknown-linux-musl
+            musl: true
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+      - name: Install musl linker
+        if: matrix.musl
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y musl-tools
+          target_key="$(printf '%s' '${{ matrix.target }}' | tr '[:lower:]-' '[:upper:]_')"
+          echo "CARGO_TARGET_${target_key}_LINKER=musl-gcc" >> "$GITHUB_ENV"
+      - name: Build release executable
+        shell: bash
+        run: |
+          cargo build --release --locked --bin herdr-omni --target '${{ matrix.target }}'
+          artifact="herdr-omni-${{ matrix.target }}"
+          mkdir -p dist
+          cp "target/${{ matrix.target }}/release/herdr-omni" "dist/${artifact}"
+          chmod +x "dist/${artifact}"
+          (
+            cd dist
+            if command -v sha256sum >/dev/null 2>&1; then
+              sha256sum "$artifact" > "${artifact}.sha256"
+            else
+              shasum -a 256 "$artifact" > "${artifact}.sha256"
+            fi
+          )
+      - name: Smoke test native executable
+        shell: bash
+        run: |
+          "dist/herdr-omni-${{ matrix.target }}" --version
+      - name: Verify static Linux executable
+        if: matrix.musl
+        shell: bash
+        run: |
+          artifact="dist/herdr-omni-${{ matrix.target }}"
+          file "$artifact" | grep -Eiq 'statically linked|static-pie'
+          if readelf -l "$artifact" | grep -q ' INTERP '; then
+            echo "musl executable unexpectedly contains an ELF interpreter"
+            exit 1
+          fi
+      - uses: actions/upload-artifact@v7
+        with:
+          name: herdr-omni-${{ matrix.target }}
+          path: |
+            dist/herdr-omni-${{ matrix.target }}
+            dist/herdr-omni-${{ matrix.target }}.sha256
+          if-no-files-found: error
+
+  release:
+    needs: [validate, build]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          pattern: herdr-omni-*
+          path: dist
+          merge-multiple: true
       - uses: softprops/action-gh-release@v3
         with:
           generate_release_notes: true
+          files: dist/herdr-omni-*

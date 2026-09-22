@@ -1,0 +1,135 @@
+[
+  {
+    "name": "worktree-normal",
+    "resource": {
+      "kind": "worktree",
+      "path": "/repo/feature",
+      "branch": "feature/ui"
+    },
+    "expected": "Path: /repo/feature\nBranch: feature/ui\n\nNot open in a workspace.\nEnter opens this worktree."
+  },
+  {
+    "name": "worktree-missing-branch",
+    "resource": {
+      "kind": "worktree",
+      "path": "/repo/feature"
+    },
+    "expected": "Path: /repo/feature\nBranch: unavailable\n\nNot open in a workspace.\nEnter opens this worktree."
+  },
+  {
+    "name": "worktree-empty-branch",
+    "resource": {
+      "kind": "worktree",
+      "path": "/repo/feature",
+      "branch": ""
+    },
+    "expected": "Path: /repo/feature\nBranch: \n\nNot open in a workspace.\nEnter opens this worktree."
+  },
+  {
+    "name": "worktree-control-text",
+    "resource": {
+      "kind": "worktree",
+      "path": " /repo/\u001b[31mfeature\u001b[0m ",
+      "branch": " feature\nui "
+    },
+    "expected": "Path: /repo/ [31mfeature [0m\nBranch: feature ui\n\nNot open in a workspace.\nEnter opens this worktree."
+  },
+  {
+    "name": "workspace-no-tabs",
+    "resource": {
+      "kind": "workspace",
+      "workspaceId": "w0",
+      "paths": [],
+      "tabs": [],
+      "paneCount": 0
+    },
+    "expected": "Branch: unavailable\nPaths:\n  unavailable\n\nNo tabs available"
+  },
+  {
+    "name": "workspace-empty-paths",
+    "resource": {
+      "kind": "workspace",
+      "workspaceId": "w1",
+      "paths": [],
+      "tabs": [
+        {
+          "id": "t1",
+          "label": "",
+          "panes": []
+        }
+      ],
+      "paneCount": 0
+    },
+    "expected": "Branch: unavailable\nPaths:\n  unavailable\n\n▣  · 0 panes\n  Pane details unavailable"
+  },
+  {
+    "name": "workspace-empty-branch-wins",
+    "resource": {
+      "kind": "workspace",
+      "workspaceId": "w3",
+      "paths": [
+        "/repo/shop"
+      ],
+      "tabs": [],
+      "branch": ""
+    },
+    "expected": "Branch: \nPath: /repo/shop\n\nNo tabs available"
+  },
+  {
+    "name": "workspace-multiple-paths",
+    "resource": {
+      "kind": "workspace",
+      "workspaceId": "w4",
+      "paths": [
+        " /repo/a\n",
+        "\t/repo/b\t"
+      ],
+      "tabs": [
+        {
+          "id": "t1",
+          "label": " Dev\t",
+          "panes": [
+            {
+              "id": "p1",
+              "label": "Build\nterminal",
+              "focused": false
+            },
+            {
+              "id": "p2",
+              "label": " Payment ",
+              "agent": "claude",
+              "status": "blocked",
+              "focused": true
+            },
+            {
+              "id": "p3",
+              "label": "Empty agent",
+              "agent": "",
+              "status": "",
+              "focused": false
+            },
+            {
+              "id": "p4",
+              "label": "Missing status",
+              "agent": "codex",
+              "focused": false
+            },
+            {
+              "id": "p5",
+              "label": "Whitespace agent",
+              "agent": "  ",
+              "status": "working",
+              "focused": false
+            }
+          ]
+        },
+        {
+          "id": "t2",
+          "label": "Empty pane tab",
+          "panes": []
+        }
+      ]
+    },
+    "expected": "Branch: unavailable\nPaths:\n  /repo/a\n  /repo/b\n\n▣ Dev · 5 panes\n  Build terminal\n  Payment · claude [blocked]\n  Empty agent\n  Missing status · codex [unknown]\n  Whitespace agent ·  [working]\n\n▣ Empty pane tab · 0 panes\n  Pane details unavailable"
+  }
+]

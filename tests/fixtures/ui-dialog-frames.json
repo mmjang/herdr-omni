@@ -1,0 +1,358 @@
+[
+  {
+    "width": 80,
+    "height": 24,
+    "state": "prompt",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Rename workspace  v0.15.1                                                esc  \n  New name                                                                      \n                                                                                \n  Choose a workspace name                                                       \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter confirm   esc back                                                      \n"
+  },
+  {
+    "width": 80,
+    "height": 24,
+    "state": "update",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                      esc  \n                                                                                \n  Herdr Omni v0.16.0 is available                                               \n  Upgrade from v0.15.1? Your settings and history will be kept.                 \n                                                                                \n    Update   [Later]                                                            \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  ←/→ or tab choose · enter confirm · esc later                                 \n"
+  },
+  {
+    "width": 80,
+    "height": 24,
+    "state": "retry",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                      esc  \n                                                                                \n  Herdr Omni v0.16.0 is available                                               \n  Upgrade from v0.15.1? Your settings and history will be kept.                 \n  Installation failed                                                           \n                                                                                \n   [Retry]   Later                                                              \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  ←/→ or tab choose · enter confirm · esc later                                 \n"
+  },
+  {
+    "width": 80,
+    "height": 24,
+    "state": "updated",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                      esc  \n                                                                                \n  Updated to v0.16.0                                                            \n  Reopen Omni to use the new version.                                           \n                                                                                \n   [Close]                                                                      \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  enter/esc close                                                               \n"
+  },
+  {
+    "width": 80,
+    "height": 24,
+    "state": "picker",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resume-session",
+        "session": {
+          "provider": "codex",
+          "id": "abc",
+          "cwd": "/missing",
+          "title": "Old"
+        }
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                      esc  \n                                                                                \n  Resume in workspace…                                                          \n  Original directory is unavailable.                                            \n                                                                                \n  › Shop (w1) · same project                                                    \n    /repo/shop                                                                  \n    Other (w2) · available                                                      \n    /repo/other                                                                 \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n                                                                                \n  ↑/↓ choose · enter resume · esc back                                          \n"
+  },
+  {
+    "width": 120,
+    "height": 24,
+    "state": "prompt",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Rename workspace  v0.15.1                                                                                        esc  \n  New name                                                                                                              \n                                                                                                                        \n  Choose a workspace name                                                                                               \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter confirm   esc back                                                                                              \n"
+  },
+  {
+    "width": 120,
+    "height": 24,
+    "state": "update",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                                                              esc  \n                                                                                                                        \n  Herdr Omni v0.16.0 is available                                                                                       \n  Upgrade from v0.15.1? Your settings and history will be kept.                                                         \n                                                                                                                        \n    Update   [Later]                                                                                                    \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  ←/→ or tab choose · enter confirm · esc later                                                                         \n"
+  },
+  {
+    "width": 120,
+    "height": 24,
+    "state": "retry",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                                                              esc  \n                                                                                                                        \n  Herdr Omni v0.16.0 is available                                                                                       \n  Upgrade from v0.15.1? Your settings and history will be kept.                                                         \n  Installation failed                                                                                                   \n                                                                                                                        \n   [Retry]   Later                                                                                                      \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  ←/→ or tab choose · enter confirm · esc later                                                                         \n"
+  },
+  {
+    "width": 120,
+    "height": 24,
+    "state": "updated",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "shortcut"
+      },
+      "prompt": {
+        "placeholder": "New name"
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                                                              esc  \n                                                                                                                        \n  Updated to v0.16.0                                                                                                    \n  Reopen Omni to use the new version.                                                                                   \n                                                                                                                        \n   [Close]                                                                                                              \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  enter/esc close                                                                                                       \n"
+  },
+  {
+    "width": 120,
+    "height": 24,
+    "state": "picker",
+    "item": {
+      "id": "rename",
+      "title": "Rename workspace",
+      "category": "Actions",
+      "icon": "◇",
+      "description": "Choose a workspace name",
+      "aliases": [],
+      "shortcuts": [],
+      "invocation": {
+        "kind": "resume-session",
+        "session": {
+          "provider": "codex",
+          "id": "abc",
+          "cwd": "/missing",
+          "title": "Old"
+        }
+      }
+    },
+    "choices": [
+      {
+        "id": "w1",
+        "label": "Shop",
+        "cwd": "/repo/shop",
+        "reason": "same project"
+      },
+      {
+        "id": "w2",
+        "label": "Other",
+        "cwd": "/repo/other",
+        "reason": "available"
+      }
+    ],
+    "frame": "  Herdr Omni  v0.15.1                                                                                              esc  \n                                                                                                                        \n  Resume in workspace…                                                                                                  \n  Original directory is unavailable.                                                                                    \n                                                                                                                        \n  › Shop (w1) · same project                                                                                            \n    /repo/shop                                                                                                          \n    Other (w2) · available                                                                                              \n    /repo/other                                                                                                         \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n                                                                                                                        \n  ↑/↓ choose · enter resume · esc back                                                                                  \n"
+  }
+]

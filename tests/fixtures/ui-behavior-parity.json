@@ -1,0 +1,4341 @@
+{
+  "rows": [
+    {
+      "section": "Actions",
+      "item": {
+        "id": "Actions:0",
+        "title": "Actions 0",
+        "category": "Actions",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Actions",
+      "item": {
+        "id": "Actions:1",
+        "title": "Actions 1",
+        "category": "Actions",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Actions",
+      "item": {
+        "id": "Actions:2",
+        "title": "Actions 2",
+        "category": "Actions",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Actions",
+      "item": {
+        "id": "Actions:3",
+        "title": "Actions 3",
+        "category": "Actions",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Actions",
+      "item": {
+        "id": "Actions:4",
+        "title": "Actions 4",
+        "category": "Actions",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:0",
+        "title": "Agents 0",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:1",
+        "title": "Agents 1",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:2",
+        "title": "Agents 2",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:3",
+        "title": "Agents 3",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:4",
+        "title": "Agents 4",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Agents",
+      "item": {
+        "id": "Agents:5",
+        "title": "Agents 5",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:0",
+        "title": "Workspace 0",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:1",
+        "title": "Workspace 1",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:2",
+        "title": "Workspace 2",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:3",
+        "title": "Workspace 3",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:4",
+        "title": "Workspace 4",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:5",
+        "title": "Workspace 5",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Workspace",
+      "item": {
+        "id": "Workspace:6",
+        "title": "Workspace 6",
+        "category": "Workspace",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Tabs",
+      "item": {
+        "id": "Tabs:0",
+        "title": "Tabs 0",
+        "category": "Tabs",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Tabs",
+      "item": {
+        "id": "Tabs:1",
+        "title": "Tabs 1",
+        "category": "Tabs",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Tabs",
+      "item": {
+        "id": "Tabs:2",
+        "title": "Tabs 2",
+        "category": "Tabs",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Tabs",
+      "item": {
+        "id": "Tabs:3",
+        "title": "Tabs 3",
+        "category": "Tabs",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Tabs",
+      "item": {
+        "id": "Tabs:4",
+        "title": "Tabs 4",
+        "category": "Tabs",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:0",
+        "title": "Custom 0",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:1",
+        "title": "Custom 1",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:2",
+        "title": "Custom 2",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:3",
+        "title": "Custom 3",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:4",
+        "title": "Custom 4",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Custom",
+      "item": {
+        "id": "Custom:5",
+        "title": "Custom 5",
+        "category": "Custom",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:0",
+        "title": "Panes 0",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:1",
+        "title": "Panes 1",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:2",
+        "title": "Panes 2",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:3",
+        "title": "Panes 3",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:4",
+        "title": "Panes 4",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:5",
+        "title": "Panes 5",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Panes",
+      "item": {
+        "id": "Panes:6",
+        "title": "Panes 6",
+        "category": "Panes",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Herdr",
+      "item": {
+        "id": "Herdr:0",
+        "title": "Herdr 0",
+        "category": "Herdr",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Herdr",
+      "item": {
+        "id": "Herdr:1",
+        "title": "Herdr 1",
+        "category": "Herdr",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Herdr",
+      "item": {
+        "id": "Herdr:2",
+        "title": "Herdr 2",
+        "category": "Herdr",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Herdr",
+      "item": {
+        "id": "Herdr:3",
+        "title": "Herdr 3",
+        "category": "Herdr",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Herdr",
+      "item": {
+        "id": "Herdr:4",
+        "title": "Herdr 4",
+        "category": "Herdr",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:0",
+        "title": "Transcript matches 0",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:1",
+        "title": "Transcript matches 1",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:2",
+        "title": "Transcript matches 2",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:3",
+        "title": "Transcript matches 3",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:4",
+        "title": "Transcript matches 4",
+        "category": "Agents",
+        "icon": "x"
+      }
+    },
+    {
+      "section": "Transcript matches",
+      "item": {
+        "id": "Transcript matches:5",
+        "title": "Transcript matches 5",
+        "category": "Agents",
+        "icon": "x"
+      }
+    }
+  ],
+  "groups": [
+    {
+      "query": "",
+      "tab": "All",
+      "rows": [
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Workspace",
+          "title": "View all Workspaces (7)",
+          "section": "Workspace",
+          "viewAll": "Workspace"
+        },
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Agents",
+          "title": "View all Agents (6)",
+          "section": "Agents",
+          "viewAll": "Agents"
+        },
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Tabs",
+          "title": "View all Tabs (5)",
+          "section": "Tabs",
+          "viewAll": "Tabs"
+        },
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Actions",
+          "title": "View all Actions (5)",
+          "section": "Actions",
+          "viewAll": "Actions"
+        },
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Panes",
+          "title": "View all Panes (7)",
+          "section": "Panes",
+          "viewAll": "Panes"
+        },
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Herdr",
+          "title": "View all Herdr (5)",
+          "section": "Herdr",
+          "viewAll": "Herdr"
+        },
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Custom",
+          "title": "View all Custom (6)",
+          "section": "Custom",
+          "viewAll": "Custom"
+        },
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Transcript matches",
+          "title": "View all Transcript matches (6)",
+          "section": "Transcript matches",
+          "viewAll": "Transcript matches"
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Actions",
+      "rows": [
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Agents",
+      "rows": [
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:5",
+          "title": "Agents 5",
+          "section": "Agents",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Workspace",
+      "rows": [
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:5",
+          "title": "Workspace 5",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:6",
+          "title": "Workspace 6",
+          "section": "Workspace",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Tabs",
+      "rows": [
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Custom",
+      "rows": [
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:5",
+          "title": "Custom 5",
+          "section": "Custom",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Panes",
+      "rows": [
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:5",
+          "title": "Panes 5",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:6",
+          "title": "Panes 6",
+          "section": "Panes",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Herdr",
+      "rows": [
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "",
+      "tab": "Transcript matches",
+      "rows": [
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:5",
+          "title": "Transcript matches 5",
+          "section": "Transcript matches",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "All",
+      "rows": [
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Workspace",
+          "title": "View all Workspaces (7)",
+          "section": "Workspace",
+          "viewAll": "Workspace"
+        },
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Agents",
+          "title": "View all Agents (6)",
+          "section": "Agents",
+          "viewAll": "Agents"
+        },
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Tabs",
+          "title": "View all Tabs (5)",
+          "section": "Tabs",
+          "viewAll": "Tabs"
+        },
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Actions",
+          "title": "View all Actions (5)",
+          "section": "Actions",
+          "viewAll": "Actions"
+        },
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Panes",
+          "title": "View all Panes (7)",
+          "section": "Panes",
+          "viewAll": "Panes"
+        },
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Herdr",
+          "title": "View all Herdr (5)",
+          "section": "Herdr",
+          "viewAll": "Herdr"
+        },
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Custom",
+          "title": "View all Custom (6)",
+          "section": "Custom",
+          "viewAll": "Custom"
+        },
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Transcript matches",
+          "title": "View all Transcript matches (6)",
+          "section": "Transcript matches",
+          "viewAll": "Transcript matches"
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Actions",
+      "rows": [
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Agents",
+      "rows": [
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:5",
+          "title": "Agents 5",
+          "section": "Agents",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Workspace",
+      "rows": [
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:5",
+          "title": "Workspace 5",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:6",
+          "title": "Workspace 6",
+          "section": "Workspace",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Tabs",
+      "rows": [
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Custom",
+      "rows": [
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:5",
+          "title": "Custom 5",
+          "section": "Custom",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Panes",
+      "rows": [
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:5",
+          "title": "Panes 5",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:6",
+          "title": "Panes 6",
+          "section": "Panes",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Herdr",
+      "rows": [
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "   ",
+      "tab": "Transcript matches",
+      "rows": [
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:5",
+          "title": "Transcript matches 5",
+          "section": "Transcript matches",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "All",
+      "rows": [
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Actions",
+          "title": "View all Actions (5)",
+          "section": "Actions",
+          "viewAll": "Actions"
+        },
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Agents",
+          "title": "View all Agents (6)",
+          "section": "Agents",
+          "viewAll": "Agents"
+        },
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Workspace",
+          "title": "View all Workspaces (7)",
+          "section": "Workspace",
+          "viewAll": "Workspace"
+        },
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Tabs",
+          "title": "View all Tabs (5)",
+          "section": "Tabs",
+          "viewAll": "Tabs"
+        },
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Custom",
+          "title": "View all Custom (6)",
+          "section": "Custom",
+          "viewAll": "Custom"
+        },
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Panes",
+          "title": "View all Panes (7)",
+          "section": "Panes",
+          "viewAll": "Panes"
+        },
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Herdr",
+          "title": "View all Herdr (5)",
+          "section": "Herdr",
+          "viewAll": "Herdr"
+        },
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "ui:view-all:Transcript matches",
+          "title": "View all Transcript matches (6)",
+          "section": "Transcript matches",
+          "viewAll": "Transcript matches"
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Actions",
+      "rows": [
+        {
+          "id": "Actions:0",
+          "title": "Actions 0",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:1",
+          "title": "Actions 1",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:2",
+          "title": "Actions 2",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:3",
+          "title": "Actions 3",
+          "section": "Actions",
+          "viewAll": null
+        },
+        {
+          "id": "Actions:4",
+          "title": "Actions 4",
+          "section": "Actions",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Agents",
+      "rows": [
+        {
+          "id": "Agents:0",
+          "title": "Agents 0",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:1",
+          "title": "Agents 1",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:2",
+          "title": "Agents 2",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:3",
+          "title": "Agents 3",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:4",
+          "title": "Agents 4",
+          "section": "Agents",
+          "viewAll": null
+        },
+        {
+          "id": "Agents:5",
+          "title": "Agents 5",
+          "section": "Agents",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Workspace",
+      "rows": [
+        {
+          "id": "Workspace:0",
+          "title": "Workspace 0",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:1",
+          "title": "Workspace 1",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:2",
+          "title": "Workspace 2",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:3",
+          "title": "Workspace 3",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:4",
+          "title": "Workspace 4",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:5",
+          "title": "Workspace 5",
+          "section": "Workspace",
+          "viewAll": null
+        },
+        {
+          "id": "Workspace:6",
+          "title": "Workspace 6",
+          "section": "Workspace",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Tabs",
+      "rows": [
+        {
+          "id": "Tabs:0",
+          "title": "Tabs 0",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:1",
+          "title": "Tabs 1",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:2",
+          "title": "Tabs 2",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:3",
+          "title": "Tabs 3",
+          "section": "Tabs",
+          "viewAll": null
+        },
+        {
+          "id": "Tabs:4",
+          "title": "Tabs 4",
+          "section": "Tabs",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Custom",
+      "rows": [
+        {
+          "id": "Custom:0",
+          "title": "Custom 0",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:1",
+          "title": "Custom 1",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:2",
+          "title": "Custom 2",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:3",
+          "title": "Custom 3",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:4",
+          "title": "Custom 4",
+          "section": "Custom",
+          "viewAll": null
+        },
+        {
+          "id": "Custom:5",
+          "title": "Custom 5",
+          "section": "Custom",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Panes",
+      "rows": [
+        {
+          "id": "Panes:0",
+          "title": "Panes 0",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:1",
+          "title": "Panes 1",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:2",
+          "title": "Panes 2",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:3",
+          "title": "Panes 3",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:4",
+          "title": "Panes 4",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:5",
+          "title": "Panes 5",
+          "section": "Panes",
+          "viewAll": null
+        },
+        {
+          "id": "Panes:6",
+          "title": "Panes 6",
+          "section": "Panes",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Herdr",
+      "rows": [
+        {
+          "id": "Herdr:0",
+          "title": "Herdr 0",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:1",
+          "title": "Herdr 1",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:2",
+          "title": "Herdr 2",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:3",
+          "title": "Herdr 3",
+          "section": "Herdr",
+          "viewAll": null
+        },
+        {
+          "id": "Herdr:4",
+          "title": "Herdr 4",
+          "section": "Herdr",
+          "viewAll": null
+        }
+      ]
+    },
+    {
+      "query": "find",
+      "tab": "Transcript matches",
+      "rows": [
+        {
+          "id": "Transcript matches:0",
+          "title": "Transcript matches 0",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:1",
+          "title": "Transcript matches 1",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:2",
+          "title": "Transcript matches 2",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:3",
+          "title": "Transcript matches 3",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:4",
+          "title": "Transcript matches 4",
+          "section": "Transcript matches",
+          "viewAll": null
+        },
+        {
+          "id": "Transcript matches:5",
+          "title": "Transcript matches 5",
+          "section": "Transcript matches",
+          "viewAll": null
+        }
+      ]
+    }
+  ],
+  "windows": [
+    {
+      "selected": 0,
+      "capacity": 1,
+      "start": 0,
+      "end": 1
+    },
+    {
+      "selected": 0,
+      "capacity": 2,
+      "start": 0,
+      "end": 1
+    },
+    {
+      "selected": 0,
+      "capacity": 3,
+      "start": 0,
+      "end": 2
+    },
+    {
+      "selected": 0,
+      "capacity": 5,
+      "start": 0,
+      "end": 4
+    },
+    {
+      "selected": 0,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 0,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 0,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 1,
+      "capacity": 1,
+      "start": 1,
+      "end": 2
+    },
+    {
+      "selected": 1,
+      "capacity": 2,
+      "start": 1,
+      "end": 2
+    },
+    {
+      "selected": 1,
+      "capacity": 3,
+      "start": 0,
+      "end": 2
+    },
+    {
+      "selected": 1,
+      "capacity": 5,
+      "start": 0,
+      "end": 4
+    },
+    {
+      "selected": 1,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 1,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 1,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 2,
+      "capacity": 1,
+      "start": 2,
+      "end": 3
+    },
+    {
+      "selected": 2,
+      "capacity": 2,
+      "start": 2,
+      "end": 3
+    },
+    {
+      "selected": 2,
+      "capacity": 3,
+      "start": 1,
+      "end": 3
+    },
+    {
+      "selected": 2,
+      "capacity": 5,
+      "start": 0,
+      "end": 4
+    },
+    {
+      "selected": 2,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 2,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 2,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 3,
+      "capacity": 1,
+      "start": 3,
+      "end": 4
+    },
+    {
+      "selected": 3,
+      "capacity": 2,
+      "start": 3,
+      "end": 4
+    },
+    {
+      "selected": 3,
+      "capacity": 3,
+      "start": 2,
+      "end": 4
+    },
+    {
+      "selected": 3,
+      "capacity": 5,
+      "start": 0,
+      "end": 4
+    },
+    {
+      "selected": 3,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 3,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 3,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 4,
+      "capacity": 1,
+      "start": 4,
+      "end": 5
+    },
+    {
+      "selected": 4,
+      "capacity": 2,
+      "start": 4,
+      "end": 5
+    },
+    {
+      "selected": 4,
+      "capacity": 3,
+      "start": 3,
+      "end": 5
+    },
+    {
+      "selected": 4,
+      "capacity": 5,
+      "start": 1,
+      "end": 5
+    },
+    {
+      "selected": 4,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 4,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 4,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 5,
+      "capacity": 1,
+      "start": 5,
+      "end": 6
+    },
+    {
+      "selected": 5,
+      "capacity": 2,
+      "start": 5,
+      "end": 6
+    },
+    {
+      "selected": 5,
+      "capacity": 3,
+      "start": 4,
+      "end": 6
+    },
+    {
+      "selected": 5,
+      "capacity": 5,
+      "start": 2,
+      "end": 6
+    },
+    {
+      "selected": 5,
+      "capacity": 8,
+      "start": 0,
+      "end": 6
+    },
+    {
+      "selected": 5,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 5,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 6,
+      "capacity": 1,
+      "start": 6,
+      "end": 7
+    },
+    {
+      "selected": 6,
+      "capacity": 2,
+      "start": 6,
+      "end": 7
+    },
+    {
+      "selected": 6,
+      "capacity": 3,
+      "start": 6,
+      "end": 8
+    },
+    {
+      "selected": 6,
+      "capacity": 5,
+      "start": 4,
+      "end": 7
+    },
+    {
+      "selected": 6,
+      "capacity": 8,
+      "start": 1,
+      "end": 7
+    },
+    {
+      "selected": 6,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 6,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 7,
+      "capacity": 1,
+      "start": 7,
+      "end": 8
+    },
+    {
+      "selected": 7,
+      "capacity": 2,
+      "start": 7,
+      "end": 8
+    },
+    {
+      "selected": 7,
+      "capacity": 3,
+      "start": 6,
+      "end": 8
+    },
+    {
+      "selected": 7,
+      "capacity": 5,
+      "start": 5,
+      "end": 8
+    },
+    {
+      "selected": 7,
+      "capacity": 8,
+      "start": 2,
+      "end": 8
+    },
+    {
+      "selected": 7,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 7,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 8,
+      "capacity": 1,
+      "start": 8,
+      "end": 9
+    },
+    {
+      "selected": 8,
+      "capacity": 2,
+      "start": 8,
+      "end": 9
+    },
+    {
+      "selected": 8,
+      "capacity": 3,
+      "start": 7,
+      "end": 9
+    },
+    {
+      "selected": 8,
+      "capacity": 5,
+      "start": 6,
+      "end": 10
+    },
+    {
+      "selected": 8,
+      "capacity": 8,
+      "start": 3,
+      "end": 9
+    },
+    {
+      "selected": 8,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 8,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 9,
+      "capacity": 1,
+      "start": 9,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 2,
+      "start": 9,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 3,
+      "start": 8,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 5,
+      "start": 6,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 8,
+      "start": 4,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 12,
+      "start": 0,
+      "end": 10
+    },
+    {
+      "selected": 9,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 10,
+      "capacity": 1,
+      "start": 10,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 2,
+      "start": 10,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 3,
+      "start": 9,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 5,
+      "start": 7,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 8,
+      "start": 5,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 12,
+      "start": 1,
+      "end": 11
+    },
+    {
+      "selected": 10,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 11,
+      "capacity": 1,
+      "start": 11,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 2,
+      "start": 11,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 3,
+      "start": 10,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 5,
+      "start": 8,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 8,
+      "start": 6,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 12,
+      "start": 2,
+      "end": 12
+    },
+    {
+      "selected": 11,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 12,
+      "capacity": 1,
+      "start": 12,
+      "end": 13
+    },
+    {
+      "selected": 12,
+      "capacity": 2,
+      "start": 12,
+      "end": 13
+    },
+    {
+      "selected": 12,
+      "capacity": 3,
+      "start": 12,
+      "end": 14
+    },
+    {
+      "selected": 12,
+      "capacity": 5,
+      "start": 10,
+      "end": 13
+    },
+    {
+      "selected": 12,
+      "capacity": 8,
+      "start": 7,
+      "end": 13
+    },
+    {
+      "selected": 12,
+      "capacity": 12,
+      "start": 4,
+      "end": 13
+    },
+    {
+      "selected": 12,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 13,
+      "capacity": 1,
+      "start": 13,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 2,
+      "start": 13,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 3,
+      "start": 12,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 5,
+      "start": 11,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 8,
+      "start": 8,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 12,
+      "start": 5,
+      "end": 14
+    },
+    {
+      "selected": 13,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 14,
+      "capacity": 1,
+      "start": 14,
+      "end": 15
+    },
+    {
+      "selected": 14,
+      "capacity": 2,
+      "start": 14,
+      "end": 15
+    },
+    {
+      "selected": 14,
+      "capacity": 3,
+      "start": 13,
+      "end": 15
+    },
+    {
+      "selected": 14,
+      "capacity": 5,
+      "start": 12,
+      "end": 16
+    },
+    {
+      "selected": 14,
+      "capacity": 8,
+      "start": 9,
+      "end": 15
+    },
+    {
+      "selected": 14,
+      "capacity": 12,
+      "start": 6,
+      "end": 16
+    },
+    {
+      "selected": 14,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 15,
+      "capacity": 1,
+      "start": 15,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 2,
+      "start": 15,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 3,
+      "start": 14,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 5,
+      "start": 12,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 8,
+      "start": 10,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 12,
+      "start": 6,
+      "end": 16
+    },
+    {
+      "selected": 15,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 16,
+      "capacity": 1,
+      "start": 16,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 2,
+      "start": 16,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 3,
+      "start": 15,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 5,
+      "start": 13,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 8,
+      "start": 11,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 12,
+      "start": 7,
+      "end": 17
+    },
+    {
+      "selected": 16,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 17,
+      "capacity": 1,
+      "start": 17,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 2,
+      "start": 17,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 3,
+      "start": 16,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 5,
+      "start": 14,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 8,
+      "start": 12,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 12,
+      "start": 8,
+      "end": 18
+    },
+    {
+      "selected": 17,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 18,
+      "capacity": 1,
+      "start": 18,
+      "end": 19
+    },
+    {
+      "selected": 18,
+      "capacity": 2,
+      "start": 18,
+      "end": 19
+    },
+    {
+      "selected": 18,
+      "capacity": 3,
+      "start": 18,
+      "end": 20
+    },
+    {
+      "selected": 18,
+      "capacity": 5,
+      "start": 16,
+      "end": 19
+    },
+    {
+      "selected": 18,
+      "capacity": 8,
+      "start": 13,
+      "end": 19
+    },
+    {
+      "selected": 18,
+      "capacity": 12,
+      "start": 10,
+      "end": 19
+    },
+    {
+      "selected": 18,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 19,
+      "capacity": 1,
+      "start": 19,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 2,
+      "start": 19,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 3,
+      "start": 18,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 5,
+      "start": 17,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 8,
+      "start": 14,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 12,
+      "start": 11,
+      "end": 20
+    },
+    {
+      "selected": 19,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 20,
+      "capacity": 1,
+      "start": 20,
+      "end": 21
+    },
+    {
+      "selected": 20,
+      "capacity": 2,
+      "start": 20,
+      "end": 21
+    },
+    {
+      "selected": 20,
+      "capacity": 3,
+      "start": 19,
+      "end": 21
+    },
+    {
+      "selected": 20,
+      "capacity": 5,
+      "start": 18,
+      "end": 22
+    },
+    {
+      "selected": 20,
+      "capacity": 8,
+      "start": 15,
+      "end": 21
+    },
+    {
+      "selected": 20,
+      "capacity": 12,
+      "start": 12,
+      "end": 22
+    },
+    {
+      "selected": 20,
+      "capacity": 25,
+      "start": 0,
+      "end": 21
+    },
+    {
+      "selected": 21,
+      "capacity": 1,
+      "start": 21,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 2,
+      "start": 21,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 3,
+      "start": 20,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 5,
+      "start": 18,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 8,
+      "start": 16,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 12,
+      "start": 12,
+      "end": 22
+    },
+    {
+      "selected": 21,
+      "capacity": 25,
+      "start": 1,
+      "end": 22
+    },
+    {
+      "selected": 22,
+      "capacity": 1,
+      "start": 22,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 2,
+      "start": 22,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 3,
+      "start": 21,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 5,
+      "start": 19,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 8,
+      "start": 17,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 12,
+      "start": 13,
+      "end": 23
+    },
+    {
+      "selected": 22,
+      "capacity": 25,
+      "start": 2,
+      "end": 23
+    },
+    {
+      "selected": 23,
+      "capacity": 1,
+      "start": 23,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 2,
+      "start": 23,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 3,
+      "start": 22,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 5,
+      "start": 20,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 8,
+      "start": 18,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 12,
+      "start": 14,
+      "end": 24
+    },
+    {
+      "selected": 23,
+      "capacity": 25,
+      "start": 3,
+      "end": 24
+    },
+    {
+      "selected": 24,
+      "capacity": 1,
+      "start": 24,
+      "end": 25
+    },
+    {
+      "selected": 24,
+      "capacity": 2,
+      "start": 24,
+      "end": 25
+    },
+    {
+      "selected": 24,
+      "capacity": 3,
+      "start": 24,
+      "end": 26
+    },
+    {
+      "selected": 24,
+      "capacity": 5,
+      "start": 22,
+      "end": 25
+    },
+    {
+      "selected": 24,
+      "capacity": 8,
+      "start": 19,
+      "end": 25
+    },
+    {
+      "selected": 24,
+      "capacity": 12,
+      "start": 16,
+      "end": 25
+    },
+    {
+      "selected": 24,
+      "capacity": 25,
+      "start": 5,
+      "end": 25
+    },
+    {
+      "selected": 25,
+      "capacity": 1,
+      "start": 25,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 2,
+      "start": 25,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 3,
+      "start": 24,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 5,
+      "start": 23,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 8,
+      "start": 20,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 12,
+      "start": 17,
+      "end": 26
+    },
+    {
+      "selected": 25,
+      "capacity": 25,
+      "start": 6,
+      "end": 27
+    },
+    {
+      "selected": 26,
+      "capacity": 1,
+      "start": 26,
+      "end": 27
+    },
+    {
+      "selected": 26,
+      "capacity": 2,
+      "start": 26,
+      "end": 27
+    },
+    {
+      "selected": 26,
+      "capacity": 3,
+      "start": 25,
+      "end": 27
+    },
+    {
+      "selected": 26,
+      "capacity": 5,
+      "start": 24,
+      "end": 28
+    },
+    {
+      "selected": 26,
+      "capacity": 8,
+      "start": 21,
+      "end": 27
+    },
+    {
+      "selected": 26,
+      "capacity": 12,
+      "start": 18,
+      "end": 28
+    },
+    {
+      "selected": 26,
+      "capacity": 25,
+      "start": 6,
+      "end": 27
+    },
+    {
+      "selected": 27,
+      "capacity": 1,
+      "start": 27,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 2,
+      "start": 27,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 3,
+      "start": 26,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 5,
+      "start": 24,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 8,
+      "start": 22,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 12,
+      "start": 18,
+      "end": 28
+    },
+    {
+      "selected": 27,
+      "capacity": 25,
+      "start": 7,
+      "end": 28
+    },
+    {
+      "selected": 28,
+      "capacity": 1,
+      "start": 28,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 2,
+      "start": 28,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 3,
+      "start": 27,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 5,
+      "start": 25,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 8,
+      "start": 23,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 12,
+      "start": 19,
+      "end": 29
+    },
+    {
+      "selected": 28,
+      "capacity": 25,
+      "start": 8,
+      "end": 29
+    },
+    {
+      "selected": 29,
+      "capacity": 1,
+      "start": 29,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 2,
+      "start": 29,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 3,
+      "start": 28,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 5,
+      "start": 26,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 8,
+      "start": 24,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 12,
+      "start": 20,
+      "end": 30
+    },
+    {
+      "selected": 29,
+      "capacity": 25,
+      "start": 9,
+      "end": 30
+    },
+    {
+      "selected": 30,
+      "capacity": 1,
+      "start": 30,
+      "end": 31
+    },
+    {
+      "selected": 30,
+      "capacity": 2,
+      "start": 30,
+      "end": 31
+    },
+    {
+      "selected": 30,
+      "capacity": 3,
+      "start": 30,
+      "end": 32
+    },
+    {
+      "selected": 30,
+      "capacity": 5,
+      "start": 28,
+      "end": 31
+    },
+    {
+      "selected": 30,
+      "capacity": 8,
+      "start": 25,
+      "end": 31
+    },
+    {
+      "selected": 30,
+      "capacity": 12,
+      "start": 22,
+      "end": 31
+    },
+    {
+      "selected": 30,
+      "capacity": 25,
+      "start": 11,
+      "end": 31
+    },
+    {
+      "selected": 31,
+      "capacity": 1,
+      "start": 31,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 2,
+      "start": 31,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 3,
+      "start": 30,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 5,
+      "start": 29,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 8,
+      "start": 26,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 12,
+      "start": 23,
+      "end": 32
+    },
+    {
+      "selected": 31,
+      "capacity": 25,
+      "start": 12,
+      "end": 33
+    },
+    {
+      "selected": 32,
+      "capacity": 1,
+      "start": 32,
+      "end": 33
+    },
+    {
+      "selected": 32,
+      "capacity": 2,
+      "start": 32,
+      "end": 33
+    },
+    {
+      "selected": 32,
+      "capacity": 3,
+      "start": 31,
+      "end": 33
+    },
+    {
+      "selected": 32,
+      "capacity": 5,
+      "start": 30,
+      "end": 34
+    },
+    {
+      "selected": 32,
+      "capacity": 8,
+      "start": 27,
+      "end": 33
+    },
+    {
+      "selected": 32,
+      "capacity": 12,
+      "start": 24,
+      "end": 34
+    },
+    {
+      "selected": 32,
+      "capacity": 25,
+      "start": 12,
+      "end": 33
+    },
+    {
+      "selected": 33,
+      "capacity": 1,
+      "start": 33,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 2,
+      "start": 33,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 3,
+      "start": 32,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 5,
+      "start": 30,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 8,
+      "start": 28,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 12,
+      "start": 24,
+      "end": 34
+    },
+    {
+      "selected": 33,
+      "capacity": 25,
+      "start": 13,
+      "end": 34
+    },
+    {
+      "selected": 34,
+      "capacity": 1,
+      "start": 34,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 2,
+      "start": 34,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 3,
+      "start": 33,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 5,
+      "start": 31,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 8,
+      "start": 29,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 12,
+      "start": 25,
+      "end": 35
+    },
+    {
+      "selected": 34,
+      "capacity": 25,
+      "start": 14,
+      "end": 35
+    },
+    {
+      "selected": 35,
+      "capacity": 1,
+      "start": 35,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 2,
+      "start": 35,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 3,
+      "start": 34,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 5,
+      "start": 32,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 8,
+      "start": 30,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 12,
+      "start": 26,
+      "end": 36
+    },
+    {
+      "selected": 35,
+      "capacity": 25,
+      "start": 15,
+      "end": 36
+    },
+    {
+      "selected": 36,
+      "capacity": 1,
+      "start": 36,
+      "end": 37
+    },
+    {
+      "selected": 36,
+      "capacity": 2,
+      "start": 36,
+      "end": 37
+    },
+    {
+      "selected": 36,
+      "capacity": 3,
+      "start": 36,
+      "end": 38
+    },
+    {
+      "selected": 36,
+      "capacity": 5,
+      "start": 34,
+      "end": 37
+    },
+    {
+      "selected": 36,
+      "capacity": 8,
+      "start": 31,
+      "end": 37
+    },
+    {
+      "selected": 36,
+      "capacity": 12,
+      "start": 28,
+      "end": 37
+    },
+    {
+      "selected": 36,
+      "capacity": 25,
+      "start": 17,
+      "end": 37
+    },
+    {
+      "selected": 37,
+      "capacity": 1,
+      "start": 37,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 2,
+      "start": 37,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 3,
+      "start": 36,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 5,
+      "start": 35,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 8,
+      "start": 32,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 12,
+      "start": 29,
+      "end": 38
+    },
+    {
+      "selected": 37,
+      "capacity": 25,
+      "start": 18,
+      "end": 39
+    },
+    {
+      "selected": 38,
+      "capacity": 1,
+      "start": 38,
+      "end": 39
+    },
+    {
+      "selected": 38,
+      "capacity": 2,
+      "start": 38,
+      "end": 39
+    },
+    {
+      "selected": 38,
+      "capacity": 3,
+      "start": 37,
+      "end": 39
+    },
+    {
+      "selected": 38,
+      "capacity": 5,
+      "start": 36,
+      "end": 40
+    },
+    {
+      "selected": 38,
+      "capacity": 8,
+      "start": 33,
+      "end": 39
+    },
+    {
+      "selected": 38,
+      "capacity": 12,
+      "start": 30,
+      "end": 40
+    },
+    {
+      "selected": 38,
+      "capacity": 25,
+      "start": 18,
+      "end": 39
+    },
+    {
+      "selected": 39,
+      "capacity": 1,
+      "start": 39,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 2,
+      "start": 39,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 3,
+      "start": 38,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 5,
+      "start": 36,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 8,
+      "start": 34,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 12,
+      "start": 30,
+      "end": 40
+    },
+    {
+      "selected": 39,
+      "capacity": 25,
+      "start": 19,
+      "end": 40
+    },
+    {
+      "selected": 40,
+      "capacity": 1,
+      "start": 40,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 2,
+      "start": 40,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 3,
+      "start": 39,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 5,
+      "start": 37,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 8,
+      "start": 35,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 12,
+      "start": 31,
+      "end": 41
+    },
+    {
+      "selected": 40,
+      "capacity": 25,
+      "start": 20,
+      "end": 41
+    },
+    {
+      "selected": 41,
+      "capacity": 1,
+      "start": 41,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 2,
+      "start": 41,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 3,
+      "start": 40,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 5,
+      "start": 38,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 8,
+      "start": 36,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 12,
+      "start": 32,
+      "end": 42
+    },
+    {
+      "selected": 41,
+      "capacity": 25,
+      "start": 21,
+      "end": 42
+    },
+    {
+      "selected": 42,
+      "capacity": 1,
+      "start": 42,
+      "end": 43
+    },
+    {
+      "selected": 42,
+      "capacity": 2,
+      "start": 42,
+      "end": 43
+    },
+    {
+      "selected": 42,
+      "capacity": 3,
+      "start": 42,
+      "end": 44
+    },
+    {
+      "selected": 42,
+      "capacity": 5,
+      "start": 40,
+      "end": 43
+    },
+    {
+      "selected": 42,
+      "capacity": 8,
+      "start": 37,
+      "end": 43
+    },
+    {
+      "selected": 42,
+      "capacity": 12,
+      "start": 34,
+      "end": 43
+    },
+    {
+      "selected": 42,
+      "capacity": 25,
+      "start": 23,
+      "end": 43
+    },
+    {
+      "selected": 43,
+      "capacity": 1,
+      "start": 43,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 2,
+      "start": 43,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 3,
+      "start": 42,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 5,
+      "start": 41,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 8,
+      "start": 38,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 12,
+      "start": 35,
+      "end": 44
+    },
+    {
+      "selected": 43,
+      "capacity": 25,
+      "start": 24,
+      "end": 45
+    },
+    {
+      "selected": 44,
+      "capacity": 1,
+      "start": 44,
+      "end": 45
+    },
+    {
+      "selected": 44,
+      "capacity": 2,
+      "start": 44,
+      "end": 45
+    },
+    {
+      "selected": 44,
+      "capacity": 3,
+      "start": 43,
+      "end": 45
+    },
+    {
+      "selected": 44,
+      "capacity": 5,
+      "start": 42,
+      "end": 46
+    },
+    {
+      "selected": 44,
+      "capacity": 8,
+      "start": 39,
+      "end": 45
+    },
+    {
+      "selected": 44,
+      "capacity": 12,
+      "start": 36,
+      "end": 46
+    },
+    {
+      "selected": 44,
+      "capacity": 25,
+      "start": 24,
+      "end": 45
+    },
+    {
+      "selected": 45,
+      "capacity": 1,
+      "start": 45,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 2,
+      "start": 45,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 3,
+      "start": 44,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 5,
+      "start": 42,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 8,
+      "start": 40,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 12,
+      "start": 36,
+      "end": 46
+    },
+    {
+      "selected": 45,
+      "capacity": 25,
+      "start": 25,
+      "end": 46
+    },
+    {
+      "selected": 46,
+      "capacity": 1,
+      "start": 46,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 2,
+      "start": 46,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 3,
+      "start": 45,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 5,
+      "start": 43,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 8,
+      "start": 41,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 12,
+      "start": 37,
+      "end": 47
+    },
+    {
+      "selected": 46,
+      "capacity": 25,
+      "start": 26,
+      "end": 47
+    },
+    {
+      "selected": 47,
+      "capacity": 1,
+      "start": 47,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 2,
+      "start": 47,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 3,
+      "start": 46,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 5,
+      "start": 44,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 8,
+      "start": 42,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 12,
+      "start": 38,
+      "end": 48
+    },
+    {
+      "selected": 47,
+      "capacity": 25,
+      "start": 27,
+      "end": 48
+    }
+  ],
+  "tabs": [
+    "All",
+    "Workspace",
+    "Agents",
+    "Tabs",
+    "Actions",
+    "Panes",
+    "Herdr",
+    "Custom",
+    "Transcript matches"
+  ],
+  "counts": {
+    "All": "47",
+    "Actions": "5",
+    "Agents": "6",
+    "Workspace": "7",
+    "Tabs": "5",
+    "Custom": "6",
+    "Panes": "7",
+    "Herdr": "5",
+    "Transcript matches": "6"
+  }
+}

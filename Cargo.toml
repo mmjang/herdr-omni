@@ -1,0 +1,21 @@
+[package]
+name = "herdr-omni"
+version = "0.16.0"
+edition = "2021"
+default-run = "herdr-omni"
+description = "Herdr command palette and agent session browser"
+
+[dependencies]
+ratatui = "0.29"
+crossterm = "0.28"
+serde_json = "1"
+toml = "0.8"
+dirs = "6"
+chrono = "0.4"
+libc = "0.2"
+unicode-width = "0.2"
+unicode-segmentation = "1"
+
+[profile.release]
+lto = "thin"
+strip = true

@@ -4,17 +4,12 @@ Source: https://github.com/microsoft/vscode/blob/6182a6ebe7cfcf1ce05126fcd475f66
 
 Revision: `6182a6ebe7cfcf1ce05126fcd475f66a5650cebc`.
 
-Vendored under the adjacent MIT license. This is the `scoreFuzzy` core used by
-VS Code Quick Open's `scoreItemFuzzy`, not the alternative scorer in `filters.ts`.
+The `scoreFuzzy` core used by VS Code Quick Open is ported to Rust in
+[`src/search.rs`](../../search.rs), under the adjacent Microsoft MIT license.
+The port retains UTF-16 scoring and traceback semantics, then converts match
+offsets to character indices for display. Omni adds its own tokenization,
+field penalties, exact-match bonuses, and category ordering.
 
-Extraction changes: retain only the first fuzzy-scorer region; remove the unused
-`FuzzyScorerCache` type; inline its ASCII `CharCode` constants and `isUpper` helper;
-adjust the license path in the header. Scoring and traceback are unchanged.
-
-Omni's adapter retains its own tokenization, field penalties, exact-match bonus,
-Recent section, and agent priority. It converts UTF-16 offsets into codepoint
-indices for highlighting. This is not a copy of VS Code's full file-ranking policy.
-
-When updating, pin a new revision, compare the extracted core and helpers, rerun
-the upstream-derived fixtures in `test/vscode-scorer.test.ts` and Omni's search
-tests, and benchmark the same workload before claiming a performance improvement.
+`tests/fixtures/search-parity.json` records results from the original TypeScript
+implementation, including Unicode cases. Run `cargo test --test search_parity`
+when changing the scorer. Pin and compare the upstream revision when updating.

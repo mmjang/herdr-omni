@@ -1,12 +1,12 @@
 id = "herdr-omni"
 name = "Herdr Omni"
-version = "0.15.1"
+version = "0.16.0"
 min_herdr_version = "0.7.0"
 description = "Fuzzy search for Herdr actions, workspaces, tabs, worktrees, and agent sessions"
 platforms = ["linux", "macos"]
 
 [[build]]
-command = ["bun", "install", "--production"]
+command = ["sh", "scripts/install.sh"]
 
 [[panes]]
 id = "picker"
@@ -14,4 +14,4 @@ title = "Herdr Omni"
 placement = "popup"
 width = "90%"
 height = "90%"
-command = ["bun", "run", "src/main.ts"]
+command = ["./bin/herdr-omni"]

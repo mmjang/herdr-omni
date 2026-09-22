@@ -1,0 +1,12 @@
+[
+  {
+    "config": "[theme]\nname = \"Latte\"\nauto_switch = true\ndark_name = \"nord\"\nlight_name = \"catppuccin-latte\"\n[theme.custom]\naccent = \"#ABC\"\n[theme.custom.dark]\naccent = \"#123456\"\n",
+    "light": {"accent":"#aabbcc","background":"#eff1f5","panel":"#ccd0da","text":"#4c4f69"},
+    "dark": {"accent":"#123456","background":"#2e3440","panel":"#3b4252","text":"#eceff4"}
+  },
+  {
+    "config": "[theme]\nname = \"tokyo_night\"\nauto_switch = false\n",
+    "light": {"accent":"#7aa2f7","background":"#1a1b26","panel":"#24283b","text":"#c0caf5"},
+    "dark": {"accent":"#7aa2f7","background":"#1a1b26","panel":"#24283b","text":"#c0caf5"}
+  }
+]

@@ -3,3 +3,5 @@
 target/
 node_modules/
 bin/herdr-palette
+bin/herdr-omni
+bin/.install.*/
