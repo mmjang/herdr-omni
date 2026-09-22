@@ -62,7 +62,7 @@ from the Rust implementation being tested.
 
 ## Final local verification
 
-117 tests passed, including the fixture matrices described above. Formatting,
+119 tests passed, including the fixture matrices described above. Formatting,
 Clippy with warnings denied, and the optimized release build passed on macOS.
 A release-binary PTY test exercised Chinese transcript search, preview expansion,
 Escape navigation, tiny-terminal resize recovery, and terminal restoration. A stalled-helper shutdown test

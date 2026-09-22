@@ -1,6 +1,6 @@
 [package]
 name = "herdr-omni"
-version = "0.16.1"
+version = "0.16.2"
 edition = "2021"
 default-run = "herdr-omni"
 description = "Herdr command palette and agent session browser"

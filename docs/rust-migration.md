@@ -8,7 +8,7 @@ scripts have been removed. The palette data and Microsoft scorer license remain.
 
 - `cargo fmt --check`
 - `cargo clippy --locked --all-targets -- -D warnings`
-- `cargo test --locked --all-targets` — 117 tests passed
+- `cargo test --locked --all-targets` — 119 tests passed
 - `cargo build --release --locked --bin herdr-omni`
 - `cargo run --locked --bin release-tool -- check v0.15.1`
 - Release executable PTY smoke: render categories, edit a query, close with Escape,

@@ -192,6 +192,10 @@ cargo run -- --demo
 
 ## Release notes
 
+### 0.16.2
+
+- Fix transcript searches failing on large Codex histories. Restore the TypeScript transport’s response-size limit and keep subsequent sessions searchable.
+
 ### 0.16.1
 
 - Rewritten in Rust and Ratatui, with search results, ordering, grouping, and UI checked against the TypeScript version.

@@ -31,6 +31,9 @@ const MAX_TRANSCRIPT_BYTES: u64 = 64 * 1024 * 1024;
 const MAX_TRANSCRIPT_LINE_BYTES: usize = 16 * 1024 * 1024;
 const MAX_PROVIDER_OUTPUT_BYTES: usize = 64 * 1024 * 1024;
 const MAX_PROVIDER_LINE_BYTES: usize = 16 * 1024 * 1024;
+// The TS Codex transport caps its JS string buffer at 64 Mi UTF-16 code units.
+// A thread/read response is one line, including tool output we later discard.
+const MAX_CODEX_RESPONSE_UNITS: usize = 64 * 1024 * 1024;
 
 #[derive(Clone, Debug, PartialEq, Eq)]
 struct PreviewMessage {
@@ -884,6 +887,22 @@ fn read_bounded_line<R: BufRead>(reader: &mut R, limit: usize) -> io::Result<Opt
         .map_err(|_| io::Error::new(io::ErrorKind::InvalidData, "provider output is not UTF-8"))
 }
 
+fn read_codex_line<R: BufRead>(reader: &mut R, limit_units: usize) -> io::Result<Option<String>> {
+    // Each UTF-16 unit needs at most three UTF-8 bytes. Bound allocation before
+    // decoding, then apply the reference transport's actual Unicode limit.
+    let line = read_bounded_line(reader, limit_units.saturating_mul(3))?;
+    if line
+        .as_ref()
+        .is_some_and(|line| line.encode_utf16().count() > limit_units)
+    {
+        return Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "Codex response too large",
+        ));
+    }
+    Ok(line)
+}
+
 fn run_bounded_command_cancellable<A: AsRef<OsStr>>(
     program: &str,
     args: &[A],
@@ -1228,7 +1247,7 @@ fn opencode_global_rows_cancellable(cancel: Option<&AtomicBool>) -> Result<Vec<V
 
 struct CodexClient {
     child: Child,
-    receiver: Receiver<String>,
+    receiver: Receiver<Result<String, String>>,
     next_id: u64,
 }
 
@@ -1263,8 +1282,14 @@ impl CodexClient {
         let (sender, receiver) = mpsc::sync_channel(1);
         thread::spawn(move || {
             let mut reader = BufReader::new(stdout);
-            while let Ok(Some(line)) = read_bounded_line(&mut reader, MAX_PROVIDER_LINE_BYTES) {
-                if sender.send(line).is_err() {
+            loop {
+                let response = match read_codex_line(&mut reader, MAX_CODEX_RESPONSE_UNITS) {
+                    Ok(Some(line)) => Ok(line),
+                    Ok(None) => break,
+                    Err(error) => Err(format!("Codex history read failed: {error}")),
+                };
+                let failed = response.is_err();
+                if sender.send(response).is_err() || failed {
                     break;
                 }
             }
@@ -1325,7 +1350,7 @@ impl CodexClient {
                 } else {
                     remaining
                 })) {
-                Ok(line) => line,
+                Ok(line) => line?,
                 Err(RecvTimeoutError::Timeout) if cancel.is_some() => continue,
                 Err(RecvTimeoutError::Timeout) => return Err("Codex history timed out".to_string()),
                 Err(RecvTimeoutError::Disconnected) => {
@@ -1337,7 +1362,7 @@ impl CodexClient {
             if response.get("id").and_then(Value::as_u64) != Some(id) {
                 continue;
             }
-            if response.get("error").is_some() {
+            if response.get("error").is_some_and(|error| !error.is_null()) {
                 return Err("Codex history request failed".to_string());
             }
             return Ok(response.get("result").cloned().unwrap_or(Value::Null));
@@ -2590,6 +2615,23 @@ done
         );
         assert!(started.elapsed() >= Duration::from_millis(120));
         remove_fixture(&root);
+    }
+
+    #[test]
+    fn codex_line_limit_counts_utf16_instead_of_utf8_bytes() {
+        let mut reader = BufReader::new(io::Cursor::new("界😀\nnext\n".as_bytes()));
+        assert_eq!(
+            read_codex_line(&mut reader, 3).unwrap(),
+            Some("界😀".into())
+        );
+        assert_eq!(
+            read_codex_line(&mut reader, 4).unwrap(),
+            Some("next".into())
+        );
+        let mut reader = BufReader::new(io::Cursor::new("界😀\n".as_bytes()));
+        assert!(read_codex_line(&mut reader, 2).is_err());
+        let mut reader = BufReader::new(io::Cursor::new(b"1234567890\n"));
+        assert!(read_codex_line(&mut reader, 3).is_err());
     }
 
     #[test]

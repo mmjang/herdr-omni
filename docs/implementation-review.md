@@ -45,3 +45,17 @@ Actions in progress retain the TS keyboard guard until completion or timeout.
 
 See [migration verification](rust-migration.md) for the final checks and
 [TypeScript parity](typescript-parity.md) for fixture coverage.
+
+## v0.16.2 Codex transport correction
+
+A real local Codex thread returned a valid 53 MB JSON-RPC line. The generic
+16 MiB provider line limit incorrectly terminated the Codex reader; subsequent
+sessions then also failed. Codex now retains the TS transport's 64 Mi UTF-16
+code-unit limit with a bounded UTF-8 allocation, propagates reader errors, and
+accepts successful responses with `error: null`.
+
+The failing real-history search was reproduced before the fix. Afterwards,
+results and excerpts for that thread and a subsequent thread matched the original
+TS implementation. Offline regressions cover oversized tool output followed by
+another response, null errors, and Unicode limit accounting. No private history
+was added to the repository.
