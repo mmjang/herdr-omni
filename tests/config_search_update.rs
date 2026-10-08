@@ -91,6 +91,38 @@ fn config_applies_nested_key_remaps_and_empty_bindings() {
 }
 
 #[test]
+fn status_indicators_follow_herdr_settings_and_custom_status_colors() {
+    let _guard = ENV_LOCK.lock().unwrap();
+    let root = temp_dir("status-indicators");
+    let config_path = root.join("config.toml");
+    let old_path = set_env("HERDR_CONFIG_PATH", Some(&config_path));
+    for (source, symbols) in [
+        ("", false),
+        ("[ui]\nstatus_indicators = \"symbols\"\n", true),
+        ("[ui]\nstatus_indicators = \"dots\"\n", false),
+        ("[ui]\nstatus_indicators = \"invalid\"\n", false),
+        ("invalid toml [", false),
+    ] {
+        fs::write(&config_path, source).unwrap();
+        assert_eq!(config::status_indicators_use_symbols(), symbols);
+    }
+    fs::write(&config_path, "[theme]\nname = \"catppuccin\"\nauto_switch = false\n[theme.custom]\ngreen = \"#112233\"\nyellow = \"#223344\"\nteal = \"#334455\"\nred = \"#445566\"\noverlay0 = \"#556677\"\n").unwrap();
+    let theme = config::load_theme();
+    assert_eq!(theme["statusIdle"], "#112233");
+    assert_eq!(theme["statusWorking"], "#223344");
+    assert_eq!(theme["shortcut"], "#334455");
+    assert_eq!(theme["error"], "#445566");
+    assert_eq!(theme["footerText"], "#556677");
+    fs::remove_file(&config_path).unwrap();
+    assert!(!config::status_indicators_use_symbols());
+    let fallback = config::load_theme();
+    assert_eq!(fallback["statusIdle"], "#a6e3a1");
+    assert_eq!(fallback["statusWorking"], "#f9e2af");
+    restore_env("HERDR_CONFIG_PATH", old_path);
+    fs::remove_dir_all(root).unwrap();
+}
+
+#[test]
 fn theme_resolves_aliases_auto_switch_and_custom_tokens() {
     let _guard = ENV_LOCK.lock().unwrap();
     let root = temp_dir("theme");

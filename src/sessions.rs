@@ -27,7 +27,7 @@ pub const TRANSCRIPT_CONTEXT_AFTER: usize = 900;
 pub const SESSION_PREVIEW_MAX_CHARS: usize = 8_000;
 pub const SESSION_PREVIEW_MAX_MESSAGES: usize = 2;
 const SESSION_REQUEST_TIMEOUT: Duration = Duration::from_secs(20);
-const MAX_TRANSCRIPT_BYTES: u64 = 64 * 1024 * 1024;
+const MAX_TRANSCRIPT_BYTES: u64 = 256 * 1024 * 1024;
 const MAX_TRANSCRIPT_LINE_BYTES: usize = 16 * 1024 * 1024;
 const MAX_PROVIDER_OUTPUT_BYTES: usize = 64 * 1024 * 1024;
 const MAX_PROVIDER_LINE_BYTES: usize = 16 * 1024 * 1024;
@@ -2494,12 +2494,49 @@ where
     provider_error.map_or(Ok(()), Err)
 }
 
-/// Merge live palette records with saved records by provider and ID.
+fn session_hint_key(session: &Value) -> Option<(String, PathBuf, String)> {
+    let provider = session.get("provider")?.as_str()?;
+    let cwd = session.get("cwd")?.as_str()?;
+    let title = clean_text(session.get("title")?.as_str()?);
+    if provider != "codex" || cwd.is_empty() || title.is_empty() {
+        return None;
+    }
+    Some((provider.to_string(), PathBuf::from(cwd), title))
+}
+
+fn session_project_hint_key(session: &Value, project: &str) -> Option<(String, String, String)> {
+    let (provider, _, title) = session_hint_key(session)?;
+    let project = clean_text(project);
+    if project.is_empty() || project.ends_with("...") || project.ends_with('…') {
+        return None;
+    }
+    Some((provider, project, title))
+}
+
+/// Merge live palette records with saved records by ID or an unambiguous title hint.
 pub fn merge_sessions(mut live: Vec<Value>, sessions: &[Value]) -> Vec<Value> {
-    let mut known = HashSet::new();
+    let mut known = live
+        .iter()
+        .filter_map(|item| item.get("session").and_then(session_key))
+        .collect::<HashSet<_>>();
     let mut activity = HashMap::<String, i64>::new();
+    let mut candidates = HashMap::<_, HashMap<String, &Value>>::new();
+    let mut project_candidates = HashMap::<_, HashMap<String, &Value>>::new();
     for session in sessions {
         if let Some(key) = session_key(session) {
+            if let Some(hint) = session_hint_key(session) {
+                candidates
+                    .entry(hint)
+                    .or_default()
+                    .insert(key.clone(), session);
+            }
+            let project = path_basename(session["cwd"].as_str().unwrap_or(""));
+            if let Some(hint) = session_project_hint_key(session, project) {
+                project_candidates
+                    .entry(hint)
+                    .or_default()
+                    .insert(key.clone(), session);
+            }
             let updated = session
                 .get("updatedAt")
                 .and_then(Value::as_i64)
@@ -2510,7 +2547,42 @@ pub fn merge_sessions(mut live: Vec<Value>, sessions: &[Value]) -> Vec<Value> {
                 .or_insert(updated);
         }
     }
+    let mut hint_counts = HashMap::<_, usize>::new();
+    let mut project_hint_counts = HashMap::<_, usize>::new();
+    for item in &live {
+        if item["livePaneId"].is_string() && item.get("session").and_then(session_key).is_none() {
+            if let Some(hint) = item.get("sessionHint").and_then(session_hint_key) {
+                *hint_counts.entry(hint).or_default() += 1;
+            }
+            if let Some(hint) = item.get("sessionHint").and_then(|hint| {
+                session_project_hint_key(hint, hint["project"].as_str().unwrap_or(""))
+            }) {
+                *project_hint_counts.entry(hint).or_default() += 1;
+            }
+        }
+    }
     for item in &mut live {
+        if item["livePaneId"].is_string() && item.get("session").and_then(session_key).is_none() {
+            if let Some(hint) = item.get("sessionHint").and_then(session_hint_key) {
+                if hint_counts.get(&hint) == Some(&1) {
+                    let matches = candidates.get(&hint).or_else(|| {
+                        let hint = &item["sessionHint"];
+                        let project_hint =
+                            session_project_hint_key(hint, hint["project"].as_str().unwrap_or(""))?;
+                        if project_hint_counts.get(&project_hint) != Some(&1) {
+                            return None;
+                        }
+                        project_candidates.get(&project_hint)
+                    });
+                    if let Some(matches) = matches.filter(|matches| matches.len() == 1) {
+                        let (key, session) = matches.iter().next().unwrap();
+                        if !known.contains(key) {
+                            item["session"] = (*session).clone();
+                        }
+                    }
+                }
+            }
+        }
         let Some(session) = item.get("session") else {
             continue;
         };
@@ -3126,6 +3198,158 @@ done
         assert_eq!(merged.len(), 2);
         assert_eq!(merged[0]["lastActiveAt"], 8);
         assert_eq!(merged[1]["session"]["provider"], "claude");
+    }
+
+    #[test]
+    fn merge_title_hint_requires_unique_session_and_pane() {
+        let item = json!({
+            "id":"live:agent:p1", "livePaneId":"p1", "agentStatus":"working",
+            "sessionHint":{"provider":"codex", "title":"检查 Lark/GitHub 积压任务", "cwd":"/repo/"}
+        });
+        let saved = json!({
+            "provider":"codex", "id":"one", "title":"检查 Lark/GitHub 积压任务",
+            "cwd":"/repo", "updatedAt":8
+        });
+        let merged = merge_sessions(vec![item.clone()], std::slice::from_ref(&saved));
+        assert_eq!(merged.len(), 1);
+        assert_eq!(merged[0]["session"], saved);
+        assert_eq!(merged[0]["agentStatus"], "working");
+        assert_eq!(merged[0]["lastActiveAt"], 8);
+
+        let mut duplicate = saved.clone();
+        duplicate["id"] = json!("two");
+        let merged = merge_sessions(vec![item.clone()], &[saved.clone(), duplicate]);
+        assert_eq!(merged.len(), 3);
+        assert!(!merged[0]["session"].is_object());
+
+        let mut other_pane = item.clone();
+        other_pane["id"] = json!("live:agent:p2");
+        other_pane["livePaneId"] = json!("p2");
+        let merged = merge_sessions(vec![item, other_pane], &[saved]);
+        assert_eq!(merged.len(), 3);
+        assert!(!merged[0]["session"].is_object());
+        assert!(!merged[1]["session"].is_object());
+    }
+
+    #[test]
+    fn project_hint_matches_changed_directory_without_guessing_ambiguous_sessions() {
+        let item = json!({
+            "id":"live:agent:p1", "livePaneId":"p1", "agentStatus":"working",
+            "sessionHint":{"provider":"codex", "title":"更新 ui_library 依赖并适配断言", "cwd":"/worktrees/pos-v8/consumer", "project":"feedme-workbench"}
+        });
+        let saved = json!({
+            "provider":"codex", "id":"one", "title":"更新 ui_library 依赖并适配断言",
+            "cwd":"/repo/feedme-workbench", "updatedAt":8
+        });
+        let merged = merge_sessions(vec![item.clone()], std::slice::from_ref(&saved));
+        assert_eq!(merged.len(), 1);
+        assert_eq!(merged[0]["session"], saved);
+        assert_eq!(merged[0]["agentStatus"], "working");
+        assert_eq!(merged[0]["lastActiveAt"], 8);
+
+        for project in ["", "elsewhere", "feedme-work...", "feedme-work…"] {
+            let mut mismatch = item.clone();
+            mismatch["sessionHint"]["project"] = json!(project);
+            let merged = merge_sessions(vec![mismatch], std::slice::from_ref(&saved));
+            assert_eq!(merged.len(), 2);
+            assert!(!merged[0]["session"].is_object());
+        }
+        for (field, value) in [
+            ("cwd", "/repo/different-project"),
+            ("provider", "claude"),
+            ("title", "更新 ui_library 依赖"),
+        ] {
+            let mut mismatch = saved.clone();
+            mismatch[field] = json!(value);
+            let merged = merge_sessions(vec![item.clone()], &[mismatch]);
+            assert_eq!(merged.len(), 2);
+            assert!(!merged[0]["session"].is_object());
+        }
+
+        let mut duplicate = saved.clone();
+        duplicate["id"] = json!("two");
+        duplicate["cwd"] = json!("/another/feedme-workbench");
+        let merged = merge_sessions(vec![item.clone()], &[saved.clone(), duplicate]);
+        assert_eq!(merged.len(), 3);
+        assert!(!merged[0]["session"].is_object());
+
+        let mut other_pane = item.clone();
+        other_pane["id"] = json!("live:agent:p2");
+        other_pane["livePaneId"] = json!("p2");
+        other_pane["sessionHint"]["cwd"] = json!("/another/worktree");
+        let merged = merge_sessions(vec![item.clone(), other_pane], std::slice::from_ref(&saved));
+        assert_eq!(merged.len(), 3);
+        assert!(!merged[0]["session"].is_object());
+        assert!(!merged[1]["session"].is_object());
+
+        let mut exact = saved.clone();
+        exact["id"] = json!("exact");
+        exact["cwd"] = item["sessionHint"]["cwd"].clone();
+        let merged = merge_sessions(vec![item.clone()], &[saved.clone(), exact]);
+        assert_eq!(merged.len(), 2);
+        assert_eq!(merged[0]["session"]["id"], "exact");
+
+        let identified = json!({"livePaneId":"p2", "session":saved});
+        for live in [
+            vec![item.clone(), identified.clone()],
+            vec![identified, item],
+        ] {
+            let merged = merge_sessions(live, std::slice::from_ref(&saved));
+            assert_eq!(merged.len(), 2);
+            assert_eq!(
+                merged
+                    .iter()
+                    .filter(|item| item["session"].is_object())
+                    .count(),
+                1
+            );
+        }
+    }
+
+    #[test]
+    fn merge_title_hint_never_overrides_identity_or_matches_partial_metadata() {
+        let item = json!({
+            "id":"live:agent:p1", "livePaneId":"p1",
+            "sessionHint":{"provider":"codex", "title":"Checkout flow", "cwd":"/repo"}
+        });
+        let saved = json!({
+            "provider":"codex", "id":"one", "title":"Checkout flow", "cwd":"/repo"
+        });
+        for (field, value) in [
+            ("provider", "claude"),
+            ("cwd", "/elsewhere"),
+            ("title", "Checkout flow extended"),
+            ("title", "Checkout flo..."),
+            ("title", ""),
+            ("cwd", ""),
+            ("id", ""),
+        ] {
+            let mut mismatch = saved.clone();
+            mismatch[field] = json!(value);
+            let merged = merge_sessions(vec![item.clone()], &[mismatch]);
+            assert!(!merged[0]["session"].is_object(), "matched {field}={value}");
+        }
+        let mut identified = item.clone();
+        identified["session"] = json!({"provider":"codex", "id":"explicit"});
+        let merged = merge_sessions(vec![identified], std::slice::from_ref(&saved));
+        assert_eq!(merged.len(), 2);
+        assert_eq!(merged[0]["session"]["id"], "explicit");
+
+        let known = json!({"livePaneId":"p2", "session":saved});
+        for live in [vec![item.clone(), known.clone()], vec![known, item.clone()]] {
+            let merged = merge_sessions(live, std::slice::from_ref(&saved));
+            assert_eq!(merged.len(), 2);
+            let hinted = merged
+                .iter()
+                .find(|value| value["id"] == item["id"])
+                .unwrap();
+            assert!(!hinted["session"].is_object());
+        }
+        let mut non_live = item;
+        non_live.as_object_mut().unwrap().remove("livePaneId");
+        let merged = merge_sessions(vec![non_live], &[saved]);
+        assert_eq!(merged.len(), 2);
+        assert!(!merged[0]["session"].is_object());
     }
 
     #[test]

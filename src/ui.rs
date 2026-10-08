@@ -47,6 +47,66 @@ fn section_label(section: &str) -> &str {
 fn s<'a>(v: &'a Value, k: &str) -> &'a str {
     v[k].as_str().unwrap_or("")
 }
+fn badge_for_agent(kind: &str) -> Option<&'static str> {
+    match kind.trim().to_ascii_lowercase().as_str() {
+        "codex" => Some("[CX]"),
+        "claude" | "claude code" => Some("[CL]"),
+        "opencode" | "open code" => Some("[OC]"),
+        "omp" | "oh-my-pi" => Some("[OM]"),
+        "pi" => Some("[PI]"),
+        "gemini" => Some("[GM]"),
+        "cursor" => Some("[CU]"),
+        "devin" => Some("[DV]"),
+        "agy" => Some("[AG]"),
+        "cline" => Some("[CN]"),
+        "mastracode" => Some("[MC]"),
+        "copilot" => Some("[CP]"),
+        "kimi" => Some("[KM]"),
+        "kiro" => Some("[KR]"),
+        "droid" => Some("[DR]"),
+        "amp" => Some("[AM]"),
+        "grok" => Some("[GK]"),
+        "hermes" => Some("[HM]"),
+        "kilo" => Some("[KL]"),
+        "qodercli" => Some("[QD]"),
+        "qwen" => Some("[QW]"),
+        "letta" => Some("[LT]"),
+        "maki" => Some("[MK]"),
+        "muse" => Some("[MU]"),
+        _ => None,
+    }
+}
+fn agent_badge(item: &Value) -> Option<&'static str> {
+    if s(item, "category") != "Agents" {
+        return None;
+    }
+    let kind = [
+        s(item, "agentKind"),
+        s(&item["session"], "provider"),
+        s(&item["sessionHint"], "provider"),
+    ]
+    .into_iter()
+    .find(|kind| !kind.is_empty());
+    if let Some(kind) = kind {
+        return badge_for_agent(kind);
+    }
+    item["aliases"]
+        .as_array()?
+        .iter()
+        .filter_map(Value::as_str)
+        .find_map(badge_for_agent)
+}
+fn agent_status_icon(status: &str, symbols: bool) -> &'static str {
+    match (status, symbols) {
+        ("working", true) => "◐",
+        ("blocked", true) => "×",
+        ("done", true) => "✓",
+        ("working" | "blocked" | "done", false) => "●",
+        ("idle", _) => "○",
+        ("", _) => "",
+        _ => "·",
+    }
+}
 fn unscoped(query: &str) -> &str {
     if query.starts_with(['@', '>', ':']) {
         &query[1..]
@@ -352,6 +412,7 @@ struct App {
     rows: Vec<Value>,
     history: Value,
     theme: Value,
+    status_symbols: bool,
     editor: Editor,
     input: Editor,
     tab: usize,
@@ -426,6 +487,7 @@ impl App {
             rows: vec![],
             history: config::load_history(),
             theme: config::load_theme(),
+            status_symbols: config::status_indicators_use_symbols(),
             editor: Editor::default(),
             input: Editor::default(),
             tab: 0,
@@ -1397,8 +1459,14 @@ impl App {
     }
     fn move_selection(&mut self, delta: isize) {
         if !self.rows.is_empty() {
-            self.selected =
-                (self.selected as isize + delta).rem_euclid(self.rows.len() as isize) as usize;
+            let last = self.rows.len() - 1;
+            self.selected = self.selected.min(last);
+            self.selected = if delta < 0 {
+                self.selected
+                    .saturating_sub(delta.saturating_abs() as usize)
+            } else {
+                self.selected.saturating_add(delta as usize).min(last)
+            };
             self.pane = 0;
         }
     }
@@ -1410,6 +1478,21 @@ impl App {
     }
     fn color(&self, key: &str, fallback: Color) -> Color {
         s(&self.theme, key).parse().unwrap_or(fallback)
+    }
+    fn agent_status_style(&self, status: &str) -> Style {
+        let color = match status {
+            "working" => self.color("statusWorking", Color::Yellow),
+            "idle" => self.color("statusIdle", Color::Green),
+            "done" => self.color("shortcut", Color::Cyan),
+            "blocked" => self.color("error", Color::Red),
+            _ => self.color("footerText", Color::DarkGray),
+        };
+        let style = Style::default().fg(color);
+        if status == "blocked" {
+            style.bold()
+        } else {
+            style
+        }
     }
     fn draw(&mut self, f: &mut Frame) {
         // A resize can transiently report zero rows, and dialogs need room for
@@ -1840,9 +1923,7 @@ impl App {
             y += 1;
             let status = s(item, "agentStatus");
             let suffix = if s(item, "category") == "Agents" {
-                let label = if !status.is_empty() {
-                    format!("[{status}]")
-                } else if item["savedSession"] == true {
+                let label = if status.is_empty() && item["savedSession"] == true {
                     format!("Saved · {}", s(&item["session"], "provider"))
                 } else {
                     String::new()
@@ -1893,18 +1974,23 @@ impl App {
                     if n == self.selected { "┃" } else { " " },
                     Style::default().fg(accent),
                 ),
-                Span::styled(
-                    format!(
-                        "{}  ",
-                        if current_agent {
-                            "●"
-                        } else {
-                            s(item, "icon")
-                        }
-                    ),
-                    Style::default().fg(if current_agent { accent } else { normal }),
-                ),
             ];
+            let badge = agent_badge(item);
+            let icon = if s(item, "category") == "Agents" {
+                agent_status_icon(status, self.status_symbols)
+            } else {
+                ""
+            };
+            if !icon.is_empty() || badge.is_some() {
+                spans.push(Span::styled(
+                    format!("{} ", if icon.is_empty() { " " } else { icon }),
+                    self.agent_status_style(status),
+                ));
+            }
+            spans.push(Span::styled(
+                format!("{}  ", badge.unwrap_or(s(item, "icon"))),
+                Style::default().fg(if current_agent { accent } else { normal }),
+            ));
             spans.extend(s(item, "title").chars().enumerate().map(|(i, c)| {
                 Span::styled(
                     c.to_string(),
@@ -2581,6 +2667,217 @@ mod tests {
         assert_eq!(app.status, "Demo: actions are disabled");
     }
     #[test]
+    fn agent_status_icons_match_herdr_symbols_and_dots() {
+        for (status, symbol, dot) in [
+            ("working", "◐", "●"),
+            ("blocked", "×", "●"),
+            ("done", "✓", "●"),
+            ("idle", "○", "○"),
+            ("unknown", "·", "·"),
+            ("unrecognized", "·", "·"),
+            ("", "", ""),
+        ] {
+            assert_eq!(agent_status_icon(status, true), symbol);
+            assert_eq!(agent_status_icon(status, false), dot);
+            assert!(UnicodeWidthStr::width(symbol) <= 1);
+            assert!(UnicodeWidthStr::width(dot) <= 1);
+        }
+    }
+
+    #[test]
+    fn status_icons_keep_herdr_colors_in_both_modes_and_do_not_mark_saved_sessions_live() {
+        for symbols in [true, false] {
+            for width in [80, 120] {
+                let mut app = App::new(true);
+                app.base.clear();
+                app.tab = 2;
+                app.preview_enabled = false;
+                app.status_symbols = symbols;
+                app.theme = json!({
+                    "statusWorking":"#112233", "error":"#223344", "shortcut":"#334455",
+                    "statusIdle":"#445566", "footerText":"#556677"
+                });
+                let states = [
+                    ("working", Color::Rgb(17, 34, 51)),
+                    ("blocked", Color::Rgb(34, 51, 68)),
+                    ("done", Color::Rgb(51, 68, 85)),
+                    ("idle", Color::Rgb(68, 85, 102)),
+                    ("unknown", Color::Rgb(85, 102, 119)),
+                ];
+                app.live = states
+                    .iter()
+                    .enumerate()
+                    .map(|(index, (status, _))| {
+                        json!({
+                            "id":format!("live:agent:p{index}"), "title":format!("Task{index}"),
+                            "category":"Agents", "agentKind":"codex", "agentStatus":status,
+                            "livePaneId":format!("p{index}")
+                        })
+                    })
+                    .collect();
+                app.saved = vec![
+                    json!({"provider":"claude", "id":"saved", "title":"Saved task", "cwd":"/repo"}),
+                ];
+                app.rebuild();
+                let mut terminal =
+                    Terminal::new(ratatui::backend::TestBackend::new(width, 20)).unwrap();
+                terminal.draw(|frame| app.draw(frame)).unwrap();
+                let buffer = terminal.backend().buffer();
+                let lines = (0..buffer.area.height)
+                    .map(|row| {
+                        (0..buffer.area.width)
+                            .map(|column| buffer[(column, row)].symbol())
+                            .collect::<String>()
+                    })
+                    .collect::<Vec<_>>();
+                for (index, (status, color)) in states.iter().enumerate() {
+                    let row = lines
+                        .iter()
+                        .position(|line| line.contains(&format!("Task{index}")))
+                        .unwrap();
+                    let icon = agent_status_icon(status, symbols);
+                    assert!(lines[row].contains(&format!("{icon} [CX]")));
+                    assert!(!lines[row].contains(&format!("[{status}]")));
+                    let column = (0..buffer.area.width)
+                        .find(|column| buffer[(*column, row as u16)].symbol() == icon)
+                        .unwrap();
+                    assert_eq!(buffer[(column, row as u16)].fg, *color);
+                }
+                let saved = lines
+                    .iter()
+                    .find(|line| line.contains("Saved task"))
+                    .unwrap();
+                assert!(saved.contains("  [CL]"));
+                assert!(!saved.contains(['◐', '×', '✓', '○', '●']));
+            }
+        }
+    }
+
+    #[test]
+    fn agent_badges_resolve_live_saved_and_legacy_types_without_overriding_identity() {
+        for (kind, badge) in [
+            ("codex", "[CX]"),
+            ("claude", "[CL]"),
+            ("opencode", "[OC]"),
+            ("omp", "[OM]"),
+        ] {
+            for metadata in [
+                json!({"agentKind":kind}),
+                json!({"session":{"provider":kind}}),
+                json!({"sessionHint":{"provider":kind}}),
+                json!({"aliases":[kind]}),
+            ] {
+                let mut item = metadata;
+                item["category"] = json!("Agents");
+                assert_eq!(agent_badge(&item), Some(badge));
+                assert_eq!(UnicodeWidthStr::width(badge), 4);
+            }
+        }
+        assert_eq!(
+            agent_badge(&json!({"category":"Agents", "aliases":["Claude Code"]})),
+            Some("[CL]")
+        );
+        assert_eq!(
+            agent_badge(
+                &json!({"category":"Agents", "agentKind":"omp", "session":{"provider":"codex"}})
+            ),
+            Some("[OM]")
+        );
+        assert_eq!(
+            agent_badge(&json!({"category":"Agents", "agentKind":"unknown", "aliases":["codex"]})),
+            None
+        );
+        assert_eq!(agent_badge(&json!({"category":"Agents"})), None);
+        assert_eq!(
+            agent_badge(&json!({"category":"Actions", "aliases":["codex"]})),
+            None
+        );
+    }
+
+    #[test]
+    fn agent_type_badges_render_for_live_and_saved_rows_with_current_marker() {
+        for width in [80, 120] {
+            let mut app = App::new(true);
+            app.base.clear();
+            app.tab = 2;
+            app.preview_enabled = false;
+            app.status_symbols = true;
+            app.live = vec![
+                json!({"id":"live:agent:p1", "title":"Codex task", "category":"Agents", "agentKind":"codex", "agentStatus":"working", "currentWorkspace":true, "livePaneId":"p1"}),
+                json!({"id":"live:agent:p2", "title":"OMP task", "category":"Agents", "agentKind":"omp", "agentStatus":"blocked", "livePaneId":"p2"}),
+                json!({"id":"live:agent:p3", "title":"Unknown task", "category":"Agents", "agentKind":"future-agent", "icon":"◈"}),
+            ];
+            app.saved = vec![
+                json!({"provider":"claude", "id":"one", "title":"Claude task", "cwd":"/repo"}),
+                json!({"provider":"opencode", "id":"two", "title":"OpenCode task", "cwd":"/repo"}),
+            ];
+            app.rebuild();
+            let mut terminal =
+                Terminal::new(ratatui::backend::TestBackend::new(width, 20)).unwrap();
+            terminal.draw(|frame| app.draw(frame)).unwrap();
+            let buffer = terminal.backend().buffer();
+            let rendered = (0..buffer.area.height)
+                .map(|row| {
+                    (0..buffer.area.width)
+                        .map(|column| buffer[(column, row)].symbol())
+                        .collect::<String>()
+                })
+                .collect::<Vec<_>>()
+                .join("\n");
+            for label in [
+                "◐ [CX]",
+                "[CL]",
+                "[OC]",
+                "[OM]",
+                "◈  Unknown task",
+                "× [OM]",
+                "current",
+            ] {
+                assert!(
+                    rendered.contains(label),
+                    "missing {label} at width {width}\n{rendered}"
+                );
+            }
+            assert!(!rendered.contains("[working]"));
+            assert!(!rendered.contains("[blocked]"));
+        }
+    }
+
+    #[test]
+    fn agent_without_session_id_displays_live_status_instead_of_saved_duplicate() {
+        let mut app = App::new(true);
+        app.base.clear();
+        app.tab = 2;
+        app.preview_enabled = false;
+        app.status_symbols = true;
+        app.live = vec![json!({
+            "id":"live:agent:p1", "title":"Checkout flow - shop", "category":"Agents",
+            "agentStatus":"working", "livePaneId":"p1",
+            "sessionHint":{"provider":"codex", "title":"Checkout flow", "cwd":"/worktrees/fix", "project":"repo"},
+            "invocation":{"kind":"herdr", "argv":["agent", "focus", "p1"]}
+        })];
+        app.saved = vec![json!({
+            "provider":"codex", "id":"one", "title":"Checkout flow", "cwd":"/repo", "updatedAt":8
+        })];
+        app.rebuild();
+        assert_eq!(app.rows.len(), 1);
+        assert_eq!(app.rows[0]["invocation"]["kind"], "herdr");
+        let mut terminal = Terminal::new(ratatui::backend::TestBackend::new(100, 20)).unwrap();
+        terminal.draw(|frame| app.draw(frame)).unwrap();
+        let buffer = terminal.backend().buffer();
+        let rendered = (0..buffer.area.height)
+            .map(|row| {
+                (0..buffer.area.width)
+                    .map(|column| buffer[(column, row)].symbol())
+                    .collect::<String>()
+            })
+            .collect::<Vec<_>>()
+            .join("\n");
+        assert!(rendered.contains("◐ [CX]"));
+        assert!(!rendered.contains("Saved · codex"));
+    }
+
+    #[test]
     fn saved_preview_cache_is_reused_and_updated_timestamp_invalidates_it() {
         let mut app = App::new(true);
         app.base = vec![];
@@ -3032,6 +3329,42 @@ mod tests {
         assert_eq!(app.tab, 4);
         assert_eq!(app.rows.len(), 8);
         assert!(!app.busy);
+    }
+    #[test]
+    fn result_selection_stays_at_list_boundaries_for_keyboard_and_wheel() {
+        let mut app = App::new(true);
+        app.rows = (0..3)
+            .map(|i| json!({"id": format!("item{i}"), "title": format!("Item {i}")}))
+            .collect();
+        let (tx, _) = mpsc::channel();
+
+        app.selected = 0;
+        app.key(event::KeyEvent::new(KeyCode::Up, KeyModifiers::NONE), &tx);
+        assert_eq!(app.selected, 0);
+        app.mouse(
+            event::MouseEvent {
+                kind: MouseEventKind::ScrollUp,
+                column: 10,
+                row: 10,
+                modifiers: KeyModifiers::NONE,
+            },
+            &tx,
+        );
+        assert_eq!(app.selected, 0);
+
+        app.selected = 2;
+        app.key(event::KeyEvent::new(KeyCode::Down, KeyModifiers::NONE), &tx);
+        assert_eq!(app.selected, 2);
+        app.mouse(
+            event::MouseEvent {
+                kind: MouseEventKind::ScrollDown,
+                column: 10,
+                row: 10,
+                modifiers: KeyModifiers::NONE,
+            },
+            &tx,
+        );
+        assert_eq!(app.selected, 2);
     }
     #[test]
     fn refresh_preserves_selected_identity() {

@@ -1765,6 +1765,7 @@ fn items_from_snapshot_with_visits(
             .iter()
             .position(|value| *value == agent_status)
             .unwrap_or(4);
+        item["agentKind"] = json!(text(agent.get("agent")));
         item["priority"] = json!(priority);
         item["agentStatus"] = json!(["blocked", "done", "working", "idle", "unknown"][priority]);
         if !pane_id.is_empty() {
@@ -1786,6 +1787,17 @@ fn items_from_snapshot_with_visits(
                 && !session_id.is_empty()
             {
                 item["session"] = json!({"provider": provider, "id": session_id, "title": session_name, "cwd": text(agent.get("cwd")), "updatedAt": 0});
+            }
+        }
+        if !item["session"].is_object() && text(agent.get("agent")) == "codex" {
+            let title = text(agent.get("terminal_title_stripped"));
+            let (title, project) = title.rsplit_once(" | ").unwrap_or((title.as_str(), ""));
+            let cwd = text(agent.get("cwd"));
+            if !title.trim().is_empty() && !cwd.is_empty() && item["livePaneId"].is_string() {
+                item["sessionHint"] = json!({"provider": "codex", "title": title, "cwd": cwd});
+                if !project.trim().is_empty() {
+                    item["sessionHint"]["project"] = json!(project);
+                }
             }
         }
         result.push(item);
@@ -2488,6 +2500,85 @@ mod tests {
                 .unwrap()["resourcePreview"]["panes"][0]["id"],
             "p1"
         );
+    }
+
+    #[test]
+    fn live_agent_kind_is_canonical_even_without_session_metadata() {
+        for kind in ["codex", "claude", "opencode", "omp"] {
+            let snapshot = json!({"agents":[{
+                "agent":kind, "display_agent":"Custom display name", "agent_status":"working",
+                "pane_id":"p1", "workspace_id":"w1", "title":"Task"
+            }]});
+            let items = items_from_snapshot_with_visits(&snapshot, "w1", &HashMap::new());
+            assert_eq!(items.len(), 1);
+            assert_eq!(items[0]["agentKind"], kind);
+            assert_eq!(items[0]["aliases"], json!(["Custom display name"]));
+            assert!(!items[0]["session"].is_object());
+        }
+    }
+
+    #[test]
+    fn codex_without_session_id_merges_history_into_live_pane() {
+        let snapshot = json!({
+            "workspaces": [{"workspace_id":"w1", "label":"integration"}],
+            "agents": [{
+                "agent":"codex", "agent_status":"working", "cwd":"/repo/integration",
+                "pane_id":"w1:p1", "workspace_id":"w1", "tab_id":"w1:t1",
+                "terminal_title_stripped":"Integrate POS v8 fixes | fix-ITS-001469-ITS-00..."
+            }]
+        });
+        let items = items_from_snapshot_with_visits(&snapshot, "w1", &HashMap::new());
+        let merged = crate::sessions::merge_sessions(
+            items,
+            &[json!({
+                "provider":"codex", "id":"thread", "title":"Integrate POS v8 fixes",
+                "cwd":"/repo/integration", "updatedAt":123
+            })],
+        );
+        let agents = merged
+            .iter()
+            .filter(|item| item["category"] == "Agents")
+            .collect::<Vec<_>>();
+        assert_eq!(agents.len(), 1);
+        assert_eq!(agents[0]["agentStatus"], "working");
+        assert_eq!(agents[0]["session"]["id"], "thread");
+        assert_eq!(agents[0]["lastActiveAt"], 123);
+        assert_eq!(
+            agents[0]["invocation"]["argv"],
+            json!(["agent", "focus", "w1:p1"])
+        );
+        assert_eq!(agents[0]["livePaneId"], "w1:p1");
+        assert_ne!(agents[0]["savedSession"], true);
+    }
+
+    #[test]
+    fn changed_codex_directory_keeps_original_project_session_identity() {
+        let snapshot = json!({"agents":[{
+            "agent":"codex", "agent_status":"working", "cwd":"/worktrees/pos-v8/consumer",
+            "pane_id":"p1", "workspace_id":"w1", "tab_id":"t1",
+            "terminal_title_stripped":"更新 ui_library | 适配断言 | feedme-workbench"
+        }]});
+        let items = items_from_snapshot_with_visits(&snapshot, "w1", &HashMap::new());
+        assert_eq!(
+            items[0]["sessionHint"]["title"],
+            "更新 ui_library | 适配断言"
+        );
+        assert_eq!(items[0]["sessionHint"]["project"], "feedme-workbench");
+        let merged = crate::sessions::merge_sessions(
+            items,
+            &[json!({
+                "provider":"codex", "id":"thread", "title":"更新 ui_library | 适配断言",
+                "cwd":"/repo/feedme-workbench", "updatedAt":123
+            })],
+        );
+        assert_eq!(merged.len(), 1);
+        assert_eq!(merged[0]["session"]["id"], "thread");
+        assert_eq!(merged[0]["agentStatus"], "working");
+        assert_eq!(
+            merged[0]["invocation"]["argv"],
+            json!(["agent", "focus", "p1"])
+        );
+        assert_ne!(merged[0]["savedSession"], true);
     }
 
     #[test]

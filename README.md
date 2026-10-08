@@ -141,12 +141,28 @@ Saved sessions resume in a new tab. If the original directory is gone, Omni
 suggests a workspace for you to confirm. Conversation history is restored—not
 deleted files or Git changes.
 
+When Herdr omits a running Codex agent's session ID, Omni matches history only
+when the directory and conversation title identify a unique session and live
+pane. If the process changes directories, Omni also accepts an exact, unique
+conversation title and original project name from the terminal title. Truncated
+project names and ambiguous matches are not used. Matched sessions retain the
+live status, preview, and focus action instead
+of appearing again as Saved. Ambiguous matches remain separate.
+
 Select a running agent to preview its current Herdr pane, including tool output,
 approval prompts, and input areas. The selected pane refreshes about once per
 second, even when no provider session ID is available. The preview preserves
 terminal columns and shows the bottom of the visible screen; long lines are
 clipped with an ellipsis. Expand it for more space, or scroll up to inspect earlier
 rows in the current screen. Reads do not focus the pane or send it any input.
+
+Agent rows use font-independent type badges: **[CX] Codex**, **[CL] Claude**,
+**[OC] OpenCode**, **[OM] oh-my-pi**, and abbreviations for other supported agents.
+Both live and saved sessions show their type. Live rows use Herdr's status icons
+and colors before the type badge, following `[ui] status_indicators`: `symbols`
+shows **◐** working, **×** blocked, **✓** done, **○** idle, and **·** unknown;
+`dots` uses colored circles instead. Saved sessions do not imply a live status.
+The **current** suffix and accented type badge mark the current workspace.
 
 Workspaces preview their paths, Git branch (when available), tabs, and agent
 states. Tabs preview their panes and the selected pane's foreground program and
@@ -191,6 +207,13 @@ cargo run -- --demo
 ```
 
 ## Release notes
+
+### 0.17.0
+
+- Show compact agent-type badges for Codex, Claude, OpenCode, OMP, and other supported agents.
+- Match Herdr's native status icons, theme colors, and symbols/dots setting in the agent list.
+- Keep running Codex sessions live instead of duplicating them as Saved when session IDs are missing, including agents that change directories into worktrees. Ambiguous matches remain separate.
+- Stop keyboard and mouse-wheel selection at list boundaries, and allow local transcript scans up to 256 MiB.
 
 ### 0.16.2
 

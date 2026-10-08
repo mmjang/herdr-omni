@@ -28,7 +28,7 @@ const TOKENS: [&str; 19] = [
     "teal",
     "peach",
 ];
-const FALLBACK: [(&str, &str); 9] = [
+const FALLBACK: [(&str, &str); 11] = [
     ("background", "#181825"),
     ("panel", "#313244"),
     ("text", "#cdd6f4"),
@@ -38,6 +38,8 @@ const FALLBACK: [(&str, &str); 9] = [
     ("shortcut", "#94e2d5"),
     ("footer", "#1e1e2e"),
     ("footerText", "#6c7086"),
+    ("statusIdle", "#a6e3a1"),
+    ("statusWorking", "#f9e2af"),
 ];
 
 fn config_path() -> PathBuf {
@@ -90,6 +92,20 @@ pub fn load_items() -> Vec<Value> {
 
 fn read_source(path: &Path) -> String {
     fs::read_to_string(path).unwrap_or_default()
+}
+
+pub fn status_indicators_use_symbols() -> bool {
+    read_source(&config_path())
+        .parse::<toml::Value>()
+        .ok()
+        .and_then(|config| {
+            config
+                .get("ui")?
+                .get("status_indicators")?
+                .as_str()
+                .map(|style| style == "symbols")
+        })
+        .unwrap_or(false)
 }
 
 fn normalize_name(name: &str) -> String {
@@ -183,12 +199,12 @@ fn neutral(light: bool) -> Map<String, Value> {
     let values = if light {
         [
             "#ffffff", "#e4e4e4", "#1a1a1a", "#6f6f6f", "#0000ee", "#cd0000", "#008080", "#f2f2f2",
-            "#6f6f6f",
+            "#6f6f6f", "#008000", "#808000",
         ]
     } else {
         [
             "#000000", "#262626", "#e5e5e5", "#9e9e9e", "#5c5cff", "#ff5555", "#00cdcd", "#121212",
-            "#7f7f7f",
+            "#7f7f7f", "#00cd00", "#cdcd00",
         ]
     };
     FALLBACK
@@ -238,7 +254,7 @@ fn host_is_light() -> bool {
     false
 }
 
-/// Resolve Herdr's configured theme into the nine colors consumed by the popup.
+/// Resolve Herdr's configured theme into the colors consumed by the popup.
 pub fn load_theme() -> Value {
     let source = read_source(&config_path());
     let parsed: toml::Value = match source.parse() {
@@ -373,6 +389,8 @@ pub fn load_theme() -> Value {
             .unwrap_or_else(|| get("surface_dim", "footer")),
     );
     out.insert("footerText".into(), get("overlay0", "footerText"));
+    out.insert("statusIdle".into(), get("green", "statusIdle"));
+    out.insert("statusWorking".into(), get("yellow", "statusWorking"));
     Value::Object(out)
 }
 

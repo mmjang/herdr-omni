@@ -293,6 +293,7 @@
         },
         {
           "id": "live:agent:w1:p1",
+          "agentKind": "codex",
           "title": "Implement search - alpha",
           "category": "Agents",
           "description": "working · editor",
@@ -301,6 +302,7 @@
             "codex"
           ],
           "searchTitle": "Implement search - alpha",
+          "sessionHint": {"provider": "codex", "title": "Implement search", "cwd": "/repo"},
           "searchPaths": [
             "/repo"
           ],
@@ -320,6 +322,7 @@
         },
         {
           "id": "live:agent:w2:p1",
+          "agentKind": "codex",
           "title": "Review changes - beta",
           "category": "Agents",
           "description": "idle · shell",
@@ -328,6 +331,7 @@
             "codex"
           ],
           "searchTitle": "Review changes - beta",
+          "sessionHint": {"provider": "codex", "title": "Review changes", "cwd": "/repo"},
           "searchPaths": [
             "/repo"
           ],
@@ -621,6 +625,7 @@
         },
         {
           "id": "live:agent:p1",
+          "agentKind": "codex",
           "title": "Audit - w1",
           "category": "Agents",
           "description": "blocked · t1",
