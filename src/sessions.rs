@@ -3767,10 +3767,7 @@ done
     fn file_backed_command_returns_full_output_and_removes_file() {
         let output = run_bounded_command_to_file_cancellable(
             "sh",
-            &[
-                "-c",
-                "head -c 400000 /dev/zero | tr '\\0' x; ls \"$TMPDIR\" >/dev/null",
-            ],
+            &["-c", "head -c 400000 /dev/zero | tr '\\0' x"],
             None,
         )
         .unwrap();

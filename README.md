@@ -208,7 +208,7 @@ cargo run -- --demo
 
 ## Release notes
 
-### 0.17.1
+### 0.17.2
 
 - Restore saved OpenCode sessions with OpenCode 2, which removed `serve --pure`, moved the session API, and renamed `export` to `session export`. OpenCode 1 keeps the previous path.
 - Read OpenCode 2 exports through a private temporary file, because OpenCode 2 can exit before a piped export is fully written.
