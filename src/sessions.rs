@@ -12,11 +12,12 @@ use std::ffi::OsStr;
 use std::fs::{self, File};
 use std::io::{self, BufRead, BufReader};
 use std::net::{TcpStream, ToSocketAddrs};
+use std::os::unix::fs::OpenOptionsExt;
 use std::path::{Path, PathBuf};
 use std::process::{Child, Command, ExitStatus, Stdio};
-use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::atomic::{AtomicBool, AtomicUsize, Ordering};
 use std::sync::mpsc::{self, Receiver, RecvTimeoutError};
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc, Mutex, OnceLock};
 use std::thread;
 use std::thread::JoinHandle;
 use std::time::{Duration, Instant};
@@ -915,6 +916,81 @@ fn run_bounded_command_cancellable<A: AsRef<OsStr>>(
     Ok(output)
 }
 
+/// OpenCode 2 exits before draining a piped stdout, so large exports arrive
+/// truncated with a zero status. A private regular file receives every byte.
+fn run_bounded_command_to_file_cancellable<A: AsRef<OsStr>>(
+    program: &str,
+    args: &[A],
+    cancel: Option<&AtomicBool>,
+) -> Result<String, String> {
+    static NEXT_OUTPUT: AtomicUsize = AtomicUsize::new(0);
+    let path = std::env::temp_dir().join(format!(
+        "herdr-omni-{program}-{}-{}.out",
+        std::process::id(),
+        NEXT_OUTPUT.fetch_add(1, Ordering::Relaxed)
+    ));
+    let file = fs::OpenOptions::new()
+        .write(true)
+        .create_new(true)
+        .mode(0o600)
+        .open(&path)
+        .map_err(|_| format!("{program} history unavailable"))?;
+    let result = run_command_into_file(program, args, file, &path, cancel);
+    let _ = fs::remove_file(&path);
+    result
+}
+
+fn run_command_into_file<A: AsRef<OsStr>>(
+    program: &str,
+    args: &[A],
+    file: File,
+    path: &Path,
+    cancel: Option<&AtomicBool>,
+) -> Result<String, String> {
+    let mut command = Command::new(program);
+    command
+        .args(args)
+        .stdin(Stdio::null())
+        .stdout(file)
+        .stderr(Stdio::null());
+    isolate(&mut command);
+    let mut child = command
+        .spawn()
+        .map_err(|_| format!("{program} history unavailable"))?;
+    let deadline = Instant::now() + SESSION_REQUEST_TIMEOUT;
+    let status = loop {
+        if cancel.is_some_and(|cancel| cancel.load(Ordering::Relaxed)) {
+            terminate(&mut child);
+            let _ = child.wait();
+            return Err(format!("{program} history cancelled"));
+        }
+        if Instant::now() >= deadline {
+            terminate(&mut child);
+            let _ = child.wait();
+            return Err(format!("{program} history timed out"));
+        }
+        match child.try_wait() {
+            Ok(Some(status)) => break status,
+            Ok(None) => thread::sleep(Duration::from_millis(10)),
+            Err(_) => {
+                terminate(&mut child);
+                let _ = child.wait();
+                return Err(format!("{program} history unavailable"));
+            }
+        }
+    };
+    if !status.success() {
+        return Err(format!("{program} history command failed"));
+    }
+    let size = fs::metadata(path)
+        .map_err(|_| format!("{program} history unavailable"))?
+        .len();
+    if size > MAX_PROVIDER_OUTPUT_BYTES as u64 {
+        return Err("Provider history output too large".to_string());
+    }
+    fs::read_to_string(path).map_err(|_| format!("{program} history unavailable"))
+}
+
 fn basic_auth(username: &str, password: &str) -> String {
     const TABLE: &[u8; 64] = b"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
     let bytes = format!("{username}:{password}").into_bytes();
@@ -1090,14 +1166,61 @@ fn decode_chunked(body: &[u8]) -> Result<Vec<u8>, String> {
     }
 }
 
+/// OpenCode 2 replaced the v1 server surface: `serve` rejects `--pure`, basic
+/// auth ignores the username override, sessions moved under `/api`, and
+/// `export` became `session export` with flattened messages.
+#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+enum OpenCodeApi {
+    V1,
+    V2,
+}
+
+impl OpenCodeApi {
+    fn username(self) -> &'static str {
+        match self {
+            Self::V1 => "omni",
+            Self::V2 => "opencode",
+        }
+    }
+}
+
+const OPENCODE_PAGE_LIMIT: usize = 1000;
+static OPENCODE_API: OnceLock<OpenCodeApi> = OnceLock::new();
+
+fn opencode_api_from_version(output: &str) -> OpenCodeApi {
+    let major = output.split_whitespace().find_map(|word| {
+        word.trim_start_matches('v')
+            .split('.')
+            .next()?
+            .parse::<u32>()
+            .ok()
+    });
+    // Unknown output is treated as the current release rather than the legacy one.
+    if major.is_some_and(|major| major < 2) {
+        OpenCodeApi::V1
+    } else {
+        OpenCodeApi::V2
+    }
+}
+
+fn opencode_api(cancel: Option<&AtomicBool>) -> Result<OpenCodeApi, String> {
+    if let Some(api) = OPENCODE_API.get() {
+        return Ok(*api);
+    }
+    let output = run_bounded_command_cancellable("opencode", &["--version"], cancel)
+        .map_err(|_| "OpenCode history unavailable".to_string())?;
+    Ok(*OPENCODE_API.get_or_init(|| opencode_api_from_version(&output)))
+}
+
 #[cfg(test)]
-fn fetch_opencode_pages(port: u16, password: &str) -> Result<Vec<Value>, String> {
-    fetch_opencode_pages_cancellable(port, password, None)
+fn fetch_opencode_pages(port: u16, password: &str, api: OpenCodeApi) -> Result<Vec<Value>, String> {
+    fetch_opencode_pages_cancellable(port, password, api, None)
 }
 
 fn fetch_opencode_pages_cancellable(
     port: u16,
     password: &str,
+    api: OpenCodeApi,
     cancel: Option<&AtomicBool>,
 ) -> Result<Vec<Value>, String> {
     let overall_deadline = Instant::now() + SESSION_REQUEST_TIMEOUT;
@@ -1111,23 +1234,41 @@ fn fetch_opencode_pages_cancellable(
                 return Err("Invalid OpenCode history pagination".to_string());
             }
         }
-        let mut path = "/experimental/session?roots=true&limit=1000".to_string();
+        let mut path = match api {
+            OpenCodeApi::V1 => {
+                format!("/experimental/session?roots=true&limit={OPENCODE_PAGE_LIMIT}")
+            }
+            OpenCodeApi::V2 => format!("/api/session?parentID=null&limit={OPENCODE_PAGE_LIMIT}"),
+        };
         if let Some(cursor) = &cursor {
             path.push_str("&cursor=");
             path.push_str(&query_escape(cursor));
         }
-        let (page, next) = http_json_cancellable(
+        let (page, header_next) = http_json_cancellable(
             port,
             &path,
-            "omni",
+            api.username(),
             password,
             cancel,
             Some(overall_deadline),
         )?;
-        let page = page
-            .as_array()
-            .ok_or_else(|| "Invalid OpenCode session list".to_string())?;
-        for row in page {
+        let (page_rows, next) = match api {
+            OpenCodeApi::V1 => (page.as_array(), header_next),
+            OpenCodeApi::V2 => {
+                // OpenCode 2 returns a next cursor even on the last page, so a
+                // short page is the only end-of-list signal.
+                let data = page.get("data").and_then(Value::as_array);
+                let next = data
+                    .filter(|data| data.len() >= OPENCODE_PAGE_LIMIT)
+                    .and_then(|_| page.pointer("/cursor/next"))
+                    .and_then(Value::as_str)
+                    .filter(|cursor| !cursor.is_empty())
+                    .map(str::to_string);
+                (data, next)
+            }
+        };
+        let page_rows = page_rows.ok_or_else(|| "Invalid OpenCode session list".to_string())?;
+        for row in page_rows {
             let Some(object) = row.as_object() else {
                 continue;
             };
@@ -1143,6 +1284,11 @@ fn fetch_opencode_pages_cancellable(
                 .unwrap_or("OpenCode session");
             let cwd = object
                 .get("directory")
+                .or_else(|| {
+                    object
+                        .get("location")
+                        .and_then(|location| location.get("directory"))
+                })
                 .and_then(Value::as_str)
                 .unwrap_or("");
             let updated = object
@@ -1177,11 +1323,16 @@ fn opencode_password() -> Result<String, String> {
 }
 
 fn opencode_global_rows_cancellable(cancel: Option<&AtomicBool>) -> Result<Vec<Value>, String> {
+    let api = opencode_api(cancel)?;
     let password = opencode_password()?;
     let mut command = Command::new("opencode");
+    command.arg("serve");
+    if api == OpenCodeApi::V1 {
+        command.arg("--pure");
+    }
     command
-        .args(["serve", "--pure", "--hostname", "127.0.0.1", "--port", "0"])
-        .env("OPENCODE_SERVER_USERNAME", "omni")
+        .args(["--hostname", "127.0.0.1", "--port", "0"])
+        .env("OPENCODE_SERVER_USERNAME", api.username())
         .env("OPENCODE_SERVER_PASSWORD", &password)
         .stdin(Stdio::null())
         .stdout(Stdio::piped())
@@ -1239,7 +1390,7 @@ fn opencode_global_rows_cancellable(cancel: Option<&AtomicBool>) -> Result<Vec<V
             break port;
         }
     };
-    let result = fetch_opencode_pages_cancellable(port, &password, cancel);
+    let result = fetch_opencode_pages_cancellable(port, &password, api, cancel);
     terminate(&mut child);
     let _ = child.wait();
     result
@@ -1558,14 +1709,27 @@ fn opencode_export_messages(value: &Value, id: &str) -> Result<Vec<PreviewMessag
         .ok_or_else(|| "Invalid OpenCode session export".to_string())?;
     let mut result = Vec::new();
     for message in messages {
+        // OpenCode 1 nests the role and `parts`; OpenCode 2 types each message,
+        // keeps user text inline, and stores assistant output in `content`.
         let role = message
             .get("info")
             .and_then(|info| info.get("role"))
+            .or_else(|| message.get("type"))
             .and_then(Value::as_str);
         let Some(role) = role.filter(|role| *role == "user" || *role == "assistant") else {
             continue;
         };
-        let Some(parts) = message.get("parts").and_then(Value::as_array) else {
+        if let Some(text) = message.get("text").and_then(Value::as_str) {
+            result.push(PreviewMessage {
+                role: role.into(),
+                text: text.into(),
+            });
+        }
+        let Some(parts) = message
+            .get("parts")
+            .or_else(|| message.get("content"))
+            .and_then(Value::as_array)
+        else {
             continue;
         };
         for part in parts {
@@ -1593,7 +1757,12 @@ fn opencode_cli_messages_cancellable(
     if !valid_opencode_id(id) {
         return Err("Invalid OpenCode session ID".to_string());
     }
-    let output = run_bounded_command_cancellable("opencode", &["export", id], cancel)?;
+    let output = match opencode_api(cancel)? {
+        OpenCodeApi::V1 => run_bounded_command_cancellable("opencode", &["export", id], cancel)?,
+        OpenCodeApi::V2 => {
+            run_bounded_command_to_file_cancellable("opencode", &["session", "export", id], cancel)?
+        }
+    };
     let value: Value =
         serde_json::from_str(&output).map_err(|_| "Invalid OpenCode session export".to_string())?;
     opencode_export_messages(&value, id)
@@ -3153,6 +3322,33 @@ done
     }
 
     #[test]
+    fn opencode_v2_export_reads_flat_messages_and_skips_reasoning_and_tools() {
+        let export = json!({"info":{"id":"ses_test123"},"messages":[
+            {"type":"user","text":"question","files":[{"data":"aGVsbG8="}]},
+            {"type":"assistant","content":[
+                {"type":"reasoning","text":"thinking"},
+                {"type":"tool","name":"shell","state":{"content":[{"type":"text","text":"secret"}]}},
+                {"type":"text","text":"answer"}
+            ]},
+            {"type":"idle","outcome":"succeeded"}
+        ]});
+        let messages = opencode_export_messages(&export, "ses_test123").unwrap();
+        assert_eq!(
+            messages,
+            vec![
+                PreviewMessage {
+                    role: "user".into(),
+                    text: "question".into()
+                },
+                PreviewMessage {
+                    role: "assistant".into(),
+                    text: "answer".into()
+                },
+            ]
+        );
+    }
+
+    #[test]
     fn preview_keeps_latest_two_and_bounds_long_latest_message() {
         let messages = vec![
             PreviewMessage {
@@ -3515,10 +3711,95 @@ done
                 stream.write_all(response.as_bytes()).unwrap();
             }
         });
-        let rows = fetch_opencode_pages(port, password).unwrap();
+        let rows = fetch_opencode_pages(port, password, OpenCodeApi::V1).unwrap();
         server.join().unwrap();
         assert_eq!(rows.len(), 2);
         assert_eq!(rows[0]["id"], "ses_first");
         assert_eq!(rows[1]["id"], "ses_second");
+    }
+
+    #[test]
+    fn opencode_v2_pages_stop_on_short_page_despite_next_cursor() {
+        use std::io::{Read, Write};
+        use std::net::TcpListener;
+
+        let listener = TcpListener::bind(("127.0.0.1", 0)).unwrap();
+        let port = listener.local_addr().unwrap().port();
+        let password = "test-password";
+        let expected_auth = format!("Basic {}", basic_auth("opencode", password));
+        let server = std::thread::spawn(move || {
+            for (index, incoming) in listener.incoming().take(2).enumerate() {
+                let mut stream = incoming.unwrap();
+                let mut request = [0u8; 4096];
+                let size = stream.read(&mut request).unwrap();
+                let request = String::from_utf8_lossy(&request[..size]);
+                assert!(request.contains(&format!("Authorization: {expected_auth}")));
+                assert!(request.starts_with("GET /api/session?parentID=null&limit=1000"));
+                let rows = if index == 0 {
+                    assert!(!request.contains("cursor="));
+                    (0..OPENCODE_PAGE_LIMIT)
+                        .map(|row| json!({"id": format!("ses_{row}"), "title": "Full", "location": {"directory": "/one"}, "time": {"updated": 1000}}))
+                        .collect::<Vec<_>>()
+                } else {
+                    assert!(request.contains("cursor=page%202"));
+                    vec![
+                        json!({"id": "ses_last", "title": "Last", "location": {"directory": "/two"}, "time": {"updated": 2000}}),
+                    ]
+                };
+                let cursor = if index == 0 { "page 2" } else { "page 3" };
+                let body = json!({"data": rows, "cursor": {"next": cursor}}).to_string();
+                let response = format!(
+                    "HTTP/1.1 200 OK\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+                    body.len()
+                );
+                stream.write_all(response.as_bytes()).unwrap();
+            }
+        });
+        let rows = fetch_opencode_pages(port, password, OpenCodeApi::V2).unwrap();
+        server.join().unwrap();
+        assert_eq!(rows.len(), OPENCODE_PAGE_LIMIT + 1);
+        assert_eq!(rows[0]["cwd"], "/one");
+        assert_eq!(rows[OPENCODE_PAGE_LIMIT]["id"], "ses_last");
+        assert_eq!(rows[OPENCODE_PAGE_LIMIT]["cwd"], "/two");
+    }
+
+    #[test]
+    fn file_backed_command_returns_full_output_and_removes_file() {
+        let output = run_bounded_command_to_file_cancellable(
+            "sh",
+            &[
+                "-c",
+                "head -c 400000 /dev/zero | tr '\\0' x; ls \"$TMPDIR\" >/dev/null",
+            ],
+            None,
+        )
+        .unwrap();
+        assert_eq!(output.len(), 400_000);
+        assert!(run_bounded_command_to_file_cancellable("sh", &["-c", "exit 3"], None).is_err());
+        let leftovers = fs::read_dir(std::env::temp_dir())
+            .unwrap()
+            .filter_map(Result::ok)
+            .filter(|entry| {
+                entry
+                    .file_name()
+                    .to_string_lossy()
+                    .starts_with(&format!("herdr-omni-sh-{}-", std::process::id()))
+            })
+            .count();
+        assert_eq!(leftovers, 0);
+    }
+
+    #[test]
+    fn opencode_version_selects_api() {
+        assert_eq!(opencode_api_from_version("1.14.3\n"), OpenCodeApi::V1);
+        assert_eq!(
+            opencode_api_from_version("opencode v1.0.0"),
+            OpenCodeApi::V1
+        );
+        assert_eq!(
+            opencode_api_from_version("opencode v2.1.2\n"),
+            OpenCodeApi::V2
+        );
+        assert_eq!(opencode_api_from_version("unknown"), OpenCodeApi::V2);
     }
 }
